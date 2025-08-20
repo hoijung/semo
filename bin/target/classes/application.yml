@@ -1,0 +1,11 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:ucanaccess://C:/Project/Access/자산관리.accdb;memory=false;immediate=true;singleConnection=true
+    driver-class-name: net.ucanaccess.jdbc.UcanaccessDriver
+    username: ""
+    password: ""
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false

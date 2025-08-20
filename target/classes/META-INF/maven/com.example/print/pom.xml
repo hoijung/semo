@@ -1,0 +1,91 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>print</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>3.3.1</version>
+  </parent>
+
+  <properties>
+    <java.version>17</java.version>
+  </properties>
+
+  <dependencies>
+  
+  <dependency>
+  <groupId>org.hsqldb</groupId>
+  <artifactId>hsqldb</artifactId>
+  <version>2.5.1</version>
+</dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+<!--
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+-->
+
+        <!-- MS Access JDBC (UCanAccess) -->
+    <dependency>
+      <groupId>net.sf.ucanaccess</groupId>
+      <artifactId>ucanaccess</artifactId>
+      <version>5.0.1</version>
+    </dependency>
+    
+    <dependency>
+        <groupId>com.microsoft.sqlserver</groupId>
+        <artifactId>mssql-jdbc</artifactId>
+        <version>11.2.0.jre11</version> <!-- JDK 버전 맞춰서 선택 -->
+    </dependency>
+    
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <version>1.18.34</version> <!-- 최신 안정 버전 -->
+        <scope>provided</scope>
+    </dependency>
+
+<dependency>
+    <groupId>p6spy</groupId>
+    <artifactId>p6spy</artifactId>
+    <version>3.9.1</version>
+</dependency>
+
+        <!--<dependency>
+  <groupId>com.healthmarketscience.jackcess</groupId>
+  <artifactId>jackcess</artifactId>
+  <version>3.0.1</version>
+</dependency>-->
+
+        <!-- JSP 컴파일 지원 -->
+    <dependency>
+        <groupId>org.apache.tomcat.embed</groupId>
+        <artifactId>tomcat-embed-jasper</artifactId>
+    </dependency>
+    
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+    </plugins>
+  </build>
+</project>

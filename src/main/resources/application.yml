@@ -1,0 +1,32 @@
+server:
+  port: 8080
+  servlet:
+      encoding:
+        force-response: true
+        charset: UTF-8
+
+spring:
+  web:
+      resources:
+        static-locations:
+          - file:C:\Project\Access\
+          - classpath:/static/  
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  datasource:
+      #url: jdbc:sqlserver://;serverName=localhost;databaseName=semo;encrypt=false
+      #spring.datasource.url=jdbc:p6spy:sqlserver://localhost:1433;databaseName=yourDB
+      url: jdbc:p6spy:sqlserver://;serverName=semo.cxyu028u2mcy.ap-northeast-2.rds.amazonaws.com;databaseName=semo;encrypt=false 
+      username: admin
+      password: 12345678
+      driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+      
+      #spring.datasource.driver-class-name=com.p6spy.engine.spy.P6SpyDriver
+      #spring.datasource.url=jdbc:p6spy:mysql://localhost:3306/mydb
+      
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+

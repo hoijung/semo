@@ -1,0 +1,45 @@
+package com.example.printinfo.web;
+
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.printinfo.dao.AuthService;
+import com.example.printinfo.model.사용자Dto;
+
+import jakarta.servlet.http.HttpSession;
+
+@RestController
+@RequestMapping("/api/auth")
+public class AuthController {
+
+	@Autowired
+	private AuthService authService;
+
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody 사용자Dto request, HttpSession session) {
+
+		사용자Dto user = authService.login(request);
+		
+		if (user == null || !"1".equals(user.get사용여부())) {
+		    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+		            .body(Map.of("status", "fail", "message", "아이디 또는 비밀번호가 틀렸습니다."));
+		}
+		// 세션에 저장
+		session.setAttribute("loginUser", user);
+		// 로그인 성공
+		return ResponseEntity.ok(Map.of("status", "success", "user", user)); 
+	}
+
+	@PostMapping("/logout")
+	public String logout(HttpSession session) {
+		session.invalidate();
+		return "로그아웃 완료";
+	}
+}

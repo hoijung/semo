@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메뉴</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+        }
+
+        .menu-container {
+            background-color: white;
+            border-bottom: 1px solid #ddd;
+            padding: 0 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-bar {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            justify-content: flex-start;
+        }
+
+        .menu-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-right: 1px solid #eee;
+            color: #333;
+        }
+
+        .menu-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .menu-item.active {
+            font-weight: bold;
+            color: #000;
+            border-bottom: 3px solid #0056b3;
+        }
+
+        .content-container {
+            text-align: center;
+            margin-top: 0px;
+        }
+
+        .title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="menu-container">
+        <ul class="menu-bar" id="menuBar">
+            <li class="menu-item active" data-page="initial">홈</li>
+            <li class="menu-item" data-page="main.html">고객지원팀</li>
+            <li class="menu-item" data-page="list.html">로고 인쇄 목록</li>
+            <li class="menu-item" data-page="logistList_3.html">세금계산서 발행</li>
+            <li class="menu-item" data-page="printList.html">인쇄 서비스팀</li>
+            <li class="menu-item" data-page="logistList_1.html">물류팀</li>
+        </ul>
+    </div>
+
+    <div class="content-container" id="contentContainer">
+        <h1 class="title">로고 인쇄 데이터 입력</h1>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuBar = document.getElementById('menuBar');
+            const contentContainer = document.getElementById('contentContainer');
+            const initialContent = contentContainer.innerHTML;
+
+            function loadPage(pageName) {
+                if (pageName === 'initial') {
+                    contentContainer.innerHTML = initialContent;
+                    return;
+                }
+
+                fetch(pageName)
+                    .then(response => response.text())
+                    .then(html => {
+                        const parser = new DOMParser();
+                        const doc = parser.parseFromString(html, 'text/html');
+                        const scripts = doc.body.querySelectorAll('script');
+
+                        // HTML을 먼저 삽입
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = html;
+
+                        // 스크립트 태그를 임시 제거
+                        const scriptNodes = tempDiv.querySelectorAll('script');
+                        scriptNodes.forEach(node => node.remove());
+
+                        // 스크립트가 제거된 HTML을 삽입
+                        contentContainer.innerHTML = tempDiv.innerHTML;
+
+                        // 스크립트를 순차적으로 실행
+                        scripts.forEach(script => {
+                            const newScript = document.createElement('script');
+                            if (script.src) {
+                                newScript.src = script.src;
+                            }
+                            if (script.textContent) {
+                                newScript.textContent = script.textContent;
+                            }
+                            contentContainer.appendChild(newScript);
+                        });
+
+                    })
+                    .catch(error => {
+                        console.error('페이지를 불러오는 중 오류가 발생했습니다:', error);
+                        contentContainer.innerHTML = '<h1>페이지를 불러올 수 없습니다.</h1>';
+                    });
+            }
+
+            menuBar.addEventListener('click', (event) => {
+                const target = event.target.closest('.menu-item');
+                if (target) {
+                    document.querySelectorAll('.menu-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    target.classList.add('active');
+
+                    const pageToLoad = target.getAttribute('data-page');
+                    loadPage(pageToLoad);
+                }
+            });
+
+            // 초기 페이지 로드
+            const initialPage = menuBar.querySelector('.menu-item.active').getAttribute('data-page');
+            if (initialPage !== 'initial') {
+                loadPage(initialPage);
+            }
+        });
+    </script>
+</body>
+
+</html>
