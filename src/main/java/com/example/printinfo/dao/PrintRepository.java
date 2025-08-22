@@ -39,12 +39,24 @@ public class PrintRepository {
     }
 
     public int update(PrintDto dto) {
-        String sql = "UPDATE semo.dbo.인쇄정보 SET 품목명=?, 쇼핑백색상=?, 사이즈=?, 제작장수=?, 인쇄담당팀=?, 특이사항=?, 고객ID=?, 주문일자=?, 완료여부=? " +
+        String sql = "UPDATE semo.dbo.인쇄정보 SET " +
+                     "품목명=?, 쇼핑백색상=?, 사이즈=?, 제작장수=?, 인쇄담당팀=?, 인쇄면=?, 인쇄도수=?, 인쇄방식=?, " +
+                     "로고인쇄크기=?, 로고인쇄위치=?, 특이사항=?, 주문일자=?, 업체명_담당자=?, 고객ID=?, 전화번호=?, " +
+                     "발송마감기한=?, 최종배송지_우편번호=?, 최종배송지_주소=?, 판매채널=?, 계산서발행타입=?, 상호명=?, " +
+                     "대표자명=?, 이메일=?, 공급가액=?, 부가세액=?, 합계금액=?, 배분여부=?, 완료여부=?, " +
+                     "수정팀=?, 피킹완료=?, 출고준비=?, 파일명=?, 인쇄로고예시=?, 피킹예정일=?, 배송타입=?, 박스규격=?, " +
+                     "기존주문여부=?, 인쇄방법=?, 수정일시=GETDATE() " +
                      "WHERE 인쇄ID=?";
         return jdbcTemplate.update(sql,
-                dto.get품목명(), dto.get쇼핑백색상(), dto.get사이즈(), dto.get제작장수(),
-                dto.get인쇄담당팀(), dto.get특이사항(), dto.get고객ID(), dto.get주문일자(),
-                dto.get완료여부(), dto.get인쇄ID());
+                dto.get품목명(), dto.get쇼핑백색상(), dto.get사이즈(), dto.get제작장수(), dto.get인쇄담당팀(),
+                dto.get인쇄면(), dto.get인쇄도수(), dto.get인쇄방식(), dto.get로고인쇄크기(), dto.get로고인쇄위치(),
+                dto.get특이사항(), dto.get주문일자(), dto.get업체명_담당자(), dto.get고객ID(), dto.get전화번호(),
+                dto.get발송마감기한(), dto.get최종배송지_우편번호(), dto.get최종배송지_주소(), dto.get판매채널(),
+                dto.get계산서발행타입(), dto.get상호명(), dto.get대표자명(), dto.get이메일(), dto.get공급가액(),
+                dto.get부가세액(), dto.get합계금액(), dto.get배분여부(), dto.get완료여부(),
+                dto.get수정팀(), dto.get피킹완료(), dto.get출고준비(), dto.get파일명(), dto.get인쇄로고예시(),
+                dto.get피킹예정일(), dto.get배송타입(), dto.get박스규격(), dto.get기존주문여부(), dto.get인쇄방법(),
+                dto.get인쇄ID());
     }
 
     public int delete(Integer id) {

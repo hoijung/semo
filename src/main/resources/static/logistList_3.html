@@ -4,6 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>물류팀대시보드(출고준비)</title>
+</head>
+
+<body>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <style>
         input[type="checkbox"][disabled] {
             appearance: none;
@@ -52,20 +56,23 @@
         #actionButtons button:hover {
             background-color: #e0e0e0;
         }
-        
+
         table.dataTable td {
-          text-align: center;
+            text-align: center;
         }
     </style>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-</head>
-
-<body>
     <h2>물류팀 대시보드(출고준비)</h2>
     <table id="grid" class="display" style="width:100%"></table>
 
+    <!-- 버튼 영역 -->
+    <div id="actionButtons" style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
+        <button id="btnDetail">상세보기</button>
+        <button id="btnPicking">피킹완료</button>
+        <button id="btnOutReady">출고준비완료</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
             const table = $('#grid').DataTable({
@@ -201,19 +208,6 @@
             });
         });
     </script>
-
-    <script>
-
-
-    </script>
-
-    <!-- 버튼 영역 -->
-    <div id="actionButtons" style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
-        <button id="btnDetail">상세보기</button>
-        <button id="btnPicking">피킹완료</button>
-        <button id="btnOutReady">출고준비완료</button>
-    </div>
-
 </body>
 
 </html>

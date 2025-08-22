@@ -1,5 +1,6 @@
 package com.example.printinfo.web;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,11 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.printinfo.dao.PrintDto;
+import com.example.printinfo.service.FileStorageService;
 import com.example.printinfo.service.PrintService;
 
 @RestController
@@ -21,6 +24,10 @@ public class PrintController {
 
     @Autowired
     private PrintService service;
+
+    // 파일 저장을 처리할 서비스 (아래에 추가 설명)
+    @Autowired(required = false)
+    private FileStorageService fileStorageService;
 
     @GetMapping
     public List<PrintDto> getAll() {
@@ -33,13 +40,32 @@ public class PrintController {
     }
 
     @PostMapping
-    public PrintDto create(@RequestBody PrintDto dto) {
+    public PrintDto create(@RequestPart("dto") PrintDto dto,
+                           @RequestPart(value = "logoFile", required = false) MultipartFile logoFile) throws IOException {
+        // 파일이 존재하고, 파일 저장 서비스가 구현되어 있을 경우
+        if (fileStorageService != null && logoFile != null && !logoFile.isEmpty()) {
+            String fileName = fileStorageService.storeFile(logoFile);
+            dto.set인쇄로고예시(fileName); // DTO에 저장된 파일명 설정
+        }
         service.insert(dto);
         return dto;
     }
 
     @PutMapping("/{id}")
-    public PrintDto update(@PathVariable Integer id, @RequestBody PrintDto dto) {
+    public PrintDto update(@PathVariable Integer id,
+                           @RequestPart("dto") PrintDto dto,
+                           @RequestPart(value = "logoFile", required = false) MultipartFile logoFile) throws IOException {
+        // 새 파일이 업로드된 경우
+        if (fileStorageService != null && logoFile != null && !logoFile.isEmpty()) {
+            // 기존 파일 삭제 로직 (선택 사항)
+            PrintDto existingDto = service.findById(id);
+            if (existingDto != null && existingDto.get인쇄로고예시() != null) {
+                fileStorageService.deleteFile(existingDto.get인쇄로고예시());
+            }
+            String fileName = fileStorageService.storeFile(logoFile);
+            dto.set인쇄로고예시(fileName); // DTO에 새로운 파일명 설정
+        }
+
         dto.set인쇄ID(id);
         service.update(dto);
         return dto;

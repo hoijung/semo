@@ -4,6 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <title>물류팀대시보드(전체)</title>
+</head>
+
+<body>
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <style>
         input[type="checkbox"][disabled] {
             appearance: none;
@@ -52,20 +57,24 @@
         #actionButtons button:hover {
             background-color: #e0e0e0;
         }
-        
+
         table.dataTable td {
-          text-align: center;
+            text-align: center;
         }
     </style>
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-</head>
-
-<body>
+        
     <h2>물류팀 대시보드(전체)</h2>
     <table id="grid" class="display" style="width:100%"></table>
 
+    <!-- 버튼 영역 -->
+    <div id="actionButtons">
+        <button id="btnDetail">상세보기</button>
+        <button id="btnPicking">피킹완료</button>
+        <button id="btnOutReady">출고준비완료</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
             const table = $('#grid').DataTable({
@@ -101,7 +110,6 @@
                     {data: 'deliveryZip', title: '우편번호', className: 'dt-center'},
                     {data: 'deliveryAddress', title: '주소'},
                     {data: 'sizeText', title: '박스규격'},
-                    {data: 'quantity', title: '수량'},
                     {data: 'printMethod', title: '발송마감일', className: 'dt-center'},
                     {
                         data: "outReadyYn", title: "출고준비"
@@ -132,22 +140,16 @@
             $('#grid tbody').on('click', 'tr', function () {
                 const data = table.row(this).data();
                 if (data) {
-                    // window.open(`assetDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=700');
+                    window.open(`assetDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=1000');
                 }
             });
 
             // 체크박스 클릭 시 해당 행 선택/해제
             $('#grid tbody').on('click', 'input.row-select', function (e) {
-                const $table = $('#grid');
                 const $row = $(this).closest('tr');
-
-                // 다른 행 체크박스 모두 해제
-                $table.find('tbody tr.selected').removeClass('selected');
-                $table.find('input.row-select').prop('checked', false);
-
-                // 클릭한 행 선택
-                $row.addClass('selected');
-                $(this).prop('checked', true);
+                // 행 선택/해제 토글
+                $row.toggleClass('selected');
+                $(this).prop('checked', $row.hasClass('selected'));
 
                 e.stopPropagation(); // tr 클릭 이벤트 방지
             });
@@ -166,53 +168,50 @@
                     alert("행을 선택해주세요.");
                     return;
                 }
-                // 여러 행 선택 가능, 첫 번째 행 상세 보기
+                // 선택된 행 중 첫 번째 항목의 상세 정보를 엽니다.
                 const data = selected[0];
                 window.open(`assetDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=1000');
             });
 
-            // 피킹완료 버튼
-            $('#btnPicking').click(function () {
+            // 공통 액션 처리 함수
+            function handleBatchAction(actionName, urlPath) {
                 const selected = getSelectedRows();
                 if (selected.length === 0) {
                     alert("행을 선택해주세요.");
                     return;
                 }
-                // AJAX 호출로 서버 업데이트 예시
-                selected.forEach(row => {
-                    $.post(`/api/print-info/${row.printId}/picking`, {status: 'Y'});
+                if (!confirm(`선택한 ${selected.length}개의 항목을 ${actionName} 처리하시겠습니까?`)) {
+                    return;
+                }
+
+                const requests = selected.map(row => {
+                    return $.post(`/api/print-info/${row.printId}/${urlPath}`, { status: 'Y' });
                 });
-                alert("선택한 행 피킹완료 처리되었습니다.");
-                $('#grid').DataTable().ajax.reload(); // 테이블 새로고침
+
+                Promise.all(requests)
+                    .then(responses => {
+                        alert(`${responses.length}개의 항목이 성공적으로 ${actionName} 처리되었습니다.`);
+                        $('#grid').DataTable().ajax.reload();
+                    })
+                    .catch(error => {
+                        console.error(`${actionName} 처리 중 오류 발생:`, error);
+                        alert("처리 중 오류가 발생했습니다. 콘솔을 확인해주세요.");
+                        // 실패하더라도 테이블을 새로고침하여 최신 상태를 반영합니다.
+                        $('#grid').DataTable().ajax.reload();
+                    });
+            }
+
+            // 피킹완료 버튼
+            $('#btnPicking').click(function () {
+                handleBatchAction('피킹완료', 'picking');
             });
 
             // 출고준비완료 버튼
             $('#btnOutReady').click(function () {
-                const selected = getSelectedRows();
-                if (selected.length === 0) {
-                    alert("행을 선택해주세요.");
-                    return;
-                }
-                selected.forEach(row => {
-                    $.post(`/api/print-info/${row.printId}/out-ready`, {status: 'Y'});
-                });
-                alert("선택한 행 출고준비 완료 처리되었습니다.");
-                $('#grid').DataTable().ajax.reload();
+                handleBatchAction('출고준비완료', 'out-ready');
             });
         });
     </script>
-
-    <script>
-
-
-    </script>
-
-    <!-- 버튼 영역 -->
-    <div id="actionButtons" style="margin-top: 20px; display: flex; justify-content: center; gap: 10px;">
-        <button id="btnDetail">상세보기</button>
-        <button id="btnPicking">피킹완료</button>
-        <button id="btnOutReady">출고준비완료</button>
-    </div>
 
 </body>
 
