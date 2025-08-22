@@ -63,11 +63,39 @@
 </head>
 
 <body>
+        <div class="menu-container">
+	</div>
+    
     <h2>물류팀 대시보드(피킹완료)</h2>
     <table id="grid" class="display" style="width:100%"></table>
 
     <script>
         $(document).ready(function () {
+			// 1. .menu-container에 menu.html을 로드합니다.
+			$('.menu-container').load('menu.html', function() {
+				// 2. 메뉴 로드가 완료된 후, 이벤트 리스너를 설정하고 현재 페이지 메뉴를 활성화합니다.
+				const menuBar = document.getElementById('menuBar');
+				if (menuBar) {
+					// 현재 페이지(main.html)에 해당하는 메뉴 항목에 'active' 클래스를 추가합니다.
+					const currentPageMenuItem = menuBar.querySelector('[data-page="logistList_2.html"]');
+					if (currentPageMenuItem) {F
+						// 기존 active 클래스를 모두 제거하고 현재 페이지만 활성화합니다.
+						menuBar.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+						currentPageMenuItem.classList.add('active');
+					}
+
+					// 메뉴 클릭 이벤트 리스너
+					menuBar.addEventListener('click', (event) => {
+						const target = event.target.closest('.menu-item');
+						if (target && !target.classList.contains('active')) {
+							const pageToLoad = target.getAttribute('data-page');
+							if (pageToLoad && pageToLoad !== 'initial') {
+								location.href = pageToLoad;
+							}
+						}
+					});
+				}
+			});
             const table = $('#grid').DataTable({
                 responsive: true,
                 ajax: '/api/print-info/list2',

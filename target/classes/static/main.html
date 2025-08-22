@@ -2,385 +2,413 @@
 <html lang="ko">
 
 <head>
-    <meta charset="UTF-8">
-    <title>인쇄정보 관리</title>
+	<meta charset="UTF-8">
+	<title>인쇄정보 관리</title>
 </head>
 
 <body>
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
 
-    <div class="main-content-wrapper">
-        <div id="list-container">
-            <table id="printTable" class="display">
-                <thead>
-                    <tr>
-                        <th>인쇄ID</th>
-                        <th>주문일자</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
+	<div class="menu-container">
 
-        <div id="detail-container">
-            <h2>
-                <div id="detail-header-buttons">
-                    <button type="button" id="btnAdd" class="enabled">등록</button>
-                    <button type="button" id="btnUpdate">수정</button>
-                    <button type="button" id="btnDelete">삭제</button>
-                </div>
-            </h2>
-            <div class="detail-card">
-                <input type="hidden" id="인쇄ID">
+	</div>
+	<div class="main-content-wrapper">
+		<div id="list-container">
+			<table id="printTable" class="display">
+				<thead>
+					<tr>
+						<th>인쇄ID</th>
+						<th>주문일자</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
 
-                <div class="field-group">
-                    <label>기본 정보</label>
-                    <div class="field-row">
-                        <div class="field-item"><span>품목명:</span><input type="text" id="품목명"></div>
-                        <div class="field-item"><span>사이즈:</span><input type="text" id="사이즈"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>쇼핑백색상:</span><input type="text" id="쇼핑백색상"></div>
-                        <div class="field-item"><span>제작장수:</span><input type="number" id="제작장수"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>주문일자:</span><input type="date" id="주문일자"></div>
-                        <div class="field-item"><span>판매채널:</span><input type="text" id="판매채널"></div>
-                    </div>
-                </div>
+		<div id="detail-container">
+			<h2>
+				<div id="detail-header-buttons">
+					<button type="button" id="btnAdd" class="enabled">등록</button>
+					<button type="button" id="btnUpdate">수정</button>
+					<button type="button" id="btnDelete">삭제</button>
+				</div>
+			</h2>
+			<div class="detail-card">
+				<input type="hidden" id="인쇄ID">
 
-                <div class="field-group">
-                    <label>인쇄 정보</label>
-                    <div class="field-row">
-                        <div class="field-item"><span>인쇄담당팀:</span><input type="text" id="인쇄담당팀"></div>
-                        <div class="field-item"><span>인쇄면:</span><input type="text" id="인쇄면"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>인쇄도수:</span><input type="text" id="인쇄도수"></div>
-                        <div class="field-item"><span>인쇄방식:</span><input type="text" id="인쇄방식"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>로고인쇄크기:</span><input type="text" id="로고인쇄크기"></div>
-                        <div class="field-item"><span>로고인쇄위치:</span><input type="text" id="로고인쇄위치"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>파일명:</span><input type="text" id="파일명"></div>
-                        <div class="field-item">
-                            <span>인쇄로고예시:</span>
-                            <input type="file" id="인쇄로고예시_file" style="margin-bottom: 5px;">
-                            <div id="인쇄로고예시_display"></div>
-                            <input type="hidden" id="인쇄로고예시">
-                        </div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>인쇄방법:</span><input type="text" id="인쇄방법"></div>
-                    </div>
-                </div>
+				<div class="field-group">
+					<label>기본 정보</label>
+					<div class="field-row">
+						<div class="field-item"><span>품목명:</span><input type="text" id="품목명"></div>
+						<div class="field-item"><span>사이즈:</span><input type="text" id="사이즈"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>쇼핑백색상:</span><input type="text" id="쇼핑백색상"></div>
+						<div class="field-item"><span>제작장수:</span><input type="number" id="제작장수"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>주문일자:</span><input type="date" id="주문일자"></div>
+						<div class="field-item"><span>판매채널:</span><input type="text" id="판매채널"></div>
+					</div>
+				</div>
 
-                <div class="field-group">
-                    <label>고객 / 배송 정보</label>
-                    <div class="field-row">
-                        <div class="field-item"><span>고객ID:</span><input type="text" id="고객ID"></div>
-                        <div class="field-item"><span>업체명/담당자:</span><input type="text" id="업체명_담당자"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>전화번호:</span><input type="text" id="전화번호"></div>
-                        <div class="field-item"><span>이메일:</span><input type="text" id="이메일"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>발송마감기한:</span><input type="date" id="발송마감기한"></div>
-                        <div class="field-item"><span>피킹예정일:</span><input type="date" id="피킹예정일"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>배송지(우편번호):</span><input type="text" id="최종배송지_우편번호"></div>
-                        <div class="field-item full-width"><span>배송지(주소):</span><input type="text" id="최종배송지_주소"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>배송타입:</span><input type="text" id="배송타입"></div>
-                        <div class="field-item"><span>박스규격:</span><input type="text" id="박스규격"></div>
-                    </div>
-                </div>
+				<div class="field-group">
+					<label>인쇄 정보</label>
+					<div class="field-row">
+						<div class="field-item"><span>인쇄담당팀:</span><input type="text" id="인쇄담당팀"></div>
+						<div class="field-item"><span>인쇄면:</span><input type="text" id="인쇄면"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>인쇄도수:</span><input type="text" id="인쇄도수"></div>
+						<div class="field-item"><span>인쇄방식:</span><input type="text" id="인쇄방식"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>로고인쇄크기:</span><input type="text" id="로고인쇄크기"></div>
+						<div class="field-item"><span>로고인쇄위치:</span><input type="text" id="로고인쇄위치"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>파일명:</span><input type="text" id="파일명"></div>
+						<div class="field-item">
+							<span>인쇄로고예시:</span>
+							<input type="file" id="인쇄로고예시_file" style="margin-bottom: 5px;">
+							<div id="인쇄로고예시_display"></div>
+							<input type="hidden" id="인쇄로고예시">
+						</div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>인쇄방법:</span><input type="text" id="인쇄방법"></div>
+					</div>
+				</div>
 
-                <div class="field-group">
-                    <label>정산 및 관리 정보</label>
-                    <div class="field-row">
-                        <div class="field-item"><span>계산서발행타입:</span><input type="text" id="계산서발행타입"></div>
-                        <div class="field-item"><span>상호명:</span><input type="text" id="상호명"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>대표자명:</span><input type="text" id="대표자명"></div>
-                        <div class="field-item"><span>등록팀:</span><input type="text" id="등록팀"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>수정팀:</span><input type="text" id="수정팀"></div>
-                        <div class="field-item"><span>공급가액:</span><input type="number" id="공급가액" step="0.01"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item"><span>부가세액:</span><input type="number" id="부가세액" step="0.01"></div>
-                        <div class="field-item"><span>합계금액:</span><input type="number" id="합계금액" step="0.01"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item checkbox-item"><span>배분여부:</span><input type="checkbox" id="배분여부"></div>
-                        <div class="field-item checkbox-item"><span>완료여부:</span><input type="checkbox" id="완료여부"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item checkbox-item"><span>피킹완료:</span><input type="checkbox" id="피킹완료"></div>
-                        <div class="field-item checkbox-item"><span>출고준비:</span><input type="checkbox" id="출고준비"></div>
-                    </div>
-                    <div class="field-row">
-                        <div class="field-item checkbox-item"><span>기존주문여부:</span><input type="checkbox" id="기존주문여부">
-                        </div>
-                    </div>
-                </div>
+				<div class="field-group">
+					<label>고객 / 배송 정보</label>
+					<div class="field-row">
+						<div class="field-item"><span>고객ID:</span><input type="text" id="고객ID"></div>
+						<div class="field-item"><span>업체명/담당자:</span><input type="text" id="업체명_담당자"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>전화번호:</span><input type="text" id="전화번호"></div>
+						<div class="field-item"><span>이메일:</span><input type="text" id="이메일"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>발송마감기한:</span><input type="date" id="발송마감기한"></div>
+						<div class="field-item"><span>피킹예정일:</span><input type="date" id="피킹예정일"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>배송지(우편번호):</span><input type="text" id="최종배송지_우편번호"></div>
+						<div class="field-item full-width"><span>배송지(주소):</span><input type="text" id="최종배송지_주소"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>배송타입:</span><input type="text" id="배송타입"></div>
+						<div class="field-item"><span>박스규격:</span><input type="text" id="박스규격"></div>
+					</div>
+				</div>
 
-                <div class="field-group">
-                    <label>특이사항</label>
-                    <div class="field-row">
-                        <div class="field-item full-width"><span>내용:</span><textarea id="특이사항"></textarea></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+				<div class="field-group">
+					<label>정산 및 관리 정보</label>
+					<div class="field-row">
+						<div class="field-item"><span>계산서발행타입:</span><input type="text" id="계산서발행타입"></div>
+						<div class="field-item"><span>상호명:</span><input type="text" id="상호명"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>대표자명:</span><input type="text" id="대표자명"></div>
+						<div class="field-item"><span>등록팀:</span><input type="text" id="등록팀"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>수정팀:</span><input type="text" id="수정팀"></div>
+						<div class="field-item"><span>공급가액:</span><input type="number" id="공급가액" step="0.01"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item"><span>부가세액:</span><input type="number" id="부가세액" step="0.01"></div>
+						<div class="field-item"><span>합계금액:</span><input type="number" id="합계금액" step="0.01"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item checkbox-item"><span>배분여부:</span><input type="checkbox" id="배분여부"></div>
+						<div class="field-item checkbox-item"><span>완료여부:</span><input type="checkbox" id="완료여부"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item checkbox-item"><span>피킹완료:</span><input type="checkbox" id="피킹완료"></div>
+						<div class="field-item checkbox-item"><span>출고준비:</span><input type="checkbox" id="출고준비"></div>
+					</div>
+					<div class="field-row">
+						<div class="field-item checkbox-item"><span>기존주문여부:</span><input type="checkbox" id="기존주문여부">
+						</div>
+					</div>
+				</div>
 
-    <script>
-        let table;
-        let selectedRow = null;
-        let currentSelectedId = null;
+				<div class="field-group">
+					<label>특이사항</label>
+					<div class="field-row">
+						<div class="field-item full-width"><span>내용:</span><textarea id="특이사항"></textarea></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-        // 모든 JavaScript 로직을 이 함수 안에 넣습니다.
-        function initializePage() {
-            table = $('#printTable').DataTable({
-                ajax: { url: '/api/prints', dataSrc: '' },
-                columns: [
-                    { data: '인쇄ID' },
-                    { data: '주문일자' }
-                ],
-                paging: false,
-                info: false,
-                searching: false
-            });
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-            // 테이블 행 클릭 이벤트
-            $('#printTable tbody').on('click', 'tr', function () {
-                const data = table.row(this).data();
-                if (!data) return;
+	<script>
+		// jQuery의 document.ready()를 사용하여 DOM이 완전히 로드된 후 스크립트를 실행합니다.
+		// 이는 페이지별 JavaScript를 초기화하는 표준적이고 안정적인 방법입니다.
+		$(document).ready(function () {
+			let table;
+			let selectedRow = null;
+			let currentSelectedId = null;
 
-                if (selectedRow) {
-                    $(selectedRow).removeClass('selected-row');
-                }
+			// 1. .menu-container에 menu.html을 로드합니다.
+			$('.menu-container').load('menu.html', function() {
+				// 2. 메뉴 로드가 완료된 후, 이벤트 리스너를 설정하고 현재 페이지 메뉴를 활성화합니다.
+				const menuBar = document.getElementById('menuBar');
+				if (menuBar) {
+					// 현재 페이지(main.html)에 해당하는 메뉴 항목에 'active' 클래스를 추가합니다.
+					const currentPageMenuItem = menuBar.querySelector('[data-page="main.html"]');
+					if (currentPageMenuItem) {
+						// 기존 active 클래스를 모두 제거하고 현재 페이지만 활성화합니다.
+						menuBar.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+						currentPageMenuItem.classList.add('active');
+					}
 
-                $(this).addClass('selected-row');
-                selectedRow = this;
+					// 메뉴 클릭 이벤트 리스너
+					menuBar.addEventListener('click', (event) => {
+						const target = event.target.closest('.menu-item');
+						if (target && !target.classList.contains('active')) {
+							const pageToLoad = target.getAttribute('data-page');
+							if (pageToLoad && pageToLoad !== 'initial') {
+								location.href = pageToLoad;
+							}
+						}
+					});
+				}
+			});
 
-                currentSelectedId = data.인쇄ID;
+			table = $('#printTable').DataTable({
+				ajax: {url: '/api/prints', dataSrc: ''},
+				columns: [
+					{data: '인쇄ID'},
+					{data: '주문일자'}
+				],
+				destroy: true, // 동적으로 로드되는 콘텐츠에서 재초기화를 허용하는 중요한 옵션입니다.
+				paging: false,
+				info: false,
+				searching: false
+			});
 
-                fillDetailForm(data);
-                updateButtonState(true);
-            });
+			// 테이블 행 클릭 이벤트
+			$('#printTable tbody').on('click', 'tr', function () {
+				const data = table.row(this).data();
+				if (!data) return;
 
-            // 버튼 이벤트 리스너
-            $('#btnAdd').click(addRecord);
-            $('#btnUpdate').click(updateRecord);
-            $('#btnDelete').click(deleteRecord);
+				if (selectedRow) {
+					$(selectedRow).removeClass('selected-row');
+				}
 
-            // 초기 버튼 상태 설정 (수정/삭제 비활성화)
-            updateButtonState(false);
-        }
+				$(this).addClass('selected-row');
+				selectedRow = this;
 
-        // 페이지가 로드되자마자 초기화 함수를 호출합니다.
-        initializePage();
+				currentSelectedId = data.인쇄ID;
 
-        function fillDetailForm(data) {
-            resetDetailFormValues();
+				fillDetailForm(data);
+				updateButtonState(true);
+			});
 
-            for (let key in data) {
-                const el = $('#' + key);
-                if (el.length) {
-                    if (el.attr('type') === 'checkbox') {
-                        el.prop('checked', data[key]);
-                    } else if (el.attr('type') === 'date') {
-                        if (data[key]) {
-                            el.val(data[key].substring(0, 10));
-                        } else {
-                            el.val('');
-                        }
-                    } else {
-                        el.val(data[key]);
-                    }
-                }
-            }
+			// 버튼 이벤트 리스너
+			$('#btnAdd').on('click', addRecord);
+			$('#btnUpdate').on('click', updateRecord);
+			$('#btnDelete').on('click', deleteRecord);
 
-            // 인쇄로고예시 이미지 표시
-            const logoFileName = data.인쇄로고예시;
-            const $displayDiv = $('#인쇄로고예시_display');
-            if (logoFileName) {
-                const fileUrl = `/File/${logoFileName}`;
-                const $link = $('<a>', { href: fileUrl, text: logoFileName, target: '_blank' });
-                const $image = $('<img>', { src: fileUrl, alt: '로고 이미지', style: 'max-width: 100%; max-height: 100px; margin-top: 5px; display: block;' });
-                $displayDiv.append($link).append($image);
-            }
-        }
+			// 초기 버튼 상태 설정 (수정/삭제 비활성화)
+			updateButtonState(false);
 
-        function createMultipartFormData(data) {
-            const formData = new FormData();
-            formData.append('dto', new Blob([JSON.stringify(data)], { type: 'application/json' }));
-            const fileInput = $('#인쇄로고예시_file')[0];
-            if (fileInput.files && fileInput.files[0]) {
-                formData.append('logoFile', fileInput.files[0]);
-            }
-            return formData;
-        }
+			function fillDetailForm(data) {
+				resetDetailFormValues();
 
-        function getFormData() {
-            const formData = {};
-            $('.detail-card').find('input, textarea').each(function () {
-                const id = $(this).attr('id');
-                if (!id || this.type === 'file') return;
+				for (let key in data) {
+					const el = $('#' + key);
+					if (el.length) {
+						if (el.attr('type') === 'checkbox') {
+							el.prop('checked', data[key]);
+						} else if (el.attr('type') === 'date') {
+							if (data[key]) {
+								el.val(data[key].substring(0, 10));
+							} else {
+								el.val('');
+							}
+						} else {
+							el.val(data[key]);
+						}
+					}
+				}
 
-                if ($(this).attr('type') === 'checkbox') {
-                    formData[id] = $(this).prop('checked');
-                } else {
-                    formData[id] = $(this).val();
-                }
-            });
-            return formData;
-        }
+				// 인쇄로고예시 이미지 표시
+				const logoFileName = data.인쇄로고예시;
+				const $displayDiv = $('#인쇄로고예시_display');
+				if (logoFileName) {
+					const fileUrl = `/File/${logoFileName}`;
+					const $link = $('<a>', {href: fileUrl, text: logoFileName, target: '_blank'});
+					const $image = $('<img>', {src: fileUrl, alt: '로고 이미지', style: 'max-width: 100%; max-height: 100px; margin-top: 5px; display: block;'});
+					$displayDiv.append($link).append($image);
+				}
+			}
 
-        function reloadTableAndRestoreSelection() {
-            table.ajax.reload(function () {
-                if (currentSelectedId !== null) {
-                    let foundRow = null;
-                    table.rows().every(function () {
-                        const rowData = this.data();
-                        if (rowData && rowData.인쇄ID === currentSelectedId) {
-                            foundRow = this.node();
-                            fillDetailForm(rowData);
-                            return false;
-                        }
-                    });
+			function createMultipartFormData(data) {
+				const formData = new FormData();
+				formData.append('dto', new Blob([JSON.stringify(data)], {type: 'application/json'}));
+				const fileInput = $('#인쇄로고예시_file')[0];
+				if (fileInput.files && fileInput.files[0]) {
+					formData.append('logoFile', fileInput.files[0]);
+				}
+				return formData;
+			}
 
-                    $('#printTable tbody tr').removeClass('selected-row');
+			function getFormData() {
+				const formData = {};
+				$('.detail-card').find('input, textarea').each(function () {
+					const id = $(this).attr('id');
+					if (!id || this.type === 'file') return;
 
-                    if (foundRow) {
-                        $(foundRow).addClass('selected-row');
-                        selectedRow = foundRow;
-                        updateButtonState(true);
-                    } else {
-                        resetDetailForm();
-                        updateButtonState(false);
-                    }
-                } else {
-                    resetDetailForm();
-                    updateButtonState(false);
-                }
-            }, false);
-        }
+					if ($(this).attr('type') === 'checkbox') {
+						formData[id] = $(this).prop('checked');
+					} else {
+						formData[id] = $(this).val();
+					}
+				});
+				return formData;
+			}
 
-        function addRecord() {
-            const jsonData = getFormData();
-            if (!confirm("등록 하시겠습니까?")) return;
+			function reloadTableAndRestoreSelection() {
+				table.ajax.reload(function () {
+					if (currentSelectedId !== null) {
+						let foundRow = null;
+						table.rows().every(function () {
+							const rowData = this.data();
+							if (rowData && rowData.인쇄ID === currentSelectedId) {
+								foundRow = this.node();
+								fillDetailForm(rowData);
+								return false;
+							}
+						});
 
-            delete jsonData.인쇄ID;
-            const multipartFormData = createMultipartFormData(jsonData);
+						$('#printTable tbody tr').removeClass('selected-row');
 
-            fetch('/api/prints', {
-                method: 'POST',
-                body: multipartFormData
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => { throw new Error('Network response was not ok: ' + text) });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    alert("새 레코드가 등록되었습니다.");
-                    currentSelectedId = data.인쇄ID; // 새로 추가된 레코드의 ID를 설정합니다.
-                    reloadTableAndRestoreSelection();
-                })
-                .catch(error => {
-                    console.error("Add Error:", error);
-                    alert("레코드 등록 실패: " + error.message);
-                });
-        }
+						if (foundRow) {
+							$(foundRow).addClass('selected-row');
+							selectedRow = foundRow;
+							updateButtonState(true);
+						} else {
+							resetDetailForm();
+							updateButtonState(false);
+						}
+					} else {
+						resetDetailForm();
+						updateButtonState(false);
+					}
+				}, false);
+			}
 
-        function updateRecord() {
-            const id = $('#인쇄ID').val();
-            if (!id) { alert("수정할 레코드를 선택하세요."); return; }
-            if (!confirm("수정 하시겠습니까?")) return;
+			function addRecord() {
+				const jsonData = getFormData();
+				if (!confirm("등록 하시겠습니까?")) return;
 
-            const jsonData = getFormData();
-            const multipartFormData = createMultipartFormData(jsonData);
+				delete jsonData.인쇄ID;
+				const multipartFormData = createMultipartFormData(jsonData);
 
-            fetch('/api/prints/' + id, {
-                method: 'PUT',
-                body: multipartFormData
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => { throw new Error('Network response was not ok: ' + text) });
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    reloadTableAndRestoreSelection();
-                })
-                .catch(error => {
-                    console.error("Update Error:", error);
-                    alert("레코드 수정 실패: " + error.message);
-                });
-        }
+				fetch('/api/prints', {
+					method: 'POST',
+					body: multipartFormData
+				})
+					.then(response => {
+						if (!response.ok) {
+							return response.text().then(text => {throw new Error('Network response was not ok: ' + text)});
+						}
+						return response.json();
+					})
+					.then(data => {
+						alert("새 레코드가 등록되었습니다.");
+						currentSelectedId = data.인쇄ID; // 새로 추가된 레코드의 ID를 설정합니다.
+						reloadTableAndRestoreSelection();
+					})
+					.catch(error => {
+						console.error("Add Error:", error);
+						alert("레코드 등록 실패: " + error.message);
+					});
+			}
 
-        function deleteRecord() {
-            const id = $('#인쇄ID').val();
-            if (!id) { alert("삭제할 레코드를 선택하세요."); return; }
-            if (!confirm("정말 삭제하시겠습니까?")) return;
+			function updateRecord() {
+				const id = $('#인쇄ID').val();
+				if (!id) {alert("수정할 레코드를 선택하세요."); return;}
+				if (!confirm("수정 하시겠습니까?")) return;
 
-            fetch('/api/prints/' + id, { method: 'DELETE' })
-                .then(response => {
-                    if (!response.ok) {
-                        return response.text().then(text => { throw new Error('Network response was not ok: ' + text) });
-                    }
-                    currentSelectedId = null;
-                    reloadTableAndRestoreSelection();
-                })
-                .catch(error => {
-                    console.error("Delete Error:", error);
-                    alert("레코드 삭제 실패: " + error.message);
-                });
-        }
+				const jsonData = getFormData();
+				const multipartFormData = createMultipartFormData(jsonData);
 
-        function resetDetailFormValues() {
-            $('#detail-container').find('input[type="text"], input[type="number"], input[type="date"], textarea').val('');
-            $('#detail-container').find('input[type="checkbox"]').prop('checked', false);
-            $('#인쇄ID').val('');
-            $('#인쇄로고예시_display').empty();
-            $('#인쇄로고예시_file').val('');
-        }
+				fetch('/api/prints/' + id, {
+					method: 'PUT',
+					body: multipartFormData
+				})
+					.then(response => {
+						if (!response.ok) {
+							return response.text().then(text => {throw new Error('Network response was not ok: ' + text)});
+						}
+						return response.json();
+					})
+					.then(data => {
+						reloadTableAndRestoreSelection();
+					})
+					.catch(error => {
+						console.error("Update Error:", error);
+						alert("레코드 수정 실패: " + error.message);
+					});
+			}
 
-        function resetDetailForm() {
-            resetDetailFormValues();
+			function deleteRecord() {
+				const id = $('#인쇄ID').val();
+				if (!id) {alert("삭제할 레코드를 선택하세요."); return;}
+				if (!confirm("정말 삭제하시겠습니까?")) return;
 
-            if (selectedRow) {
-                $(selectedRow).removeClass('selected-row');
-                selectedRow = null;
-            }
-            currentSelectedId = null;
-        }
+				fetch('/api/prints/' + id, {method: 'DELETE'})
+					.then(response => {
+						if (!response.ok) {
+							return response.text().then(text => {throw new Error('Network response was not ok: ' + text)});
+						}
+						currentSelectedId = null;
+						reloadTableAndRestoreSelection();
+					})
+					.catch(error => {
+						console.error("Delete Error:", error);
+						alert("레코드 삭제 실패: " + error.message);
+					});
+			}
 
-        function updateButtonState(enable) {
-            $('#btnAdd').prop('disabled', false).addClass('enabled');
+			function resetDetailFormValues() {
+				$('#detail-container').find('input[type="text"], input[type="number"], input[type="date"], textarea').val('');
+				$('#detail-container').find('input[type="checkbox"]').prop('checked', false);
+				$('#인쇄ID').val('');
+				$('#인쇄로고예시_display').empty();
+				$('#인쇄로고예시_file').val('');
+			}
 
-            $('#btnUpdate, #btnDelete').prop('disabled', !enable)
-                .toggleClass('enabled', enable);
-        }
-    </script>
+			function resetDetailForm() {
+				resetDetailFormValues();
+
+				if (selectedRow) {
+					$(selectedRow).removeClass('selected-row');
+					selectedRow = null;
+				}
+				currentSelectedId = null;
+			}
+
+			function updateButtonState(enable) {
+				$('#btnAdd').prop('disabled', false).addClass('enabled');
+
+				$('#btnUpdate, #btnDelete').prop('disabled', !enable)
+					.toggleClass('enabled', enable);
+			}
+		});
+	</script>
 </body>
 
 </html>

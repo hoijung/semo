@@ -106,7 +106,7 @@
       </div>
       <div class="form-group">
         <label for="비밀번호">비밀번호</label>
-        <input type="password" id="비밀번호" name="비밀번호" placeholder="********" autocomplete="current-password" required  value="1234"/>
+        <input type="text" id="비밀번호" name="비밀번호" placeholder="********" autocomplete="current-password" required  value="1234"/>
       </div>
       <!--<div class="actions">
         <label><input type="checkbox" id="remember" /> 아이디 저장</label>
@@ -153,7 +153,7 @@
         //debugger
         if (msg.status == 'success') {
            // alert(`환영합니다, ${msg.사용자명}님! (데모)`);
-            window.location.href = "/index.html";
+            window.location.href = "/main.html";
         } else {
            alert(msg.message);
         }
