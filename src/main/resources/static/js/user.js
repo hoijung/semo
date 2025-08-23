@@ -29,9 +29,9 @@ $(document).ready(function () {
 			table = $('#userTable').DataTable({
 				ajax: {url: '/api/users', dataSrc: ''},
 				columns: [
-					{data: '사용자ID'},
-					{data: '사용자명'},
-					{data: '아이디'}
+					{data: 'userId'},
+					{data: 'userName'},
+					{data: 'id'}
 				],
 				destroy: true,
 				paging: false,
@@ -50,7 +50,7 @@ $(document).ready(function () {
 
 				$(this).addClass('selected-row');
 				selectedRow = this;
-				currentSelectedId = data.사용자ID;
+				currentSelectedId = data.userId;
 
 				fillDetailForm(data);
 				updateButtonState(true);
@@ -102,7 +102,7 @@ $(document).ready(function () {
 						let foundRow = null;
 						table.rows().every(function () {
 							const rowData = this.data();
-							if (rowData && rowData.사용자ID === currentSelectedId) {
+							if (rowData && rowData.userId === currentSelectedId) {
 								foundRow = this.node();
 								fillDetailForm(rowData);
 								return false;
@@ -145,18 +145,18 @@ $(document).ready(function () {
 
 			function addRecord() {
 				const jsonData = getFormData();
-				if (!jsonData.사용자명 || !jsonData.아이디 || !jsonData.비밀번호) {
+				if (!jsonData.userName || !jsonData.id || !jsonData.password) {
 					alert("사용자명, 아이디, 비밀번호는 필수입니다.");
 					return;
 				}
 				if (!confirm("등록 하시겠습니까?")) return;
 
-				delete jsonData.사용자ID;
+				delete jsonData.userId;
 
 				sendRequest('/api/users', 'POST', jsonData)
 					.then(data => {
 						alert("새 사용자가 등록되었습니다.");
-						currentSelectedId = data.사용자ID;
+						currentSelectedId = data.userId;
 						reloadTableAndRestoreSelection();
 					})
 					.catch(error => {
@@ -166,13 +166,13 @@ $(document).ready(function () {
 			}
 
 			function updateRecord() {
-				const id = $('#사용자ID').val();
+				const id = $('#userId').val();
 				if (!id) { alert("수정할 사용자를 선택하세요."); return; }
 				if (!confirm("수정 하시겠습니까?")) return;
 
 				const jsonData = getFormData();
-				if (jsonData.비밀번호 === '') {
-					delete jsonData.비밀번호;
+				if (jsonData.password === '') {
+					delete jsonData.password;
 				}
 
 				sendRequest('/api/users/' + id, 'PUT', jsonData)
@@ -187,7 +187,7 @@ $(document).ready(function () {
 			}
 
 			function deleteRecord() {
-				const id = $('#사용자ID').val();
+				const id = $('#userId').val();
 				if (!id) { alert("삭제할 사용자를 선택하세요."); return; }
 				if (!confirm("정말 삭제하시겠습니까?")) return;
 

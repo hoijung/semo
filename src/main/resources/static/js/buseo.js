@@ -29,9 +29,9 @@ $(document).ready(function () {
 			table = $('#departmentTable').DataTable({
 				ajax: {url: '/api/departments', dataSrc: ''},
 				columns: [
-					{data: '부서ID'},
-					{data: '부서명'},
-					{data: '분류번호'}
+					{data: 'departmentId'},
+					{data: 'departmentName'},
+					{data: 'classificationNumber'}
 				],
 				destroy: true,
 				paging: false,
@@ -50,7 +50,7 @@ $(document).ready(function () {
 
 				$(this).addClass('selected-row');
 				selectedRow = this;
-				currentSelectedId = data.부서ID;
+				currentSelectedId = data.departmentID;
 
 				fillDetailForm(data);
 				updateButtonState(true);
@@ -99,7 +99,7 @@ $(document).ready(function () {
 						let foundRow = null;
 						table.rows().every(function () {
 							const rowData = this.data();
-							if (rowData && rowData.부서ID === currentSelectedId) {
+							if (rowData && rowData.departmentId === currentSelectedId) {
 								foundRow = this.node();
 								fillDetailForm(rowData);
 								return false;
@@ -142,18 +142,18 @@ $(document).ready(function () {
 
 			function addRecord() {
 				const jsonData = getFormData();
-				if (!jsonData.부서명) {
+				if (!jsonData.departmentName) {
 					alert("부서명은 필수입니다.");
 					return;
 				}
 				if (!confirm("등록 하시겠습니까?")) return;
 
-				delete jsonData.부서ID;
+				delete jsonData.departmentId;
 
 				sendRequest('/api/departments', 'POST', jsonData)
 					.then(data => {
 						alert("새 부서가 등록되었습니다.");
-						currentSelectedId = data.부서ID;
+						currentSelectedId = data.departmentId;
 						reloadTableAndRestoreSelection();
 					})
 					.catch(error => {
@@ -163,7 +163,7 @@ $(document).ready(function () {
 			}
 
 			function updateRecord() {
-				const id = $('#부서ID').val();
+				const id = $('#departmentId').val();
 				if (!id) { alert("수정할 부서를 선택하세요."); return; }
 				if (!confirm("수정 하시겠습니까?")) return;
 
@@ -181,7 +181,7 @@ $(document).ready(function () {
 			}
 
 			function deleteRecord() {
-				const id = $('#부서ID').val();
+				const id = $('#departmentId').val();
 				if (!id) { alert("삭제할 부서를 선택하세요."); return; }
 				if (!confirm("정말 삭제하시겠습니까?")) return;
 

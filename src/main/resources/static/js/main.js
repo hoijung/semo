@@ -21,12 +21,12 @@
 					// 메뉴 클릭 이벤트 리스너
 					menuBar.addEventListener('click', (event) => {
 						const target = event.target.closest('.menu-item');
-						if (target && !target.classList.contains('active')) {
+						//if (target && !target.classList.contains('active')) {
 							const pageToLoad = target.getAttribute('data-page');
-							if (pageToLoad && pageToLoad !== 'initial') {
+							//if (pageToLoad && pageToLoad !== 'initial') {
 								location.href = pageToLoad;
-							}
-						}
+							//}
+						//}
 					});
 				}
 			});
