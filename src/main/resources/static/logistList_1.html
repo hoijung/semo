@@ -225,8 +225,12 @@ input[type="checkbox"][disabled]:checked::after {
 				<form id="searchForm">
 				<div class="search-filters">
 					<div class="filter-group">
-						<label for="pickingDate">피킹예정일</label>
-						<input type="date" id="pickingDate" name="pickingDate">
+						<label for="pickingDateStart">피킹예정일 (시작)</label>
+						<input type="date" id="pickingDateStart" name="pickingDateStart">
+					</div>
+					<div class="filter-group">
+						<label for="pickingDateEnd">피킹예정일 (종료)</label>
+						<input type="date" id="pickingDateEnd" name="pickingDateEnd">
 					</div>
 					<div class="filter-group">
 						<label for="printTeam">담당팀</label>
@@ -250,7 +254,9 @@ input[type="checkbox"][disabled]:checked::after {
 				<div class="action-buttons">
 					<button id="btnDetail">상세보기</button>
 					<button id="btnPicking">피킹완료</button>
+					<button id="btnCancelPicking">피킹취소</button>
 					<button id="btnOutReady">출고준비완료</button>
+					<button id="btnCancelOutReady">출고준비취소</button>
 				</div>
 				<div class="table-container">
 					<table id="grid" class="display" style="width:100%"></table>

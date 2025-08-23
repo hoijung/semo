@@ -226,6 +226,14 @@
 			box-sizing: border-box;
 		}
 
+		#공급가액,
+		#부가세액,
+		#합계금액 {
+			text-align: right;
+			width: 120px;
+			/* Increased width to accommodate larger numbers */
+		}
+
 		.field-item textarea {
 			resize: vertical;
 			min-height: 60px;
@@ -332,6 +340,7 @@
 						<tr>
 							<th>인쇄ID</th>
 							<th>주문일자</th>
+							<th>배분여부</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -340,6 +349,8 @@
 
 			<div id="detail-container">
 				<div id="detail-header-buttons">
+					<button type="button" id="btnDistribute" class="enabled">부서배분</button>
+					<button type="button" id="btnCancelDistribute" class="enabled">배분취소</button>
 					<button type="button" id="btnAdd" class="enabled">등록</button>
 					<button type="button" id="btnUpdate">수정</button>
 					<button type="button" id="btnDelete">삭제</button>
@@ -361,11 +372,15 @@
 
 							</div>
 							<div class="field-row-three-col">
-								<div class="field-item"><span>공급가액:</span><input type="number" id="공급가액" step="0.01">
+								<div class="field-item">
+									<span>공급가액:</span>
+									<input type="text" id="공급가액"  oninput="onlyNumberWithComma(this); calculateVat();"/>
 								</div>
-								<div class="field-item"><span>부가세액:</span><input type="number" id="부가세액" step="0.01">
+								<div class="field-item"><span>부가세액:</span>
+									<input type="text" id="부가세액"  oninput="onlyNumberWithComma(this);"/>
 								</div>
-								<div class="field-item"><span>합계금액:</span><input type="number" id="합계금액" step="0.01">
+								<div class="field-item"><span>합계금액:</span>
+									<input type="text" id="합계금액"  oninput="onlyNumberWithComma(this);"/>
 								</div>
 							</div>
 							<div class="field-row">
@@ -409,12 +424,12 @@
 						<div class="field-row-three-col">
 							<div class="field-item"><span>인쇄담당팀:</span><select id="인쇄담당팀"></select></div>
 							<div class="field-item"><span>기존주문횟수:</span><input type="text" id="기존주문횟수"></div>
-							<div class="field-item"><span>인쇄면:</span><select id="인쇄면"></select></div>							
+							<div class="field-item"><span>인쇄면:</span><select id="인쇄면"></select></div>
 						</div>
 						<div class="field-row">
 							<div class="field-item"><span>인쇄도수:</span><select id="인쇄도수"></select></div>
 							<div class="field-item"><span>인쇄참고사항:</span><input type="text" id="인쇄참고사항"></div>
-						</div>						
+						</div>
 						<div class="field-row-three-col">
 							<div class="field-item"><span>조색 데이터1</span><input type="text" id="조색데이터1"></div>
 							<div class="field-item"><span>조색 데이터2</span><input type="text" id="조색데이터2"></div>
@@ -435,7 +450,7 @@
 							</div>
 						</div>
 						<div class="field-row">
-							
+
 						</div>
 					</div>
 
@@ -451,7 +466,11 @@
 							<div class="field-item"><span>발송최종기한:</span><input type="date" id="발송마감기한"></div>
 						</div>
 						<div class="field-row-three-col">
-							<div class="field-item"><span>배송지(우편번호):</span><input type="text" id="최종배송지_우편번호"></div>
+							<div class="field-item">
+								<span>배송지(우편번호):</span>
+								<input type="text" id="최종배송지_우편번호" readonly>
+								<button type="button" id="postcodeSearchBtn">우편번호 찾기</button>
+							</div>
 							<div class="field-item"><span>배송지(주소):</span><input type="text" id="최종배송지_주소"></div>
 							<div class="field-item"><span>세부배송지:</span><input type="text" id="배송지주소상세"></div>
 						</div>
@@ -473,7 +492,34 @@
 
 		<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 		<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+		<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 		<script src="js/main.js"></script>
+		<script>
+			document.getElementById('postcodeSearchBtn').addEventListener('click', function () {
+				new daum.Postcode({
+					oncomplete: function (data) {
+						var roadAddr = data.roadAddress; // 도로명 주소 변수
+						var extraRoadAddr = ''; // 참고 항목 변수
+
+						if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+							extraRoadAddr += data.bname;
+						}
+						if (data.buildingName !== '' && data.apartment === 'Y') {
+							extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+						}
+						if (extraRoadAddr !== '') {
+							extraRoadAddr = ' (' + extraRoadAddr + ')';
+						}
+
+						document.getElementById('최종배송지_우편번호').value = data.zonecode;
+						document.getElementById('최종배송지_주소').value = roadAddr;
+						document.getElementById('배송지주소상세').focus();
+					}
+				}).open();
+			});
+		</script>
+</body>
+</script>
 </body>
 
 </html>

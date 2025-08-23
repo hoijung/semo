@@ -48,19 +48,19 @@ public class PrintInfoRepository {
     
     public boolean updatePickingYn(int printId, boolean status) {
         String sql = "UPDATE 인쇄정보 " +
-                     "SET 피킹완료 = 1 " +
+                     "SET 피킹완료 = ? " +
                      "WHERE 인쇄ID = ?";
 
-        int updated = jdbcTemplate.update(sql, printId);
+        int updated = jdbcTemplate.update(sql, status ? 1 : 0, printId);
         return updated > 0;
     }
     
     public boolean updateOutReadyYn(int printId, boolean status) {
         String sql = "UPDATE 인쇄정보 " +
-                     "SET 출고준비 = 1 " +
+                     "SET 출고준비 = ? " +
                      "WHERE 인쇄ID = ?";
 
-        int updated = jdbcTemplate.update(sql, printId);
+        int updated = jdbcTemplate.update(sql, status, printId);
         return updated > 0;
     }    
     
@@ -121,7 +121,7 @@ public class PrintInfoRepository {
     }   
     
     // 전체 조회
-    public List<PrintInfo> findAll1() {
+    public List<PrintInfo> findAll1(String pickingDateStart, String pickingDateEnd, String printTeam, String companyContact, String itemName) {
     	 String sql = "SELECT 인쇄ID, 인쇄방법, 품목명, 쇼핑백색상, 사이즈, 제작장수, " +
                  "인쇄담당팀, 인쇄면, 인쇄도수, 인쇄방식, 로고인쇄크기, 로고인쇄위치, " +
                  "특이사항, 주문일자, 업체명_담당자, 고객ID, 전화번호, 발송마감기한, " +

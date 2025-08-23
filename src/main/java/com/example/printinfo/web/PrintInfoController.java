@@ -39,7 +39,7 @@ public class PrintInfoController {
     // 전체 목록
     @GetMapping("/printList1")
     public Map<String,Object> getPrintAll1() {
-        List<PrintInfo> list = service.getAllPrintInfo1();
+        List<PrintInfo> list = service.getAllPrintInfo1(null, null, null, null, null);
         Map<String,Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
         return response;
@@ -47,8 +47,14 @@ public class PrintInfoController {
     
     // 전체 목록
     @GetMapping("/list1")
-    public Map<String,Object> getAll1() {
-        List<PrintInfo> list = service.getAllPrintInfo1();
+    public Map<String,Object> getAll1(
+            @RequestParam(required = false) String pickingDateStart,
+            @RequestParam(required = false) String pickingDateEnd,
+            @RequestParam(required = false) String printTeam,
+            @RequestParam(required = false) String companyContact,
+            @RequestParam(required = false) String itemName) {
+        List<PrintInfo> list = service.getAllPrintInfo1(pickingDateStart, pickingDateEnd,
+                                                        printTeam, companyContact, itemName);
         Map<String,Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
         return response;
@@ -100,6 +106,17 @@ public class PrintInfoController {
         }
     }   
 
+    // 피킹 취소 처리 (New)
+    @PostMapping("/{printId}/cancel-picking")
+    public ResponseEntity<String> cancelPicking(@PathVariable int printId) {
+        boolean updated = service.cancelPickingStatus(printId);
+        if (updated) {
+            return ResponseEntity.ok("피킹 취소 처리 성공");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 데이터 없음");
+        }
+    }
+
     // 출고준비 완료 처리
     @PostMapping("/{printId}/out-ready")
     public ResponseEntity<String> updateOutReady(@PathVariable int printId, @RequestParam String status) {
@@ -109,5 +126,22 @@ public class PrintInfoController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 데이터 없음");
         }
-    }     
-}
+    }
+
+    // 출고준비 취소 처리 (New)
+    @PostMapping("/{printId}/cancel-out-ready")
+    public ResponseEntity<String> cancelOutReady(@PathVariable int printId) {
+        try {
+            boolean updated = service.cancelOutReadyStatus(printId);
+            if (updated) {
+                return ResponseEntity.ok("출고준비 취소 처리 성공");
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 데이터 없음");
+            }
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+}   

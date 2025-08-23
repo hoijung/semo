@@ -106,10 +106,16 @@ $(document).ready(function () {
 
 			// 체크박스 클릭 시 해당 행 선택/해제
 			$('#grid tbody').on('click', 'input.row-select', function (e) {
+				const $table = $('#grid');
 				const $row = $(this).closest('tr');
-				// 행 선택/해제 토글
-				$row.toggleClass('selected');
-				$(this).prop('checked', $row.hasClass('selected'));
+
+				// 다른 행 체크박스 모두 해제
+				$table.find('tbody tr.selected').removeClass('selected');
+				$table.find('input.row-select').prop('checked', false);
+
+				// 클릭한 행 선택
+				$row.addClass('selected');
+				$(this).prop('checked', true);
 
 				e.stopPropagation(); // tr 클릭 이벤트 방지
 			});
@@ -140,12 +146,25 @@ $(document).ready(function () {
 					alert("행을 선택해주세요.");
 					return;
 				}
+
+				// Client-side validation for "출고준비취소"
+				if (urlPath === 'cancel-out-ready') {
+					const notOutReadyItems = selected.filter(row => row.outReadyYn !== '1');
+					if (notOutReadyItems.length > 0) {
+						alert("출고완료된 항목만 출고준비를 취소할 수 있습니다.");
+						return; // Prevent action if any item is not '출고완료'
+					}
+				}
 				if (!confirm(`선택한 ${selected.length}개의 항목을 ${actionName} 처리하시겠습니까?`)) {
 					return;
 				}
 
 				const requests = selected.map(row => {
-					return $.post(`/api/print-info/${row.printId}/${urlPath}`, { status: 'Y' });
+					if (urlPath === 'picking' || urlPath === 'out-ready') {
+						return $.post(`/api/print-info/${row.printId}/${urlPath}`, { status: 'Y' });
+					} else { // For cancel-picking and cancel-out-ready
+						return $.post(`/api/print-info/${row.printId}/${urlPath}`);
+					}
 				});
 
 				Promise.all(requests)
@@ -155,7 +174,14 @@ $(document).ready(function () {
 					})
 					.catch(error => {
 						console.error(`${actionName} 처리 중 오류 발생:`, error);
-						alert("처리 중 오류가 발생했습니다. 콘솔을 확인해주세요.");
+						// Attempt to parse error message from server response if available
+						let errorMessage = "처리 중 오류가 발생했습니다. 콘솔을 확인해주세요.";
+						if (error && error.responseJSON && error.responseJSON.message) {
+							errorMessage = error.responseJSON.message;
+						} else if (error && error.responseText) {
+							errorMessage = error.responseText;
+						}
+						alert(errorMessage);
 						// 실패하더라도 테이블을 새로고침하여 최신 상태를 반영합니다.
 						$('#grid').DataTable().ajax.reload();
 					});
@@ -166,8 +192,18 @@ $(document).ready(function () {
 				handleBatchAction('피킹완료', 'picking');
 			});
 
+			// 피킹취소 버튼 (New)
+			$('#btnCancelPicking').click(function () {
+				handleBatchAction('피킹취소', 'cancel-picking'); // New action
+			});
+
 			// 출고준비완료 버튼
 			$('#btnOutReady').click(function () {
 				handleBatchAction('출고준비완료', 'out-ready');
+			});
+
+			// 출고준비취소 버튼 (New)
+			$('#btnCancelOutReady').click(function () {
+				handleBatchAction('출고준비취소', 'cancel-out-ready'); // New action
 			});
 		});

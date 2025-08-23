@@ -19,4 +19,29 @@ public class PrintService {
     public int insert(PrintDto dto) { return repository.insert(dto); }
     public int update(PrintDto dto) { return repository.update(dto); }
     public int delete(Integer id) { return repository.delete(id); }
+
+    public PrintDto distributePrint(Integer id) {
+        PrintDto dto = repository.findById(id);
+        if (dto != null) {
+            dto.set배분여부(true);
+            repository.update(dto);
+        }
+        return dto;
+    }
+
+    public PrintDto cancelDistributePrint(Integer id) {
+        PrintDto dto = repository.findById(id);
+        if (dto == null) {
+            // Handle not found case, e.g., throw an exception
+            throw new IllegalArgumentException("Print record not found with ID: " + id);
+        }
+
+        if (dto.get피킹완료() != null && dto.get피킹완료()) {
+            throw new IllegalStateException("피킹이 완료된 레코드는 배분을 취소할 수 없습니다.");
+        }
+
+        dto.set배분여부(false);
+        repository.update(dto);
+        return dto;
+    }
 }
