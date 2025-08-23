@@ -344,8 +344,19 @@ public class PrintInfo {
 
     /** 최종 배송지 주소 */
     private String deliveryAddress;
+    
+    /** 배송지 타입 */
+    private String deliveryType;    
 
-    /** 판매 채널 */
+    public String getDeliveryType() {
+		return deliveryType;
+	}
+
+	public void setDeliveryType(String deliveryType) {
+		this.deliveryType = deliveryType;
+	}
+
+	/** 판매 채널 */
     private String salesChannel;
 
     /** 계산서 발행 타입 */

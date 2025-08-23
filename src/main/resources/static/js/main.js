@@ -307,4 +307,131 @@
 
 			// Call loadPrintTypes when the document is ready
 			loadPrintTypes();
+
+			// Function to load item names into the 인쇄도수 combobox
+			function loadPrintCounts() {
+				fetch('/api/commoncodes/group/인쇄도수')
+					.then(response => response.json())
+					.then(data => {
+						const pSelect = $('#인쇄도수');
+						pSelect.empty(); // Clear existing options
+						pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+						data.forEach(code => {
+							pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+						});
+					})
+					.catch(error => console.error('Error loading item names:', error));
+			}
+
+			// Call loadItemNames when the document is ready
+			loadPrintCounts();	
+			
+			// Function to load item names into the 인쇄면 combobox
+			function loadPrintSides() {
+				fetch('/api/commoncodes/group/인쇄면')
+					.then(response => response.json())
+					.then(data => {
+						const pSelect = $('#인쇄면');
+						pSelect.empty(); // Clear existing options
+						pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+						data.forEach(code => {
+							pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+						});
+					})
+					.catch(error => console.error('Error loading item names:', error));
+			}
+
+			// Call loadItemNames when the document is ready
+			loadPrintSides();		
+			
+			// Function to load item names into the 인쇄팀 combobox
+			function loadPrintTeams() {
+				fetch('/api/commoncodes/group/인쇄담당팀')
+					.then(response => response.json())
+					.then(data => {
+						const pSelect = $('#인쇄담당팀');
+						pSelect.empty(); // Clear existing options
+						pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+						data.forEach(code => {
+							pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+						});
+					})
+					.catch(error => console.error('Error loading item names:', error));
+			}
+
+			// Call loadItemNames when the document is ready
+			loadPrintTeams();		
+
+			// Function to load item names into the 인쇄팀 combobox
+			function loadPrintTeams() {
+				fetch('/api/commoncodes/group/인쇄담당팀')
+					.then(response => response.json())
+					.then(data => {
+						const pSelect = $('#인쇄담당팀');
+						pSelect.empty(); // Clear existing options
+						pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+						data.forEach(code => {
+							pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+						});
+					})
+					.catch(error => console.error('Error loading item names:', error));
+			}
+
+			// Call loadItemNames when the document is ready
+			loadPrintTeams();	
+			
+			// Function to load item names into the 배송타입 combobox
+			function loadDeliveryTypes() {
+				fetch('/api/commoncodes/group/배송타입')
+					.then(response => response.json())
+					.then(data => {
+						const pSelect = $('#배송타입');
+						pSelect.empty(); // Clear existing options
+						pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+						data.forEach(code => {
+							pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+						});
+					})
+					.catch(error => console.error('Error loading item names:', error));
+			}
+
+			// Call loadItemNames when the document is ready
+			loadDeliveryTypes();	
+			
+			// Function to load item names into the 계산서발행타입 combobox
+			function loadTaxTypes() {
+				fetch('/api/commoncodes/group/계산서발행타입')
+					.then(response => response.json())
+					.then(data => {
+						const pSelect = $('#계산서발행타입');
+						pSelect.empty(); // Clear existing options
+						pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+						data.forEach(code => {
+							pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+						});
+					})
+					.catch(error => console.error('Error loading item names:', error));
+			}
+
+			// Call loadItemNames when the document is ready
+			loadTaxTypes();		
+			
+			// Function to load item names into the 계산서발행타입 combobox
+			function loadPrintMethods() {
+				fetch('/api/commoncodes/group/인쇄방법')
+					.then(response => response.json())
+					.then(data => {
+						const pSelect = $('#인쇄방법');
+						pSelect.empty(); // Clear existing options
+						pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+						data.forEach(code => {
+							pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+						});
+					})
+					.catch(error => console.error('Error loading item names:', error));
+			}
+
+			// Call loadItemNames when the document is ready
+			loadPrintMethods();				
+
 		});

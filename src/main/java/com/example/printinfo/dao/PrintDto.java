@@ -263,7 +263,20 @@ public class PrintDto {
     private String 발송마감기한;
     private String 최종배송지_우편번호;
     private String 최종배송지_주소;
-    private String 판매채널;
+	private String 배송지주소상세;
+    public String get배송지주소상세() {
+		return 배송지주소상세;
+	}
+	public void set배송지주소상세(String 배송지주소상세) {
+		this.배송지주소상세 = 배송지주소상세;
+	}
+	public String get로고인쇄색상() {
+		return 로고인쇄색상;
+	}
+	public void set로고인쇄색상(String 로고인쇄색상) {
+		this.로고인쇄색상 = 로고인쇄색상;
+	}
+	private String 판매채널;
     private String 계산서발행타입;
     private String 상호명;
     private String 대표자명;
@@ -284,6 +297,28 @@ public class PrintDto {
     private String 박스규격;
     private Boolean 기존주문여부;
     private String 인쇄방법;
+    private String 로고인쇄색상;
+    private String 조색데이터1;
+    public String get조색데이터1() {
+		return 조색데이터1;
+	}
+	public void set조색데이터1(String 조색데이터1) {
+		this.조색데이터1 = 조색데이터1;
+	}
+	public String get조색데이터2() {
+		return 조색데이터2;
+	}
+	public void set조색데이터2(String 조색데이터2) {
+		this.조색데이터2 = 조색데이터2;
+	}
+	public String get조색데이터3() {
+		return 조색데이터3;
+	}
+	public void set조색데이터3(String 조색데이터3) {
+		this.조색데이터3 = 조색데이터3;
+	}
+	private String 조색데이터2;
+    private String 조색데이터3;
 
     // Getter/Setter 생략 (Lombok 사용 가능)
 }
