@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+	<meta charset="UTF-8">
+	<title>인쇄정보 관리</title>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+	<link rel="stylesheet" href="style.css">
+	<style>
+		body {
+			font-family: 'Malgun Gothic', sans-serif;
+			background-color: #f4f7fc;
+			margin: 0;
+			padding: 0;
+		}
+
+		.container {
+			display: flex;
+			flex-direction: column;
+			height: 100vh;
+		}
+
+		.header {
+			background-color: #2c3e50;
+			color: white;
+			padding: 15px 20px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.header h1 {
+			margin: 0;
+			font-size: 24px;
+		}
+
+		.menu-container {
+			flex-shrink: 0;
+		}
+
+		.content {
+			flex-grow: 1;
+			padding: 20px;
+			display: flex;
+			gap: 20px;
+		}
+
+		#list-container {
+			flex: 0 0 300px; /* Fixed width for the list */
+			background-color: white;
+			padding: 20px;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			display: flex;
+			flex-direction: column;
+		}
+
+		#detail-container {
+			flex-grow: 1; /* Takes remaining space */
+			background-color: white;
+			padding: 20px;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			display: flex;
+			flex-direction: column;
+		}
+
+		#detail-header-buttons {
+			display: flex;
+			justify-content: flex-end;
+			gap: 10px;
+			margin-bottom: 15px;
+		}
+
+		#detail-header-buttons button {
+			padding: 8px 16px;
+			font-size: 14px;
+			border: 1px solid #888;
+			border-radius: 5px;
+			background-color: #f5f5f5;
+			cursor: pointer;
+			transition: background-color 0.2s, color 0.2s;
+		}
+
+		#detail-header-buttons button:hover {
+			background-color: #e0e0e0;
+		}
+
+		.detail-card {
+			flex-grow: 1;
+			overflow-y: auto; /* Enable scrolling for the form */
+		}
+
+		.field-group {
+			border: 1px solid #e0e0e0;
+			border-radius: 5px;
+			padding: 15px;
+			margin-bottom: 20px;
+			background-color: #fdfdfd;
+		}
+
+		.field-group label {
+			font-size: 16px;
+			font-weight: bold;
+			color: #333;
+			margin-bottom: 15px;
+			display: block;
+			padding-bottom: 10px;
+			border-bottom: 1px solid #eee;
+		}
+
+		.field-row {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 15px;
+			margin-top: 15px;
+		}
+
+		.field-item {
+			flex: 1 1 calc(50% - 15px); /* Two columns, with gap */
+			display: flex;
+			flex-direction: column;
+		}
+
+		.field-item.full-width {
+			flex: 1 1 100%;
+		}
+
+		.field-item span {
+			font-weight: bold;
+			margin-bottom: 5px;
+			font-size: 13px;
+			color: #555;
+		}
+
+		.field-item input[type="text"],
+		.field-item input[type="number"],
+		.field-item input[type="date"],
+		.field-item select,
+		.field-item textarea {
+			padding: 8px;
+			border: 1px solid #ccc;
+			border-radius: 4px;
+			font-size: 14px;
+			width: 100%;
+			box-sizing: border-box;
+		}
+
+		.field-item textarea {
+			resize: vertical;
+			min-height: 60px;
+		}
+
+		.field-item input[type="checkbox"] {
+			margin-top: 5px;
+			width: 18px;
+			height: 18px;
+		}
+
+		.checkbox-item {
+			flex-direction: row;
+			align-items: center;
+		}
+
+		.checkbox-item span {
+			margin-right: 10px;
+			margin-bottom: 0;
+		}
+
+		#인쇄로고예시_display img {
+			max-width: 100%;
+			height: auto;
+			display: block;
+			margin-top: 10px;
+			border: 1px solid #eee;
+			border-radius: 4px;
+		}
+
+		#인쇄로고예시_display a {
+			display: block;
+			margin-top: 5px;
+			font-size: 13px;
+			color: #3498db;
+			text-decoration: none;
+		}
+
+		#인쇄로고예시_display a:hover {
+			text-decoration: underline;
+		}
+
+		table.dataTable {
+			width: 100%;
+			border-collapse: collapse;
+		}
+		
+		table.dataTable th,
+		table.dataTable td {
+			text-align: center;
+			padding: 12px;
+		}
+
+		table.dataTable thead th {
+			background-color: #f2f2f2;
+			font-weight: bold;
+		}
+
+		.selected-row {
+			background-color: #e0f2f7 !important;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="header">
+			<h1>ERP 시스템</h1>
+			<div class="menu-container">
+			</div>
+		</div>
+		<div class="content">
+			<div id="list-container">
+				<table id="printTable" class="display">
+					<thead>
+						<tr>
+							<th>인쇄ID</th>
+							<th>주문일자</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+
+			<div id="detail-container">
+				<div id="detail-header-buttons">
+					<button type="button" id="btnAdd" class="enabled">등록</button>
+					<button type="button" id="btnUpdate">수정</button>
+					<button type="button" id="btnDelete">삭제</button>
+				</div>
+				<div class="detail-card">
+					<input type="hidden" id="인쇄ID">
+
+					<div class="field-group">
+						<label>기본 정보</label>
+						<div class="field-row">
+							<div class="field-item"><span>품목명:</span><select id="품목명"></select></div>
+							<div class="field-item"><span>사이즈:</span><input type="text" id="사이즈"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>쇼핑백색상:</span><input type="text" id="쇼핑백색상"></div>
+							<div class="field-item"><span>제작장수:</span><input type="number" id="제작장수"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>주문일자:</span><input type="date" id="주문일자"></div>
+							<div class="field-item"><span>판매채널:</span><select id="판매채널"></select></div>
+						</div>
+					</div>
+
+					<div class="field-group">
+						<label>인쇄 정보</label>
+						<div class="field-row">
+							<div class="field-item"><span>인쇄담당팀:</span><input type="text" id="인쇄담당팀"></div>
+							<div class="field-item"><span>인쇄면:</span><input type="text" id="인쇄면"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>인쇄도수:</span><input type="text" id="인쇄도수"></div>
+							<div class="field-item"><span>인쇄방식:</span><select id="인쇄방식"></select></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>로고인쇄크기:</span><input type="text" id="로고인쇄크기"></div>
+							<div class="field-item"><span>로고인쇄위치:</span><input type="text" id="로고인쇄위치"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>파일명:</span><input type="text" id="파일명"></div>
+							<div class="field-item">
+								<span>인쇄로고예시:</span>
+								<input type="file" id="인쇄로고예시_file" style="margin-bottom: 5px;">
+								<div id="인쇄로고예시_display"></div>
+								<input type="hidden" id="인쇄로고예시">
+							</div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>인쇄방법:</span><input type="text" id="인쇄방법"></div>
+						</div>
+					</div>
+
+					<div class="field-group">
+						<label>고객 / 배송 정보</label>
+						<div class="field-row">
+							<div class="field-item"><span>고객ID:</span><input type="text" id="고객ID"></div>
+							<div class="field-item"><span>업체명/담당자:</span><input type="text" id="업체명_담당자"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>전화번호:</span><input type="text" id="전화번호"></div>
+							<div class="field-item"><span>이메일:</span><input type="text" id="이메일"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>발송마감기한:</span><input type="date" id="발송마감기한"></div>
+							<div class="field-item"><span>피킹예정일:</span><input type="date" id="피킹예정일"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>배송지(우편번호):</span><input type="text" id="최종배송지_우편번호"></div>
+							<div class="field-item full-width"><span>배송지(주소):</span><input type="text" id="최종배송지_주소"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>배송타입:</span><input type="text" id="배송타입"></div>
+							<div class="field-item"><span>박스규격:</span><input type="text" id="박스규격"></div>
+						</div>
+					</div>
+
+					<div class="field-group">
+						<label>정산 및 관리 정보</label>
+						<div class="field-row">
+							<div class="field-item"><span>계산서발행타입:</span><input type="text" id="계산서발행타입"></div>
+							<div class="field-item"><span>상호명:</span><input type="text" id="상호명"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>대표자명:</span><input type="text" id="대표자명"></div>
+							<div class="field-item"><span>등록팀:</span><input type="text" id="등록팀"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>수정팀:</span><input type="text" id="수정팀"></div>
+							<div class="field-item"><span>공급가액:</span><input type="number" id="공급가액" step="0.01"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>부가세액:</span><input type="number" id="부가세액" step="0.01"></div>
+							<div class="field-item"><span>합계금액:</span><input type="number" id="합계금액" step="0.01"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item checkbox-item"><span>배분여부:</span><input type="checkbox" id="배분여부"></div>
+							<div class="field-item checkbox-item"><span>완료여부:</span><input type="checkbox" id="완료여부"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item checkbox-item"><span>피킹완료:</span><input type="checkbox" id="피킹완료"></div>
+							<div class="field-item checkbox-item"><span>출고준비:</span><input type="checkbox" id="출고준비"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item checkbox-item"><span>기존주문여부:</span><input type="checkbox" id="기존주문여부">
+							</div>
+						</div>
+					</div>
+
+					<div class="field-group">
+						<label>특이사항</label>
+						<div class="field-row">
+							<div class="field-item full-width"><span>내용:</span><textarea id="특이사항"></textarea></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+	<script>
+		// jQuery의 document.ready()를 사용하여 DOM이 완전히 로드된 후 스크립트를 실행합니다.
+		// 이는 페이지별 JavaScript를 초기화하는 표준적이고 안정적인 방법입니다.
+		$(document).ready(function () {
+			let table;
+			let selectedRow = null;
+			let currentSelectedId = null;
+
+			// 1. .menu-container에 menu.html을 로드합니다.
+			$('.menu-container').load('menu.html', function() {
+				// 2. 메뉴 로드가 완료된 후, 이벤트 리스너를 설정하고 현재 페이지 메뉴를 활성화합니다.
+				const menuBar = document.getElementById('menuBar');
+				if (menuBar) {
+					// 현재 페이지(main.html)에 해당하는 메뉴 항목에 'active' 클래스를 추가합니다.
+					const currentPageMenuItem = menuBar.querySelector('[data-page="main.html"]');
+					if (currentPageMenuItem) {
+						// 기존 active 클래스를 모두 제거하고 현재 페이지만 활성화합니다.
+						menuBar.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+						currentPageMenuItem.classList.add('active');
+					}
+
+					// 메뉴 클릭 이벤트 리스너
+					menuBar.addEventListener('click', (event) => {
+						const target = event.target.closest('.menu-item');
+						if (target && !target.classList.contains('active')) {
+							const pageToLoad = target.getAttribute('data-page');
+							if (pageToLoad && pageToLoad !== 'initial') {
+								location.href = pageToLoad;
+							}
+						}
+					});
+				}
+			});
+
+			table = $('#printTable').DataTable({
+				ajax: {url: '/api/prints', dataSrc: ''},
+				columns: [
+					{data: '인쇄ID'},
+					{data: '주문일자'}
+				],
+				destroy: true, // 동적으로 로드되는 콘텐츠에서 재초기화를 허용하는 중요한 옵션입니다.
+				paging: false,
+				info: false,
+				searching: false
+			});
+
+			// 테이블 행 클릭 이벤트
+			$('#printTable tbody').on('click', 'tr', function () {
+				const data = table.row(this).data();
+				if (!data) return;
+
+				if (selectedRow) {
+					$(selectedRow).removeClass('selected-row');
+				}
+
+				$(this).addClass('selected-row');
+				selectedRow = this;
+
+				currentSelectedId = data.인쇄ID;
+
+				fillDetailForm(data);
+				updateButtonState(true);
+			});
+
+			// 버튼 이벤트 리스너
+			$('#btnAdd').on('click', addRecord);
+			$('#btnUpdate').on('click', updateRecord);
+			$('#btnDelete').on('click', deleteRecord);
+
+			// 초기 버튼 상태 설정 (수정/삭제 비활성화)
+			updateButtonState(false);
+
+			function fillDetailForm(data) {
+				resetDetailFormValues();
+
+				for (let key in data) {
+					const el = $('#' + key);
+					if (el.length) {
+						if (el.attr('type') === 'checkbox') {
+							el.prop('checked', data[key]);
+						} else if (el.attr('type') === 'date') {
+							if (data[key]) {
+								el.val(data[key].substring(0, 10));
+							} else {
+								el.val('');
+							}
+						} else {
+							el.val(data[key]);
+						}
+					}
+				}
+
+				// 인쇄로고예시 이미지 표시
+				const logoFileName = data.인쇄로고예시;
+				const $displayDiv = $('#인쇄로고예시_display');
+				if (logoFileName) {
+					const fileUrl = `/File/${logoFileName}`;
+					const $link = $('<a>', {href: fileUrl, text: logoFileName, target: '_blank'});
+					const $image = $('<img>', {src: fileUrl, alt: '로고 이미지', style: 'max-width: 100%; max-height: 100px; margin-top: 5px; display: block;'});
+					$displayDiv.append($link).append($image);
+				}
+			}
+
+			function createMultipartFormData(data) {
+				const formData = new FormData();
+				formData.append('dto', new Blob([JSON.stringify(data)], {type: 'application/json'}));
+				const fileInput = $('#인쇄로고예시_file')[0];
+				if (fileInput.files && fileInput.files[0]) {
+					formData.append('logoFile', fileInput.files[0]);
+				}
+				return formData;
+			}
+
+			function getFormData() {
+				const formData = {};
+				$('.detail-card').find('input, textarea, select').each(function () {
+					const id = $(this).attr('id');
+					if (!id || this.type === 'file') return;
+
+					if ($(this).attr('type') === 'checkbox') {
+						formData[id] = $(this).prop('checked');
+					} else {
+						formData[id] = $(this).val();
+					}
+				});
+				return formData;
+			}
+
+			function reloadTableAndRestoreSelection() {
+				table.ajax.reload(function () {
+					if (currentSelectedId !== null) {
+						let foundRow = null;
+						table.rows().every(function () {
+							const rowData = this.data();
+							if (rowData && rowData.인쇄ID === currentSelectedId) {
+								foundRow = this.node();
+								fillDetailForm(rowData);
+								return false;
+							}
+						});
+
+						$('#printTable tbody tr').removeClass('selected-row');
+
+						if (foundRow) {
+							$(foundRow).addClass('selected-row');
+							selectedRow = foundRow;
+							updateButtonState(true);
+						} else {
+							resetDetailForm();
+							updateButtonState(false);
+						}
+					} else {
+						resetDetailForm();
+						updateButtonState(false);
+					}
+				}, false);
+			}
+
+			function addRecord() {
+				const jsonData = getFormData();
+				if (!confirm("등록 하시겠습니까?")) return;
+
+				delete jsonData.인쇄ID;
+				const multipartFormData = createMultipartFormData(jsonData);
+
+				fetch('/api/prints', {
+					method: 'POST',
+					body: multipartFormData
+				})
+					.then(response => {
+						if (!response.ok) {
+							return response.text().then(text => {throw new Error('Network response was not ok: ' + text)});
+						}
+						return response.json();
+					})
+					.then(data => {
+						alert("새 레코드가 등록되었습니다.");
+						currentSelectedId = data.인쇄ID; // 새로 추가된 레코드의 ID를 설정합니다.
+						reloadTableAndRestoreSelection();
+					})
+					.catch(error => {
+						console.error("Add Error:", error);
+						alert("레코드 등록 실패: " + error.message);
+					});
+			}
+
+			function updateRecord() {
+				const id = $('#인쇄ID').val();
+				if (!id) {alert("수정할 레코드를 선택하세요."); return;}
+				if (!confirm("수정 하시겠습니까?")) return;
+
+				const jsonData = getFormData();
+				const multipartFormData = createMultipartFormData(jsonData);
+
+				fetch('/api/prints/' + id, {
+					method: 'PUT',
+					body: multipartFormData
+				})
+					.then(response => {
+						if (!response.ok) {
+							return response.text().then(text => {throw new Error('Network response was not ok: ' + text)});
+						}
+						return response.json();
+					})
+					.then(data => {
+						reloadTableAndRestoreSelection();
+					})
+					.catch(error => {
+						console.error("Update Error:", error);
+						alert("레코드 수정 실패: " + error.message);
+					});
+			}
+
+			function deleteRecord() {
+				const id = $('#인쇄ID').val();
+				if (!id) {alert("삭제할 레코드를 선택하세요."); return;}
+				if (!confirm("정말 삭제하시겠습니까?")) return;
+
+				fetch('/api/prints/' + id, {method: 'DELETE'})
+					.then(response => {
+						if (!response.ok) {
+							return response.text().then(text => {throw new Error('Network response was not ok: ' + text)});
+						}
+						currentSelectedId = null;
+						reloadTableAndRestoreSelection();
+					})
+					.catch(error => {
+						console.error("Delete Error:", error);
+						alert("레코드 삭제 실패: " + error.message);
+					});
+			}
+
+			function resetDetailFormValues() {
+				$('#detail-container').find('input[type="text"], input[type="number"], input[type="date"], textarea').val('');
+				$('#detail-container').find('input[type="checkbox"]').prop('checked', false);
+				$('#인쇄ID').val('');
+				$('#인쇄로고예시_display').empty();
+				$('#인쇄로고예시_file').val('');
+			}
+
+			function resetDetailForm() {
+				resetDetailFormValues();
+
+				if (selectedRow) {
+					$(selectedRow).removeClass('selected-row');
+					selectedRow = null;
+				}
+				currentSelectedId = null;
+			}
+
+			function updateButtonState(enable) {
+				$('#btnAdd').prop('disabled', false).addClass('enabled');
+
+				$('#btnUpdate, #btnDelete').prop('disabled', !enable)
+					.toggleClass('enabled', enable);
+			}
+
+			// Function to load item names into the 품목명 combobox
+			function loadItemNames() {
+				fetch('/api/commoncodes/group/품목명')
+					.then(response => response.json())
+					.then(data => {
+						const 품목명Select = $('#품목명');
+						품목명Select.empty(); // Clear existing options
+						품목명Select.append('<option value="">선택하세요</option>'); // Add a default option
+						data.forEach(code => {
+							품목명Select.append(`<option value="${code.코드명}">${code.코드명}</option>`);
+						});
+					})
+					.catch(error => console.error('Error loading item names:', error));
+			}
+
+			// Call loadItemNames when the document is ready
+			loadItemNames();
+
+			// Function to load sales channels into the 판매채널 combobox
+			function loadSalesChannels() {
+				fetch('/api/commoncodes/group/판매채널')
+					.then(response => response.json())
+					.then(data => {
+						const salesChannelSelect = $('#판매채널');
+						salesChannelSelect.empty(); // Clear existing options
+						salesChannelSelect.append('<option value="">선택하세요</option>'); // Add a default option
+						data.forEach(code => {
+							salesChannelSelect.append(`<option value="${code.코드명}">${code.코드명}</option>`);
+						});
+					})
+					.catch(error => console.error('Error loading sales channels:', error));
+			}
+
+			// Call loadSalesChannels when the document is ready
+			loadSalesChannels();
+
+			// Function to load print types into the 인쇄방식 combobox
+			function loadPrintTypes() {
+				fetch('/api/commoncodes/group/인쇄방식')
+					.then(response => response.json())
+					.then(data => {
+						const printTypeSelect = $('#인쇄방식');
+						printTypeSelect.empty(); // Clear existing options
+						printTypeSelect.append('<option value="">선택하세요</option>'); // Add a default option
+						data.forEach(code => {
+							printTypeSelect.append(`<option value="${code.코드명}">${code.코드명}</option>`);
+						});
+					})
+					.catch(error => console.error('Error loading print types:', error));
+			}
+
+			// Call loadPrintTypes when the document is ready
+			loadPrintTypes();
+		});
+	</script>
+</body>
+
+</html>

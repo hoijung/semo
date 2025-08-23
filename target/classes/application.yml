@@ -1,0 +1,64 @@
+# ===============================================
+# =         공통 설정 (Default Profile)         =
+# ===============================================
+server:
+  port: 8080
+  servlet:
+    encoding:
+      force-response: true
+      charset: UTF-8
+
+spring:
+  mvc:
+    view:
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
+  # 기본 활성 프로필을 dev로 설정합니다.
+  # WAR 배포 시에는 실행 명령어에 --spring.profiles.active=prod 옵션을 추가하여 prod 프로필을 활성화해야 합니다.
+  profiles:
+    active: dev
+
+---
+# ===============================================
+# =      개발 환경 프로필 (Development: dev)      =
+# ===============================================
+spring:
+  config:
+    activate:
+      on-profile: dev
+  web:
+    resources:
+      static-locations:
+        - file:C:\Project\Access\
+        - file:C:\Users\love\git\semo\src\main\resources\static\ # 개발 시 소스 경로 직접 참조
+        - classpath:/static/
+  datasource:
+    url: jdbc:p6spy:sqlserver://;serverName=semo.cxyu028u2mcy.ap-northeast-2.rds.amazonaws.com;databaseName=semo;encrypt=false
+    username: admin
+    password: 12345678
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+
+file:
+  upload-dir: C:\Users\love\git\semo\src\main\resources\static\File
+
+---
+# ===============================================
+# =      운영 환경 프로필 (Production: prod)      =
+# ===============================================
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    # !!! 중요: 운영 서버의 DB 정보로 반드시 수정해야 합니다. !!!
+    url: jdbc:p6spy:sqlserver://;serverName=semo.cxyu028u2mcy.ap-northeast-2.rds.amazonaws.com;databaseName=semo;encrypt=false
+    username: admin
+    password: 12345678 # 보안을 위해 환경 변수나 외부 설정 파일 사용을 강력히 권장합니다.
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+
+file:
+  # JAR 배포 시 서버의 실제 파일 저장 경로
+  upload-dir: /home/ubuntu/semo/www/uploads/File

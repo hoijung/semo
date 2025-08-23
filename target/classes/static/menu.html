@@ -1,0 +1,62 @@
+<style>
+	body {
+		font-family: Arial, sans-serif;
+		margin: 0;
+		background-color: #f4f4f4;
+	}
+
+	.menu-container {
+		background-color: white;
+		border-bottom: 1px solid #ddd;
+		padding: 0 20px;
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	}
+
+	.menu-bar {
+		display: flex;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		justify-content: flex-start;
+	}
+
+	.menu-item {
+		padding: 15px 20px;
+		cursor: pointer;
+		transition: background-color 0.3s;
+		border-right: 1px solid #eee;
+		color: #333;
+	}
+
+	.menu-item:hover {
+		background-color: #f0f0f0;
+	}
+
+	.menu-item.active {
+		font-weight: bold;
+		color: #000;
+		border-bottom: 3px solid #0056b3;
+	}
+
+	.content-container {
+		text-align: center;
+		margin-top: 0px;
+	}
+
+	.title {
+		font-size: 2.5em;
+		font-weight: bold;
+		color: #333;
+	}
+</style>
+
+<ul class="menu-bar" id="menuBar">
+	<li class="menu-item active" data-page="initial">홈</li>
+	<li class="menu-item" data-page="main.html">고객지원팀</li>
+	<li class="menu-item" data-page="list.html">로고 인쇄 목록</li>
+	<li class="menu-item" data-page="logistList_3.html">세금계산서 발행</li>
+	<li class="menu-item" data-page="printList.html">인쇄 서비스팀</li>
+	<li class="menu-item" data-page="logistList_1.html">물류팀</li>
+	<li class="menu-item" data-page="user.html">사용자관리</li>
+	<li class="menu-item" data-page="buseo.html">부서관리</li>
+</ul>
