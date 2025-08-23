@@ -137,7 +137,6 @@
         alert("아이디와 비밀번호를 입력하세요.");
         return;
       }
-
       // 실제 ERP 백엔드 인증 API 호출 부분
       fetch('/api/auth/login', {
         method: 'POST',
@@ -150,7 +149,6 @@
       .then(res => res.json())
       .then(msg => {
         console.log(msg);
-        //debugger
         if (msg.status == 'success') {
            // alert(`환영합니다, ${msg.사용자명}님! (데모)`);
             window.location.href = "/";
