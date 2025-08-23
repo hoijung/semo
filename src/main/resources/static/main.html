@@ -107,6 +107,9 @@
 .detail-card {
     flex-grow: 1;
     overflow-y: auto; /* Enable scrolling for the form */
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
 }
 
 .field-group {
@@ -132,6 +135,19 @@
     flex-wrap: wrap;
     gap: 15px;
     margin-top: 15px;
+}
+
+.field-row-three-col {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.field-row-three-col .field-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .field-item {
@@ -284,20 +300,30 @@ table.dataTable thead th {
 				</div>
 				<div class="detail-card">
 					<input type="hidden" id="인쇄ID">
-
+					
 					<div class="field-group">
-						<label>기본 정보</label>
-						<div class="field-row">
-							<div class="field-item"><span>품목명:</span><select id="품목명"></select></div>
-							<div class="field-item"><span>사이즈:</span><input type="text" id="사이즈"></div>
+						<label>고객정보</label>
+						<div class="field-row-three-col">
+							<div class="field-item"><span>주문일자:</span><input type="date" id="주문일자"></div>							
+							<div class="field-item"><span>업체명(담당자):</span><input type="text" id="업체명_담당자"></div>
+							<div class="field-item"><span>고객ID:</span><input type="text" id="고객ID"></div>
 						</div>
 						<div class="field-row">
-							<div class="field-item"><span>쇼핑백색상:</span><input type="text" id="쇼핑백색상"></div>
-							<div class="field-item"><span>제작장수:</span><input type="number" id="제작장수"></div>
+							<div class="field-item"><span>전화번호:</span><input type="text" id="전화번호"></div>
+							<div class="field-item"><span>발송최종기한:</span><input type="date" id="발송마감기한"></div>
+						</div>
+						<div class="field-row-three-col">
+							<div class="field-item"><span>배송지(우편번호):</span><input type="text" id="최종배송지_우편번호"></div>
+							<div class="field-item"><span>배송지(주소):</span><input type="text" id="최종배송지_주소"></div>
+							<div class="field-item"><span>세부배송지:</span></div>
 						</div>
 						<div class="field-row">
-							<div class="field-item"><span>주문일자:</span><input type="date" id="주문일자"></div>
-							<div class="field-item"><span>판매채널:</span><select id="판매채널"></select></div>
+							<div class="field-item"><span>배송타입:</span><input type="text" id="배송타입"></div>	
+							<div class="field-item"><span>판매채널:</span><select id="판매채널"></select></div>												
+						</div>
+						<div class="field-row">							
+							<div class="field-item"><span>피킹예정일:</span><input type="date" id="피킹예정일"></div>
+							<div class="field-item"><span>박스규격:</span><input type="text" id="박스규격"></div>
 						</div>
 					</div>
 
@@ -327,50 +353,44 @@ table.dataTable thead th {
 						<div class="field-row">
 							<div class="field-item"><span>인쇄방법:</span><input type="text" id="인쇄방법"></div>
 						</div>
-					</div>
-
-					<div class="field-group">
-						<label>고객 / 배송 정보</label>
 						<div class="field-row">
-							<div class="field-item"><span>고객ID:</span><input type="text" id="고객ID"></div>
-							<div class="field-item"><span>업체명/담당자:</span><input type="text" id="업체명_담당자"></div>
+							<div class="field-item"><span>품목명:</span><select id="품목명"></select></div>
+							<div class="field-item"><span>사이즈:</span><input type="text" id="사이즈"></div>
 						</div>
 						<div class="field-row">
-							<div class="field-item"><span>전화번호:</span><input type="text" id="전화번호"></div>
-							<div class="field-item"><span>이메일:</span><input type="text" id="이메일"></div>
+							<div class="field-item"><span>쇼핑백색상:</span><input type="text" id="쇼핑백색상"></div>
+							<div class="field-item"><span>제작장수:</span><input type="number" id="제작장수"></div>
 						</div>
+						
 						<div class="field-row">
-							<div class="field-item"><span>발송마감기한:</span><input type="date" id="발송마감기한"></div>
-							<div class="field-item"><span>피킹예정일:</span><input type="date" id="피킹예정일"></div>
-						</div>
-						<div class="field-row">
-							<div class="field-item"><span>배송지(우편번호):</span><input type="text" id="최종배송지_우편번호"></div>
-							<div class="field-item full-width"><span>배송지(주소):</span><input type="text" id="최종배송지_주소"></div>
-						</div>
-						<div class="field-row">
-							<div class="field-item"><span>배송타입:</span><input type="text" id="배송타입"></div>
-							<div class="field-item"><span>박스규격:</span><input type="text" id="박스규격"></div>
+							<div class="field-item full-width"><span>내용:</span><textarea id="특이사항"></textarea></div>
 						</div>
 					</div>
 
 					<div class="field-group">
-						<label>정산 및 관리 정보</label>
-						<div class="field-row">
+						<label>세금계산서 발행정보</label>
+						
+						<div class="field-row-three-col">
 							<div class="field-item"><span>계산서발행타입:</span><input type="text" id="계산서발행타입"></div>
 							<div class="field-item"><span>상호명:</span><input type="text" id="상호명"></div>
-						</div>
-						<div class="field-row">
 							<div class="field-item"><span>대표자명:</span><input type="text" id="대표자명"></div>
-							<div class="field-item"><span>등록팀:</span><input type="text" id="등록팀"></div>
 						</div>
 						<div class="field-row">
-							<div class="field-item"><span>수정팀:</span><input type="text" id="수정팀"></div>
+							<div class="field-item"><span>이메일:</span><input type="text" id="이메일"></div>
+							<div class="field-item"><span>사업자등록번호:</span>							
+							
+						</div>
+						<div class="field-row-three-col">
 							<div class="field-item"><span>공급가액:</span><input type="number" id="공급가액" step="0.01"></div>
-						</div>
-						<div class="field-row">
 							<div class="field-item"><span>부가세액:</span><input type="number" id="부가세액" step="0.01"></div>
 							<div class="field-item"><span>합계금액:</span><input type="number" id="합계금액" step="0.01"></div>
 						</div>
+						<div class="field-row">
+							<div class="field-item"><span>등록팀:</span><input type="text" id="등록팀"></div>							
+							<div class="field-item"><span>수정팀:</span><input type="text" id="수정팀"></div>
+							
+						</div>
+						
 						<div class="field-row">
 							<div class="field-item checkbox-item"><span>배분여부:</span><input type="checkbox" id="배분여부"></div>
 							<div class="field-item checkbox-item"><span>완료여부:</span><input type="checkbox" id="완료여부"></div>
@@ -385,12 +405,13 @@ table.dataTable thead th {
 						</div>
 					</div>
 
-					<div class="field-group">
-						<label>특이사항</label>
-						<div class="field-row">
-							<div class="field-item full-width"><span>내용:</span><textarea id="특이사항"></textarea></div>
-						</div>
-					</div>
+					
+
+										
+
+					
+
+					
 				</div>
 			</div>
 		</div>
