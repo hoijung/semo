@@ -6,19 +6,6 @@
 <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
 <body>
-<script>
-function openDaumPostcode() {
-    new daum.Postcode({
-        oncomplete: function(data) {
-    	location.href = "about:blank?selectedAddress=" + (data.roadAddress) + "/" + (data.zonecode);
-        }
-    }).open();
-}
-
-// 페이지 로드 시 자동 실행
-window.onload = function() {
-    openDaumPostcode();
-};
-</script>
+<script src="js/daum_postcode.js"></script>
 </body>
 </html>

@@ -1,0 +1,149 @@
+$(document).ready(function () {
+			// 1. .menu-container에 menu.html을 로드합니다.
+			$('.menu-container').load('menu.html', function () {
+				// 2. 메뉴 로드가 완료된 후, 이벤트 리스너를 설정하고 현재 페이지 메뉴를 활성화합니다.
+				const menuBar = document.getElementById('menuBar');
+				if (menuBar) {
+					// 현재 페이지(main.html)에 해당하는 메뉴 항목에 'active' 클래스를 추가합니다.
+					const currentPageMenuItem = menuBar.querySelector('[data-page="printList.html"]');
+					if (currentPageMenuItem) {
+						// 기존 active 클래스를 모두 제거하고 현재 페이지만 활성화합니다.
+						menuBar.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+						currentPageMenuItem.classList.add('active');
+					}
+
+					// 메뉴 클릭 이벤트 리스너
+					menuBar.addEventListener('click', (event) => {
+						const target = event.target.closest('.menu-item');
+						if (target && !target.classList.contains('active')) {
+							const pageToLoad = target.getAttribute('data-page');
+							if (pageToLoad && pageToLoad !== 'initial') {
+								location.href = pageToLoad;
+							}
+						}
+					});
+				}
+			});
+			const table = $('#grid').DataTable({
+				responsive: true,
+				ajax: '/api/print-info/printList1',
+				columns: [
+					{
+						title: '',  // 체크박스 컬럼
+						orderable: false,
+						className: 'dt-body-center',
+						render: function (data, type, row, meta) {
+							return `<input type="checkbox" class="row-select">`;
+						}
+					},
+					{data: 'printTeam', title: '담당팀'},
+					{data: 'companyContact', title: '업체명(고객명)'},
+					{data: 'itemName', title: '품목명'},
+					{data: 'bagColor', title: '컬러'},
+					{data: 'size', title: '사이즈'},
+					{data: 'quantity', title: '장수'},
+					{data: 'printSide', title: '인쇄면'},
+					{data: 'printCount', title: '인쇄도수', className: 'dt-center'},
+					{data: 'logoSize', title: '로고인쇄크기'},
+					{data: 'logoPosition', title: '로고위치'},
+					{data: 'quantity', title: '예시사진'},
+					{data: 'quantity', title: '박스규격'},
+					{data: 'quantity', title: '박스수량'},
+					{data: 'printMethod', title: '발송마감일', className: 'dt-center'},
+					{
+						data: "outReadyYn", title: "작업완료"
+						, className: 'dt-center'
+						, render: function (data, type, row) {
+							if (type === 'display') {
+								return `<input type="checkbox" ${data ? 'checked' : ''} disabled>`;
+							}
+							return data;
+						}
+					},
+
+					//{data: 'printId', title: '인쇄ID'},
+					// {data: 'printMethod', title: '인쇄방법'},
+
+					// {data: 'itemName', title: '품목명'},
+					// {data: 'bagColor', title: '쇼핑백색상'},
+					// {data: 'sizeText', title: '사이즈'},
+					//{data: 'quantity', title: '제작장수'},
+
+					// {data: 'team', title: '인쇄담당팀'},
+					// {data: 'sides', title: '인쇄면'},
+
+				]
+			});
+
+			// 클릭 이벤트
+			$('#grid tbody').on('click', 'tr', function () {
+				const data = table.row(this).data();
+				if (data) {
+					// window.open(`assetDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=700');
+				}
+			});
+
+			// 체크박스 클릭 시 해당 행 선택/해제
+			$('#grid tbody').on('click', 'input.row-select', function (e) {
+				const $table = $('#grid');
+				const $row = $(this).closest('tr');
+
+				// 다른 행 체크박스 모두 해제
+				$table.find('tbody tr.selected').removeClass('selected');
+				$table.find('input.row-select').prop('checked', false);
+
+				// 클릭한 행 선택
+				$row.addClass('selected');
+				$(this).prop('checked', true);
+
+				e.stopPropagation(); // tr 클릭 이벤트 방지
+			});
+
+			// 선택된 행 가져오기
+			function getSelectedRows() {
+				return $('#grid tbody tr.selected').map(function () {
+					return $('#grid').DataTable().row(this).data();
+				}).get();
+			}
+
+			// 상세보기 버튼
+			$('#btnDetail').click(function () {
+				const selected = getSelectedRows();
+				if (selected.length === 0) {
+					alert("행을 선택해주세요.");
+					return;
+				}
+				// 여러 행 선택 가능, 첫 번째 행 상세 보기
+				const data = selected[0];
+				window.open(`assetDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=1000');
+			});
+
+			// 피킹완료 버튼
+			$('#btnPicking').click(function () {
+				const selected = getSelectedRows();
+				if (selected.length === 0) {
+					alert("행을 선택해주세요.");
+					return;
+				}
+				// AJAX 호출로 서버 업데이트 예시
+				selected.forEach(row => {
+					$.post(`/api/print-info/${row.printId}/picking`, {status: 'Y'});
+				});
+				alert("선택한 행 피킹완료 처리되었습니다.");
+				$('#grid').DataTable().ajax.reload(); // 테이블 새로고침
+			});
+
+			// 출고준비완료 버튼
+			$('#btnOutReady').click(function () {
+				const selected = getSelectedRows();
+				if (selected.length === 0) {
+					alert("행을 선택해주세요.");
+					return;
+				}
+				selected.forEach(row => {
+					$.post(`/api/print-info/${row.printId}/out-ready`, {status: 'Y'});
+				});
+				alert("선택한 행 출고준비 완료 처리되었습니다.");
+				$('#grid').DataTable().ajax.reload();
+			});
+		});

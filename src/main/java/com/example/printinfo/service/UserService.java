@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.printinfo.dao.사용자Repository;
-import com.example.printinfo.model.사용자Dto;
+import com.example.printinfo.dao.UserRepository;
+import com.example.printinfo.model.UserDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,46 +15,45 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final 사용자Repository 사용자Repository;
+    private final UserRepository userRepository;
 
-    public List<사용자Dto> getAllUsers() {
-        return 사용자Repository.findAll();
+    public List<UserDto> getAllUsers() {
+        return userRepository.findAll();
     }
 
-    public Optional<사용자Dto> getUserById(Integer id) {
-        return 사용자Repository.findById(id);
+    public Optional<UserDto> getUserById(Integer id) {
+        return userRepository.findById(id);
     }
 
     @Transactional
-    public 사용자Dto createUser(사용자Dto user) {
+    public UserDto createUser(UserDto user) {
         // 실제 운영 환경에서는 Spring Security의 PasswordEncoder 등을 사용하여 비밀번호를 반드시 해싱해야 합니다.
-        // user.set비밀번호(passwordEncoder.encode(user.get비밀번호()));
-      사용자Repository.update(user);
+        // user.setPassword(passwordEncoder.encode(user.getPassword()));
+      userRepository.create(user);
       
       return user;
     }
 
     @Transactional
-    public 사용자Dto updateUser(Integer id, 사용자Dto userDetails) {
-    	사용자Dto user = 사용자Repository.findById(id)
+    public UserDto updateUser(Integer id, UserDto userDetails) {
+    	UserDto user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
-        user.set사용자명(userDetails.get사용자명());
-        user.set아이디(userDetails.get아이디());
-        if (userDetails.get비밀번호() != null && !userDetails.get비밀번호().isEmpty()) {
+        user.setUserName(userDetails.getUserName());
+        user.setUserId(userDetails.getUserId());
+        if (userDetails.getPassword() != null && !userDetails.getPassword().isEmpty()) {
             // 실제 운영 환경에서는 여기에서도 비밀번호를 해싱해야 합니다.
-            user.set비밀번호(userDetails.get비밀번호());
+            user.setPassword(userDetails.getPassword());
         }
-        user.set사용여부(userDetails.get사용여부());
+        user.setUseYn(userDetails.getUseYn());
 
-        사용자Repository.update(user);
+        userRepository.update(user);
         
         return user;
     }
 
     @Transactional
     public void deleteUser(Integer id) {
-        사용자Repository.deleteById(id);
+        userRepository.deleteById(id);
     }
 }
-

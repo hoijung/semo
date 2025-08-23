@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.printinfo.dao.AuthService;
-import com.example.printinfo.model.사용자Dto;
+import com.example.printinfo.model.UserDto;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -23,11 +23,11 @@ public class AuthController {
 	private AuthService authService;
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody 사용자Dto request, HttpSession session) {
+	public ResponseEntity<?> login(@RequestBody UserDto request, HttpSession session) {
 
-		사용자Dto user = authService.login(request);
+		UserDto user = authService.login(request);
 		
-		if (user == null || !"1".equals(user.get사용여부())) {
+		if (user == null || !"1".equals(user.getUseYn())) {
 		    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 		            .body(Map.of("status", "fail", "message", "아이디 또는 비밀번호가 틀렸습니다."));
 		}

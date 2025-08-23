@@ -1,23 +1,22 @@
 package com.example.printinfo.dao;
 
 import org.springframework.stereotype.Service;
-
-import com.example.printinfo.model.사용자Dto;
+import com.example.printinfo.model.*;
 
 @Service
 public class AuthService {
 
-    private final 사용자Repository 사용자Repo;
+    private final UserRepository userRepository;
 
-    public AuthService(사용자Repository 사용자Repo) {
-        this.사용자Repo = 사용자Repo;
+    public AuthService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public 사용자Dto login(사용자Dto 요청) {
+    public UserDto login(UserDto request) {
     	
-    	사용자Dto result;
+    	UserDto result;
     	
-    	result = 사용자Repo.findBy아이디(요청.get아이디(), 요청.get비밀번호());
+    	result = userRepository.findByUserIdAndPassword(request.getId(), request.getPassword());
     	    	
         return result;
     }
