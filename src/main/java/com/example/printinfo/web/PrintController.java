@@ -1,7 +1,9 @@
 package com.example.printinfo.web;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.printinfo.dao.PrintDto;
+import com.example.printinfo.model.PrintInfo;
 import com.example.printinfo.service.FileStorageService;
 import com.example.printinfo.service.PrintService;
 
@@ -39,14 +42,46 @@ public class PrintController {
 
     // New search endpoint for list.html
     @GetMapping("/search")
-    public List<PrintDto> searchPrints(
-            @RequestParam(required = false) String pickingDateStart,
-            @RequestParam(required = false) String pickingDateEnd,
+    public Map<String, Object> searchPrints(
+            @RequestParam(required = false) String orderDateStart,
+            @RequestParam(required = false) String orderDateEnd,
             @RequestParam(required = false) String printTeam,
             @RequestParam(required = false) String companyContact,
             @RequestParam(required = false) String itemName) {
-        return service.searchPrints(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
+
+        System.out.println("pickingDateStartss: " + orderDateStart);
+        System.out.println("pickingDateEnd: " + orderDateEnd);
+        System.out.println("printTeam: " + printTeam);
+        System.out.println("companyContact: " + companyContact);
+        System.out.println("itemName: " + itemName);
+
+        List<PrintInfo> list =  service.searchPrints(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
+
+        Map<String,Object> response = new HashMap<>();
+        response.put("data", list); // DataTables 기본 expects {data: [...]}
+        return response;
     }
+
+    // 전체 목록
+    @GetMapping("/printList1")
+    public Map<String,Object> getPrintAll1(
+            @RequestParam(required = false) String orderDateStart,
+            @RequestParam(required = false) String orderDateEnd,
+            @RequestParam(required = false) String printTeam,
+            @RequestParam(required = false) String companyContact,
+            @RequestParam(required = false) String itemName) {
+
+        System.out.println("pickingDateStartss: " + orderDateStart);
+        System.out.println("pickingDateEnd: " + orderDateEnd);
+        System.out.println("printTeam: " + printTeam);
+        System.out.println("companyContact: " + companyContact);
+        System.out.println("itemName: " + itemName);
+
+        List<PrintInfo> list = service.searchPrints(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
+        Map<String,Object> response = new HashMap<>();
+        response.put("data", list); // DataTables 기본 expects {data: [...]}
+        return response;
+    }    
 
     @GetMapping("/{id}")
     public PrintDto getById(@PathVariable Integer id) {

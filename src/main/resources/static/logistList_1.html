@@ -150,6 +150,7 @@ table.dataTable th,
 table.dataTable td {
     text-align: center;
     padding: 12px;
+    font-size: 0.8em;
 }
 
 table.dataTable thead th {
@@ -221,42 +222,27 @@ input[type="checkbox"][disabled]:checked::after {
 		</div>
 		<div class="content">
 			<div class="search-area">
-				<h2>조회 조건</h2>
 				<form id="searchForm">
-				<div class="search-filters">
-					<div class="filter-group">
-						<label for="pickingDateStart">피킹예정일 (시작)</label>
-						<input type="date" id="pickingDateStart" name="pickingDateStart">
+					<div class="search-filters">
+						<div class="filter-group">
+							<label for="orderDateStart">주문일자 (시작)</label>
+							<input type="date" id="orderDateStart" name="orderDateStart">
+						</div>
+						<div class="filter-group">
+							<label for="orderDateEnd">주문일자 (종료)</label>
+							<input type="date" id="orderDateEnd" name="orderDateEnd">
+						</div>
+					<div class="filter-group" style="margin-left: auto;">
+							<button id="btnSearch" >조회</button>
+						</div>
 					</div>
-					<div class="filter-group">
-						<label for="pickingDateEnd">피킹예정일 (종료)</label>
-						<input type="date" id="pickingDateEnd" name="pickingDateEnd">
-					</div>
-					<div class="filter-group">
-						<label for="printTeam">담당팀</label>
-						<input type="text" id="printTeam" name="printTeam">
-					</div>
-					<div class="filter-group">
-						<label for="companyContact">업체명(고객명)</label>
-						<input type="text" id="companyContact" name="companyContact">
-					</div>
-					<div class="filter-group">
-						<label for="itemName">품목명</label>
-						<input type="text" id="itemName" name="itemName">
-					</div>
-				</div>
-				<div class="search-buttons">
-					<button id="btnSearch">조회</button>
-				</div>
 				</form>
 			</div>
 			<div class="main-content">
 				<div class="action-buttons">
 					<button id="btnDetail">상세보기</button>
 					<button id="btnPicking">피킹완료</button>
-					<button id="btnCancelPicking">피킹취소</button>
 					<button id="btnOutReady">출고준비완료</button>
-					<button id="btnCancelOutReady">출고준비취소</button>
 				</div>
 				<div class="table-container">
 					<table id="grid" class="display" style="width:100%"></table>

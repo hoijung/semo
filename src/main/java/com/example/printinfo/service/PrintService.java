@@ -18,9 +18,9 @@ public class PrintService {
     public List<PrintDto> findAll() { return repository.findAll(); }
 
     // New search method for list.html
-    public List<PrintDto> searchPrints(String pickingDateStart, String pickingDateEnd,
+    public List<PrintInfo> searchPrints(String orderDateStart, String orderDateEnd,
                                        String printTeam, String companyContact, String itemName) {
-        return repository.findPrintsByCriteria(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
+        return repository.findPrintsByCriteria(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
     }
 
     public PrintDto findById(Integer id) { return repository.findById(id); }

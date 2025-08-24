@@ -3,7 +3,6 @@ com\example\printinfo\web\PrintInfoController.class
 com\example\printinfo\dao\AttachmentDTO.class
 com\example\printinfo\dao\AuthService.class
 com\example\printinfo\config\CorsConfig.class
-com\example\printinfo\dao\PrintInfoRepository.class
 com\example\printinfo\config\AuthInterceptor.class
 com\example\printinfo\model\UserDto.class
 com\example\printinfo\web\CommonCodeController.class

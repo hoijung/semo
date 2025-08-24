@@ -312,6 +312,53 @@ public class PrintInfo {
     /** 주문일자 */
     private String orderDate;
 
+    /** 주문여부 */
+    private String orderYn;	
+
+
+    /** 박스규격 */
+    private String boxSize;	
+
+    /** 박스수량 */
+    private String boxCount;	
+
+    /** 사업자번호 */
+    private String bussNo;		
+
+	public String getBussNo() {
+		return bussNo;
+	}
+
+	public void setBussNo(String bussNo) {
+		this.bussNo = bussNo;
+	}
+
+	public String getBoxCount() {
+		return boxCount;
+	}
+	
+	public void setBoxCount(String boxCount) {
+		this.boxCount = boxCount;
+	}
+	
+
+    public void setBoxSize(String boxSize) {
+		this.boxSize = boxSize;
+	}
+
+    public String getBoxSize() {
+		return boxSize;
+	}	
+
+
+    public void setOrderYn(String orderYn) {
+		this.orderYn = orderYn;
+	}
+
+    public String getOrderYn() {
+		return orderYn;
+	}	
+
     public void setOrderDate(String orderDate) {
 		this.orderDate = orderDate;
 	}
@@ -347,6 +394,17 @@ public class PrintInfo {
     
     /** 배송지 타입 */
     private String deliveryType;    
+
+    /** 계산서발행유무 */
+    private String billPubYn;   	
+
+	public String getBillPubYn() {
+		return billPubYn;
+	}
+
+	public void setBillPubYn(String billPubYn) {
+		this.billPubYn = billPubYn;
+	}
 
     public String getDeliveryType() {
 		return deliveryType;

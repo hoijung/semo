@@ -48,8 +48,13 @@ public class PrintInfoController {
     
     // 전체 목록
     @GetMapping("/printList1")
-    public Map<String,Object> getPrintAll1() {
-        List<PrintInfo> list = service2.getAllPrintInfo1(null, null, null, null, null);
+    public Map<String,Object> getPrintAll1(
+            @RequestParam(required = false) String orderDateStart,
+            @RequestParam(required = false) String orderDateEnd,
+            @RequestParam(required = false) String printTeam,
+            @RequestParam(required = false) String companyContact,
+            @RequestParam(required = false) String itemName) {
+        List<PrintInfo> list = service2.searchPrints(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
         Map<String,Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
         return response;
@@ -58,12 +63,19 @@ public class PrintInfoController {
     // 전체 목록
     @GetMapping("/list1")
     public Map<String,Object> getAll1(
-            @RequestParam(required = false) String pickingDateStart,
-            @RequestParam(required = false) String pickingDateEnd,
+            @RequestParam(required = false) String orderDateStart,
+            @RequestParam(required = false) String orderDateEnd,
             @RequestParam(required = false) String printTeam,
             @RequestParam(required = false) String companyContact,
             @RequestParam(required = false) String itemName) {
-        List<PrintInfo> list = service2.getAllPrintInfo1(pickingDateStart, pickingDateEnd,
+
+        System.out.println("pickingDateStartss: " + orderDateStart);
+        System.out.println("pickingDateEnd: " + orderDateEnd);
+        System.out.println("printTeam: " + printTeam);
+        System.out.println("companyContact: " + companyContact);
+        System.out.println("itemName: " + itemName);
+
+        List<PrintInfo> list = service2.getAllPrintInfo1(orderDateStart, orderDateEnd,
                                                         printTeam, companyContact, itemName);
         Map<String,Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
