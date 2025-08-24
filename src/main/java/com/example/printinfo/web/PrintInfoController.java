@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.printinfo.dao.PrintInfoService;
 import com.example.printinfo.model.PrintInfo;
+import com.example.printinfo.service.PrintService;
 
 @RestController
 @RequestMapping("/api/print-info")
@@ -26,11 +27,20 @@ public class PrintInfoController {
 
     @Autowired
     private PrintInfoService service;
+    
+    @Autowired
+    private PrintService service2;    
 
     // 전체 목록
     @GetMapping("/list")
-    public Map<String,Object> getList() {
-        List<PrintInfo> list = service.getList();
+    public Map<String,Object> getList(
+            @RequestParam(required = false) String pickingDateStart,
+            @RequestParam(required = false) String pickingDateEnd,
+            @RequestParam(required = false) String printTeam,
+            @RequestParam(required = false) String companyContact,
+            @RequestParam(required = false) String itemName) {
+        List<PrintInfo> list = service2.getList(pickingDateStart, pickingDateEnd,
+                                               printTeam, companyContact, itemName);
         Map<String,Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
         return response;
@@ -39,7 +49,7 @@ public class PrintInfoController {
     // 전체 목록
     @GetMapping("/printList1")
     public Map<String,Object> getPrintAll1() {
-        List<PrintInfo> list = service.getAllPrintInfo1(null, null, null, null, null);
+        List<PrintInfo> list = service2.getAllPrintInfo1(null, null, null, null, null);
         Map<String,Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
         return response;
@@ -53,7 +63,7 @@ public class PrintInfoController {
             @RequestParam(required = false) String printTeam,
             @RequestParam(required = false) String companyContact,
             @RequestParam(required = false) String itemName) {
-        List<PrintInfo> list = service.getAllPrintInfo1(pickingDateStart, pickingDateEnd,
+        List<PrintInfo> list = service2.getAllPrintInfo1(pickingDateStart, pickingDateEnd,
                                                         printTeam, companyContact, itemName);
         Map<String,Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
@@ -63,7 +73,7 @@ public class PrintInfoController {
     // 전체 목록
     @GetMapping("/list2")
     public Map<String,Object> getAll2() {
-        List<PrintInfo> list = service.getAllPrintInfo2();
+        List<PrintInfo> list = service2.getAllPrintInfo2();
         Map<String,Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
         return response;
@@ -72,7 +82,7 @@ public class PrintInfoController {
     // 전체 목록
     @GetMapping("/list3")
     public Map<String,Object> getAll3() {
-        List<PrintInfo> list = service.getAllPrintInfo3();
+        List<PrintInfo> list = service2.getAllPrintInfo3();
         Map<String,Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
         return response;

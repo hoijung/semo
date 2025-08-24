@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.example.printinfo.dao.PrintDto;
 import com.example.printinfo.dao.PrintRepository;
+import com.example.printinfo.model.PrintInfo;
 
 @Service
 public class PrintService {
@@ -15,6 +16,13 @@ public class PrintService {
     private PrintRepository repository;
 
     public List<PrintDto> findAll() { return repository.findAll(); }
+
+    // New search method for list.html
+    public List<PrintDto> searchPrints(String pickingDateStart, String pickingDateEnd,
+                                       String printTeam, String companyContact, String itemName) {
+        return repository.findPrintsByCriteria(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
+    }
+
     public PrintDto findById(Integer id) { return repository.findById(id); }
     public int insert(PrintDto dto) { return repository.insert(dto); }
     public int update(PrintDto dto) { return repository.update(dto); }
@@ -44,4 +52,28 @@ public class PrintService {
         repository.update(dto);
         return dto;
     }
+    
+    
+// 전체 조회
+ public List<PrintInfo> getAllPrintInfo1(String pickingDateStart, String pickingDateEnd,
+                                         String printTeam, String companyContact, String itemName) {
+     return repository.findAll1(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
+ }
+ 
+ // 전체 조회
+ public List<PrintInfo> getList(String pickingDateStart, String pickingDateEnd,
+                                String printTeam, String companyContact, String itemName) {
+     return repository.getList(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
+ }    
+
+ // 전체 조회
+ public List<PrintInfo> getAllPrintInfo2() {
+     return repository.findAll2();
+ }
+ 
+ // 전체 조회
+ public List<PrintInfo> getAllPrintInfo3() {
+     return repository.findAll3();
+ }
+    
 }

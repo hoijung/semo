@@ -12,7 +12,7 @@ import com.example.printinfo.model.PrintInfo;
 public class PrintInfoService {
 
     @Autowired
-    private PrintInfoRepository repository;
+    private PrintRepository repository;
     
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -20,27 +20,7 @@ public class PrintInfoService {
     public PrintInfo getPrintInfoById(int printId) {
         return repository.findById(printId);
     }
-        
- // 전체 조회
-    public List<PrintInfo> getAllPrintInfo1(String pickingDateStart, String pickingDateEnd,
-                                            String printTeam, String companyContact, String itemName) {
-        return repository.findAll1(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
-    }
-    
-    // 전체 조회
-    public List<PrintInfo> getList() {
-        return repository.getList();
-    }    
-
-    // 전체 조회
-    public List<PrintInfo> getAllPrintInfo2() {
-        return repository.findAll2();
-    }
-    
-    // 전체 조회
-    public List<PrintInfo> getAllPrintInfo3() {
-        return repository.findAll3();
-    }
+ 
 	public boolean updatePickingStatus(int printId, String status) {
 		// TODO Auto-generated method stub
 		repository.updatePickingYn(printId, true);

@@ -27,7 +27,7 @@ $(document).ready(function () {
 
 			const table = $('#grid').DataTable({
 				ajax: {
-					url: '/api/print-info/list',
+					url: '/api/prints/search', // Changed from /api/print-info/list
 					dataSrc: 'data'
 				},
 				columns: [
@@ -92,7 +92,7 @@ $(document).ready(function () {
 
 			// 조회 버튼 클릭 이벤트
 			$('#btnSearch').on('click', function () {
-				table.ajax.url('/api/print-info/list?' + $('#searchForm').serialize()).load();
+				table.ajax.url('/api/prints/search?' + $('#searchForm').serialize()).load(); // Changed URL
 			});
 
 			// 클릭 이벤트

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam; // Added import
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +35,17 @@ public class PrintController {
     @GetMapping
     public List<PrintDto> getAll() {
         return service.findAll();
+    }
+
+    // New search endpoint for list.html
+    @GetMapping("/search")
+    public List<PrintDto> searchPrints(
+            @RequestParam(required = false) String pickingDateStart,
+            @RequestParam(required = false) String pickingDateEnd,
+            @RequestParam(required = false) String printTeam,
+            @RequestParam(required = false) String companyContact,
+            @RequestParam(required = false) String itemName) {
+        return service.searchPrints(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
     }
 
     @GetMapping("/{id}")
