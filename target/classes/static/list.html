@@ -142,9 +142,22 @@
 
         table.dataTable th,
         table.dataTable td {
+            border: 1px solid #ccc;
+            /* 세로줄, 가로줄 모두 표시 */
             text-align: center;
-            padding: 12px;
+            /* 가로 가운데 정렬 */
+            vertical-align: middle;
+            /* 세로 가운데 정렬 */
+            padding: 6px;
+
+            text-align: center;
             font-size: 0.8em;
+        }
+
+        .group-header {
+            text-align: center;
+            font-weight: bold;
+            background-color: #f0f0f0;
         }
 
         table.dataTable thead th {
@@ -205,6 +218,25 @@
             border-bottom: 3px solid #0056b3;
         }
     </style>
+
+    <style>
+        /* 그룹 헤더 전용 스타일 */
+        .group-header {
+            text-align: center !important;
+            /* 가로 가운데 */
+            vertical-align: middle !important;
+            /* 세로 가운데 */
+            background-color: #f0f0f0;
+            /* 배경 색상 */
+            font-weight: bold;
+        }
+
+        /* DataTables 기본 컬럼 가운데 정렬 */
+        .dt-center {
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
 </head>
 
 <body>
@@ -244,10 +276,11 @@
                         <thead>
                             <tr>
                                 <th rowspan="2">선택</th>
-                                <th colspan="5" text-align="center">고객정보</th>                                
-                                <th colspan="12" text-align="center">상품정보</th>                                
-                                <th colspan="5" text-align="center">배송프로세스</th>                                
-                                <th colspan="7" text-align="center">세금계산서</th>                                
+                                <th colspan="5" class="group-header">고객정보</th>
+                                <th colspan="9" class="group-header">상품정보</th>
+                                <th colspan="5" class="group-header">배송프로세스</th>
+                                <th colspan="7" class="group-header">세금계산서</th>
+                                <th colspan="6" class="group-header">타입테이블</th>
                             </tr>
                             <tr>
                                 <th>번호</th>
@@ -265,17 +298,39 @@
                                 <th>인쇄팀</th>
                                 <th>인쇄명</th>
                                 <th>인쇄도수</th>
-                                <th>조색데이터1</th>
+                                <!-- <th>조색데이터1</th>
+                                <th>조색데이터2</th>
+                                <th>조색데이터3</th> -->
+
+
 
                                 <th>예시사진</th>
                                 <th>박스규격</th>
                                 <th>박스수량</th>
                                 <th>배송타입</th>
+                                <th>최종배송지</th>
+
+                                <th>발행유무</th>
+                                <th>사업자명(또는 성명)</th>
                                 <th>사업자번호</th>
                                 <th>대표자명</th>
                                 <th>이메일</th>
                                 <th>세액</th>
                                 <th>공급가액</th>
+
+                                <th>주문일자</th>
+                                <th>피킹예정일</th>
+                                <th>피킹완료</th>
+                                <th>피킹인쇄완료</th>
+                                <th>출고준비</th>
+                                <th>발송마감일</th>
+
+                                <!-- { data: 'orderDate', title: '주문일자', className: 'dt-center' },
+			{ data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
+			{ data: 'pickingDate', title: '피킹완료', className: 'dt-center' },
+			{ data: 'pickingDate', title: '피킹인쇄완료', className: 'dt-center' },
+			{ data: 'pickingDate', title: '출고준비', className: 'dt-center' },
+			{ data: 'pickingDate', title: '발송마감일', className: 'dt-center' }, -->
                             </tr>
                         </thead>
                     </table>

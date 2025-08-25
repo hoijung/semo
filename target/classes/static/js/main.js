@@ -90,7 +90,17 @@ $(document).ready(function () {
 		destroy: true, // 동적으로 로드되는 콘텐츠에서 재초기화를 허용하는 중요한 옵션입니다.
 		paging: false,
 		info: false,
-		searching: false
+		searching: false,
+		drawCallback: function(settings) {
+			// This is to ensure that the selection happens only on the initial draw.
+			if (this.api().page.info().page === 0 && !this.api().state.loaded()) {
+				// Select the first row
+				const firstRow = $('#printTable tbody tr:first');
+				if (firstRow.length) {
+					firstRow.trigger('click');
+				}
+			}
+		}
 	});
 
 	// 테이블 행 클릭 이벤트
@@ -154,6 +164,9 @@ $(document).ready(function () {
 			const $image = $('<img>', { src: fileUrl, alt: '로고 이미지', style: 'max-width: 100%; max-height: 100px; margin-top: 5px; display: block;' });
 			$displayDiv.append($link).append($image);
 		}
+        
+        // Set initial state of tax info section
+        toggleTaxInfoSection();
 	}
 
 	function createMultipartFormData(data) {
@@ -392,6 +405,15 @@ $(document).ready(function () {
 	// Call loadItemNames when the document is ready
 	loadItemNames();
 
+	// Function to toggle the tax info section based on sales channel
+	function toggleTaxInfoSection() {
+		const salesChannel = $('#판매채널').val();
+		const isDirectDeposit = salesChannel === '직접입금';
+		
+		// Enable/disable all inputs, selects, and buttons within the tax info group
+		$('#tax-info-group').find('input, select, button').prop('disabled', !isDirectDeposit);
+	}
+
 	// Function to load sales channels into the 판매채널 combobox
 	function loadSalesChannels() {
 		fetch('/api/commoncodes/group/판매채널')
@@ -403,12 +425,18 @@ $(document).ready(function () {
 				data.forEach(code => {
 					salesChannelSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
 				});
+                // After loading, set the initial state for the tax section
+                toggleTaxInfoSection();
 			})
 			.catch(error => console.error('Error loading sales channels:', error));
 	}
 
 	// Call loadSalesChannels when the document is ready
 	loadSalesChannels();
+    
+    // Add change event listener to the sales channel dropdown
+	$('#판매채널').on('change', toggleTaxInfoSection);
+
 
 	// Function to load print types into the 인쇄방식 combobox
 	function loadPrintTypes() {
@@ -463,24 +491,6 @@ $(document).ready(function () {
 
 	// Call loadItemNames when the document is ready
 	loadPrintSides();
-
-	// Function to load item names into the 인쇄팀 combobox
-	function loadPrintTeams() {
-		fetch('/api/commoncodes/group/인쇄담당팀')
-			.then(response => response.json())
-			.then(data => {
-				const pSelect = $('#인쇄담당팀');
-				pSelect.empty(); // Clear existing options
-				pSelect.append('<option value="">선택하세요</option>'); // Add a default option
-				data.forEach(code => {
-					pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
-				});
-			})
-			.catch(error => console.error('Error loading item names:', error));
-	}
-
-	// Call loadItemNames when the document is ready
-	loadPrintTeams();
 
 	// Function to load item names into the 인쇄팀 combobox
 	function loadPrintTeams() {

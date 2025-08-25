@@ -358,7 +358,7 @@
 				<div class="detail-card">
 					<input type="hidden" id="인쇄ID">
 
-					<div class="field-group">
+					<div class="field-group" id="tax-info-group">
 						<label>세금계산서 발행정보</label>
 
 						<div class="field-row-three-col">
@@ -465,14 +465,21 @@
 							<div class="field-item"><span>전화번호:</span><input type="text" id="전화번호"></div>
 							<div class="field-item"><span>발송최종기한:</span><input type="date" id="발송마감기한"></div>
 						</div>
-						<div class="field-row-three-col">
+						<div class="field-row">
 							<div class="field-item">
-								<span>배송지(우편번호):</span>
-								<input type="text" id="최종배송지_우편번호" readonly>
-								<button type="button" id="postcodeSearchBtn">우편번호 찾기</button>
+								<span>우편번호</span>
+								<div style="display: flex; align-items: center; gap: 5px;">
+									<input type="text" id="최종배송지_우편번호" readonly style="width: 80px;">
+									<button type="button" id="postcodeSearchBtn">&#128269;</button>
+								</div>
 							</div>
-							<div class="field-item"><span>배송지(주소):</span><input type="text" id="최종배송지_주소"></div>
-							<div class="field-item"><span>세부배송지:</span><input type="text" id="배송지주소상세"></div>
+							<div class="field-item" style="flex-grow: 1;">
+								<span>배송지</span>
+								<input type="text" id="최종배송지_주소">
+							</div>
+						</div>
+						<div class="field-row">
+							<div class="field-item full-width"><span>세부배송지</span><input type="text" id="배송지주소상세"></div>
 						</div>
 						<div class="field-row">
 							<div class="field-item"><span>배송타입:</span><select id="배송타입"></select></div>
