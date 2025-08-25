@@ -325,6 +325,39 @@ public class PrintInfo {
     /** 사업자번호 */
     private String bussNo;		
 
+	    /** 조색데이터1 */
+    private String colorData1;	
+
+	public String getColorData1() {
+		return colorData1;
+	}
+
+	public void setColorData1(String colorData1) {
+		this.colorData1 = colorData1;
+	}
+
+	    /** 조색데이터1 */
+    private String colorData2;	
+	
+	public String getColorData2() {
+		return colorData2;
+	}
+	
+	public void setColorData2(String colorData2) {
+		this.colorData2 = colorData2;
+	}
+
+	    /** 조색데이터1 */
+    private String colorData3;		
+
+	public String getColorData3() {
+		return colorData3;
+	}
+
+	public void setColorData3(String colorData3) {
+		this.colorData3 = colorData3;
+	}
+
 	public String getBussNo() {
 		return bussNo;
 	}
