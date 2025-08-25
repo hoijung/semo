@@ -25,10 +25,53 @@ $(document).ready(function () {
 		}
 	});
 
+	const inputStart = document.getElementById("orderDateStart");
+	const inputEnd = document.getElementById("orderDateEnd");
+
+	// 오늘 날짜 구하기
+    const today = new Date();
+
+	// yyyy-MM-dd 형식으로 변환
+    const formattedToday = today.toISOString().split("T")[0];
+    // input 기본값 설정
+    inputEnd.value = formattedToday;
+
+	const startDay = new Date();
+    // 14일(=2주) 전 날짜 구하기
+    startDay.setDate(startDay.getDate() - 31);
+    // yyyy-MM-dd 형식으로 변환
+    const formattedStart = startDay.toISOString().split("T")[0];
+    // input 기본값 설정
+    inputStart.value = formattedStart;
+
+	
+	
+//	$(document).ready(function() {
+	//     $('#grid').DataTable({
+	// 	responsive: true,
+	// 	ajax: {
+	// 		url: '/api/prints/search',
+	// 		dataSrc: 'data'
+	// 	},
+	// 	scrollX: true,   // ✅ 좌우 스크롤 허용
+	// 	columns: [
+	// 		{ data: null, render: () => `<input type="checkbox" class="row-select">` },
+	// 		{ data: 'printId' },
+	// 		{ data: 'companyContact' },
+	// 	]  // 여기서 #myTable 이 실제로 DOM에 없으면 오류
+	// });
+
+	// return;
+	// form 직렬화 (검색조건을 한 번에 쿼리스트링으로)
+		const query = $('#searchForm').serialize();
+
+		// 새로운 url로 다시 로드
+		//table.ajax.url('/api/prints/search?' + query).load();
+
 	const table = $('#grid').DataTable({
 		responsive: true,
 		ajax: {
-			url: '/api/prints/search',
+			url: '/api/prints/search?' + $('#searchForm').serialize(),
 			dataSrc: 'data'
 		},
 		scrollX: true,   // ✅ 좌우 스크롤 허용
@@ -37,10 +80,10 @@ $(document).ready(function () {
 			{ data: 'printId' },
 			{ data: 'companyContact' },
 			{ data: 'customerId' },
-			// { data: 'printTeam' },
-			{ data: 'phoneNumber' },
-			{ data: 'salesChannel' },
+			{ data: 'printTeam' },
+			
 
+			{ data: 'salesChannel' },
 			{ data: 'printMethod' },
 			{ data: 'orderYn' },
 			{ data: 'itemName' },
@@ -50,15 +93,16 @@ $(document).ready(function () {
 			{ data: 'printTeam' },
 			{ data: 'printSide' },
 			{ data: 'printCount' },
-			{ data: 'colorData1' },
-			{ data: 'colorData2' },
-			{ data: 'colorData3' },
+			// { data: 'colorData1' },
+			// { data: 'colorData2' },
+			// { data: 'colorData3' },
 
 			{ data: 'logoSamplePath' },
 			{ data: 'boxSize' },
 			{ data: 'boxCount' },
 			{ data: 'deliveryType' },
 			{ data: 'deliveryAddress' },
+
 			{ data: 'billPubYn' },
 			{ data: 'companyContact' },
 			{ data: 'bussNo' },
@@ -67,7 +111,14 @@ $(document).ready(function () {
 			{ data: 'taxAmount' },
 			{ data: 'supplyAmount' },
 
+			{ data: 'orderDate', title: '주문일자', className: 'dt-center' },
+			{ data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
+			{ data: 'pickingDate', title: '피킹완료', className: 'dt-center' },
+			{ data: 'pickingDate', title: '피킹인쇄완료', className: 'dt-center' },
+			{ data: 'pickingDate', title: '출고준비', className: 'dt-center' },
+			{ data: 'pickingDate', title: '발송마감일', className: 'dt-center' },
 
+// { data: 'phoneNumber' },
 		],
 		// columns: [
 		// 	{
@@ -116,6 +167,9 @@ $(document).ready(function () {
 		searching: false, // 기본 검색 기능 비활성화
 		lengthChange: false, // 표시 건수 변경 기능 비활성화
 		pageLength: 15, // 기본 페이지당 행 수
+		columnDefs: [
+            { targets: "_all", className: "dt-center" } // 전체 컬럼 가운데 정렬
+        ],
 		language: {
 			emptyTable: "데이터가 없습니다.",
 			info: "총 _TOTAL_개",
