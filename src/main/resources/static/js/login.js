@@ -26,8 +26,9 @@ function isEmpty(str) {
       .then(res => res.json())
       .then(msg => {
         console.log(msg);
-        //debugger
+        debugger
         if (msg.status == 'success') {
+
            // alert(`환영합니다, ${msg.사용자명}님! (데모)`);
             window.location.href = "/";
         } else {

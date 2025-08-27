@@ -1,5 +1,6 @@
 package com.example.printinfo.config;
 
+import com.example.printinfo.model.UserDto;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,11 +14,68 @@ public class AuthInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		HttpSession session = request.getSession();
-		if (session.getAttribute("loginUser") == null) {
-			// 세션에 사용자 정보가 없으면 로그인 페이지로 리다이렉트
+		UserDto loginUser = (UserDto) session.getAttribute("loginUser");
+
+		if (loginUser == null) {
 			response.sendRedirect("/login.html");
-			return false; // 요청 처리 중단
+			return false;
 		}
-		return true; // 요청 처리 계속    
+
+		String authority = loginUser.getAuthority();
+		String requestURI = request.getRequestURI();
+		String method = request.getMethod();
+
+		// Admin can do anything
+		if ("관리자".equals(authority)) {
+			return true;
+		}
+
+		// Read-only can only view
+		if ("모든 데이터 조회".equals(authority)) {
+			if (!"GET".equalsIgnoreCase(method)) {
+				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+				return false;
+			}
+			return true;
+		}
+
+		// Print Team
+		if ("인쇄팀 대시보드".equals(authority)) {
+			if (requestURI.startsWith("/")) { // Assuming this is the API for logistics
+				return true;
+			}
+			if (requestURI.startsWith("/api/prints")) {
+				return true;
+			}
+			if (requestURI.startsWith("/printList.html") || requestURI.startsWith("/api/commoncodes")) {
+				return true;
+			}
+			if ("GET".equalsIgnoreCase(method)) {
+				return true;
+			}
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return false;
+		}
+
+		// Logistics Team
+		if ("물류팀 대시보드".equals(authority)) {
+			if (requestURI.startsWith("/")) { // Assuming this is the API for logistics
+				return true;
+			}
+			if (requestURI.startsWith("/api/logistics")) { // Assuming this is the API for logistics
+				return true;
+			}
+			if (requestURI.startsWith("/logistList_1.html") || requestURI.startsWith("/api/commoncodes")) {
+				return true;
+			}
+			if ("GET".equalsIgnoreCase(method)) {
+				return true;
+			}
+			response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+			return false;
+		}
+
+		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+		return false;
 	}
 }

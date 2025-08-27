@@ -1,0 +1,11 @@
+# Compiled Java class files
+*.class
+
+# Jar files
+*.jar
+
+# Maven build output
+target/
+
+# Log files
+spy.log

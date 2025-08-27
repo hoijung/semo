@@ -45,6 +45,12 @@ function onlyNumberWithComma(obj) {
 // jQuery의 document.ready()를 사용하여 DOM이 완전히 로드된 후 스크립트를 실행합니다.
 // 이는 페이지별 JavaScript를 초기화하는 표준적이고 안정적인 방법입니다.
 $(document).ready(function () {
+    fetch('/api/auth/user')
+        .then(response => response.json())
+        .then(user => {
+            document.getElementById('greeting').textContent = `${user.userName} 님`;
+        })
+        .catch(error => console.error('Error fetching user data:', error));
 	let table;
 	let selectedRow = null;
 	let currentSelectedId = null;
@@ -75,13 +81,19 @@ $(document).ready(function () {
 		}
 	});
 
+	function getTableHeight() {
+        // 예: 화면 높이에서 200px 여유 공간 빼기
+        return $(window).height() - 200 + "px";
+    }
+
 	table = $('#printTable').DataTable({
 		ajax: { url: '/api/prints', dataSrc: '' },
+		scrollY: getTableHeight(), // 동적으로 높이 지정
 		columns: [
-			{ data: '인쇄ID' },
+			{ data: '인쇄ID' , title: 'No' },
 			{ data: '주문일자' },
 			{
-				data: '배분여부', // Assuming this field exists in the API response
+				data: '배분여부', title:'배분', // Assuming this field exists in the API response
 				render: function(data, type, row) {
 					return data ? 'Y' : 'N'; // Display 'Y' for true, 'N' for false
 				}

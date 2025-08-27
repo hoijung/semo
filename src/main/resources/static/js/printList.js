@@ -1,4 +1,28 @@
 $(document).ready(function () {
+    // Fetch user authority and set up UI
+    fetch('/api/auth/user')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Not authenticated');
+            }
+            return response.json();
+        })
+        .then(user => {
+            document.getElementById('greeting').textContent = `${user.userName} 님`;
+            const authority = user.authority;
+            if (authority !== '관리자' && authority !== '인쇄팀') {
+                $('#btnPrintEnd').hide();
+                $('#btnPrintEndCnl').hide();
+            }
+            if (authority === '모든 데이터 조회') {
+                $('#btnDetail').hide();
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+            // Redirect to login page if not authenticated
+            window.location.href = '/login.html';
+        });
 	// 1. .menu-container에 menu.html을 로드합니다.
 	$('.menu-container').load('menu.html', function () {
 		// 2. 메뉴 로드가 완료된 후, 이벤트 리스너를 설정하고 현재 페이지 메뉴를 활성화합니다.
@@ -25,12 +49,38 @@ $(document).ready(function () {
 		}
 	});
 
+	const inputStart = document.getElementById("orderDateStart");
+	const inputEnd = document.getElementById("orderDateEnd");
+
+	// 오늘 날짜 구하기
+	const today = new Date();
+
+	// yyyy-MM-dd 형식으로 변환
+	const formattedToday = today.toISOString().split("T")[0];
+	// input 기본값 설정
+	inputEnd.value = formattedToday;
+
+	const startDay = new Date();
+	// 14일(=2주) 전 날짜 구하기
+	startDay.setDate(startDay.getDate() - 31);
+	// yyyy-MM-dd 형식으로 변환
+	const formattedStart = startDay.toISOString().split("T")[0];
+	// input 기본값 설정
+	inputStart.value = formattedStart;
+
+	function getTableHeight() {
+        // 예: 화면 높이에서 200px 여유 공간 빼기
+        return $(window).height() - 300 + "px";
+    }
+
 	const table = $('#grid').DataTable({
 		responsive: true,
 		ajax: {
 			url: '/api/prints/printList1',
 			dataSrc: 'data'
 		},
+		scrollY: getTableHeight(), // 동적으로 높이 지정
+		scrollX: true,   // ✅ 좌우 스크롤 허용
 		columns: [
 			{
 				title: '',  // 체크박스 컬럼
@@ -40,9 +90,9 @@ $(document).ready(function () {
 					return `<input type="checkbox" class="row-select">`;
 				}
 			},
-			{ data: 'printTeam', title: '담당팀' },
-			{ data: 'companyContact', title: '업체명(고객명)' },
-			{ data: 'companyContact', title: '인쇄참고사향' },
+			{ data: 'printTeam'},
+			{ data: 'companyContact'},
+			{ data: 'companyContact'},
 			{ data: 'itemName', title: '품목명' },
 			{ data: 'bagColor', title: '컬러' },
 			{ data: 'size', title: '사이즈' },
@@ -53,36 +103,34 @@ $(document).ready(function () {
 			{ data: 'colorData1', title: '조색데이터1' },
 			{ data: 'colorData2', title: '조색데이터2' },
 			{ data: 'colorData3', title: '조색데이터3' },
-			
+
+			{ data: 'logoColor', title: '로고인쇄색상' },
 			{ data: 'logoSize', title: '로고인쇄크기' },
 			{ data: 'logoPosition', title: '로고위치' },
-			{ data: 'quantity', title: '예시사진' },
-			{ data: 'quantity', title: '박스규격' },
 			{ data: 'quantity', title: '박스수량' },
-			{ data: 'printMethod', title: '발송마감일', className: 'dt-center' },
+			{ data: 'printMethod', title: '발송최종기한', className: 'dt-center' },
+			// {
+			// 	data: "outReadyYn", title: "작업완료"
+			// 	, className: 'dt-center'
+			// 	, render: function (data, type, row) {
+			// 		if (type === 'display') {
+			// 			return `<input type="checkbox" ${data == '1' ? 'checked' : ''} disabled>`;
+			// 		}
+			// 		return data;
+			// 	}
+			// },
 			{
-				data: "outReadyYn", title: "작업완료"
+				data: "printEndYn", title: "인쇄완료"
 				, className: 'dt-center'
 				, render: function (data, type, row) {
 					if (type === 'display') {
-						return `<input type="checkbox" ${data ? 'checked' : ''} disabled>`;
+						return `<input type="checkbox" ${data == '1' ? 'checked' : ''} disabled>`;
 					}
 					return data;
 				}
 			}
 
-			//{data: 'printId', title: '인쇄ID'},
-			// {data: 'printMethod', title: '인쇄방법'},
-
-			// {data: 'itemName', title: '품목명'},
-			// {data: 'bagColor', title: '쇼핑백색상'},
-			// {data: 'sizeText', title: '사이즈'},
-			//{data: 'quantity', title: '제작장수'},
-
-			// {data: 'team', title: '인쇄담당팀'},
-			// {data: 'sides', title: '인쇄면'},
-
-		] ,
+		],
 
 		searching: false, // 기본 검색 기능 비활성화
 		lengthChange: false, // 표시 건수 변경 기능 비활성화
@@ -157,8 +205,8 @@ $(document).ready(function () {
 		window.open(`assetDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=1000');
 	});
 
-	// 피킹완료 버튼
-	$('#btnPicking').click(function () {
+	// 인쇄완료 버튼
+	$('#btnPrintEnd').click(function () {
 		const selected = getSelectedRows();
 		if (selected.length === 0) {
 			alert("행을 선택해주세요.");
@@ -166,23 +214,25 @@ $(document).ready(function () {
 		}
 		// AJAX 호출로 서버 업데이트 예시
 		selected.forEach(row => {
-			$.post(`/api/print-info/${row.printId}/picking`, { status: 'Y' });
+			$.post(`/api/print-info/${row.printId}/printEnd`, { status: 'Y' });
 		});
-		alert("선택한 행 피킹완료 처리되었습니다.");
+		alert("선택한 행 인쇄완료 처리되었습니다.");
 		$('#grid').DataTable().ajax.reload(); // 테이블 새로고침
 	});
 
-	// 출고준비완료 버튼
-	$('#btnOutReady').click(function () {
+	// 인쇄완료 취소 버튼
+	$('#btnPrintEndCnl').click(function () {
 		const selected = getSelectedRows();
 		if (selected.length === 0) {
 			alert("행을 선택해주세요.");
 			return;
 		}
+		// AJAX 호출로 서버 업데이트 예시
 		selected.forEach(row => {
-			$.post(`/api/print-info/${row.printId}/out-ready`, { status: 'Y' });
+			$.post(`/api/print-info/${row.printId}/cancel-printEnd`, { status: 'Y' });
 		});
-		alert("선택한 행 출고준비 완료 처리되었습니다.");
-		$('#grid').DataTable().ajax.reload();
+		alert("선택한 행 인쇄완료 취소되었습니다.");
+		$('#grid').DataTable().ajax.reload(); // 테이블 새로고침
 	});
+
 });

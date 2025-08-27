@@ -12,4 +12,5 @@ public class UserDto {
     private String useYn;
     private String userSeq;
     private String id;
+    private String authority;
 }

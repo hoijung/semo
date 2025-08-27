@@ -1,4 +1,30 @@
 $(document).ready(function () {
+    // Fetch user authority and set up UI
+    fetch('/api/auth/user')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Not authenticated');
+            }
+            return response.json();
+        })
+        .then(user => {
+            document.getElementById('greeting').textContent = `${user.userName} 님`;
+            const authority = user.authority;
+            if (authority !== '관리자' && authority !== '물류팀') {
+                $('#btnPicking').hide();
+                $('#btnOutReady').hide();
+                $('#btnCancelPicking').hide();
+                $('#btnCancelOutReady').hide();
+            }
+            if (authority === '모든 데이터 조회') {
+                $('#btnDetail').hide();
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+            // Redirect to login page if not authenticated
+            window.location.href = '/login.html';
+        });
 
 	// 1. .menu-container에 menu.html을 로드합니다.
 	$('.menu-container').load('menu.html', function () {
@@ -25,6 +51,26 @@ $(document).ready(function () {
 			});
 		}
 	});
+
+	
+	const inputStart = document.getElementById("orderDateStart");
+	const inputEnd = document.getElementById("orderDateEnd");
+
+	// 오늘 날짜 구하기
+	const today = new Date();
+
+	// yyyy-MM-dd 형식으로 변환
+	const formattedToday = today.toISOString().split("T")[0];
+	// input 기본값 설정
+	inputEnd.value = formattedToday;
+
+	const startDay = new Date();
+	// 14일(=2주) 전 날짜 구하기
+	startDay.setDate(startDay.getDate() - 31);
+	// yyyy-MM-dd 형식으로 변환
+	const formattedStart = startDay.toISOString().split("T")[0];
+	// input 기본값 설정
+	inputStart.value = formattedStart;
 
 	const table = $('#grid').DataTable({
 		responsive: true,

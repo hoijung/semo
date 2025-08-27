@@ -38,6 +38,18 @@ public class PrintInfoService {
         return repository.updatePickingYn(printId, false);
     }
 
+	public boolean updatePrintEnd(int printId, String status) {
+		// TODO Auto-generated method stub
+		repository.updatePrintEnd(printId, true);
+		return true;
+	}    
+    
+    public boolean cancelPrintEnd(int printId) {
+        // Assuming a method in repository to update picking status to false
+        return repository.updatePrintEnd(printId, false);
+    }    
+
+
     public boolean cancelOutReadyStatus(int printId) {
         PrintInfo printInfo = repository.findById(printId);
         if (printInfo == null) {

@@ -27,7 +27,7 @@ $(document).ready(function () {
 
 			// 2. DataTable 초기화
 			table = $('#userTable').DataTable({
-				ajax: {url: '/api/users', dataSrc: ''},
+				ajax: {url: '/api/users/list', dataSrc: ''},
 				columns: [
 					{data: 'userId'},
 					{data: 'userName'},

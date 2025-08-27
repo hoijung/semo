@@ -166,4 +166,26 @@ public class PrintInfoController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+ // 인쇄 완료 처리
+    @PostMapping("/{printId}/printEnd")
+    public ResponseEntity<String> printEnd(@PathVariable int printId, @RequestParam String status) {
+        boolean updated = service.updatePrintEnd(printId, status); 
+        if (updated) {
+            return ResponseEntity.ok("인쇄완료 처리 성공");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 데이터 없음");
+        }
+    }   
+
+    // 인쇄완료 취소 처리 (New)
+    @PostMapping("/{printId}/cancel-printEnd")
+    public ResponseEntity<String> cancelPrintEnd(@PathVariable int printId) {
+        boolean updated = service.cancelPrintEnd(printId);
+        if (updated) {
+            return ResponseEntity.ok("인쇄완료 취소 처리 성공");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 데이터 없음");
+        }
+    }    
 }   

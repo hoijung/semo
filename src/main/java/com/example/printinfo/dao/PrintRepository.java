@@ -398,6 +398,15 @@ public class PrintRepository {
         return updated > 0;
     }
 
+    public boolean updatePrintEnd(int printId, boolean status) {
+        String sql = "UPDATE 인쇄정보 " +
+                "SET 인쇄완료 = ? " +
+                "WHERE 인쇄ID = ?";
+
+        int updated = jdbcTemplate.update(sql, status ? 1 : 0, printId);
+        return updated > 0;
+    }    
+
     public boolean updateOutReadyYn(int printId, boolean status) {
         String sql = "UPDATE 인쇄정보 " +
                 "SET 출고준비 = ? " +
@@ -415,8 +424,8 @@ public class PrintRepository {
                 .append(", 업체명_담당자, 고객ID, 전화번호")
                 .append(", 발송마감기한, 최종배송지_우편번호, 최종배송지_주소, 판매채널, 계산서발행타입, 상호명, 대표자명")
                 .append(", 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, 등록일시, 수정일시, 등록팀, 수정팀")
-                .append(", 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 배송타입, 박스규격, 기존주문여부, 인쇄방법")
-                .append(", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3 ")
+                .append(", 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 배송타입, 박스규격, 박스수량, 배송타입, 기존주문여부, 인쇄방법")
+                .append(", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄완료 ")
                 .append(" FROM semo.dbo.인쇄정보 WHERE 1=1");
 
         List<Object> params = new java.util.ArrayList<>();
@@ -456,6 +465,7 @@ public class PrintRepository {
             dto.setPrintSide(rs.getString("인쇄면"));
             dto.setPrintCount(rs.getString("인쇄도수"));
             dto.setPrintType(rs.getString("인쇄방식"));
+            dto.setLogoColor(rs.getString("로고인쇄색상"));
             dto.setLogoSize(rs.getString("로고인쇄크기"));
             dto.setLogoPosition(rs.getString("로고인쇄위치"));
             dto.setRemarks(rs.getString("특이사항"));
@@ -485,6 +495,11 @@ public class PrintRepository {
             dto.setFileName(rs.getString("파일명"));
             dto.setLogoSamplePath(rs.getString("인쇄로고예시"));
             dto.setPickingDate(rs.getString("피킹예정일"));
+            dto.setBoxSize(rs.getString("박스규격"));
+            dto.setBoxCount(rs.getString("박스수량"));
+            dto.setDeliveryType(rs.getString("배송타입"));
+            dto.setPrintEndYn(rs.getString("인쇄완료"));
+            dto.setOldOrderYn(rs.getString("기존주문여부"));
             return dto;
         });
     }

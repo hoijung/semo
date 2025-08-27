@@ -36,6 +36,7 @@ public class UserRepository {
 		info.setPassword(rs.getString("비밀번호"));
 		// DB의 bit 타입을 DTO의 String 타입으로 변환합니다.
 		info.setUseYn(String.valueOf(rs.getBoolean("사용여부")));
+		info.setAuthority(rs.getString("권한"));
 		return info;
 	};
 
@@ -117,6 +118,7 @@ public class UserRepository {
 				info.setPassword(rs.getString("비밀번호"));
 				info.setUseYn(rs.getString("사용여부"));
 				info.setUserSeq(rs.getString("사용자ID"));
+				info.setAuthority(rs.getString("권한"));
 				return info;
 			}, userId, password);
 		} catch (EmptyResultDataAccessException e) {

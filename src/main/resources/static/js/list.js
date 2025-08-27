@@ -45,23 +45,6 @@ $(document).ready(function () {
     inputStart.value = formattedStart;
 
 	
-	
-//	$(document).ready(function() {
-	//     $('#grid').DataTable({
-	// 	responsive: true,
-	// 	ajax: {
-	// 		url: '/api/prints/search',
-	// 		dataSrc: 'data'
-	// 	},
-	// 	scrollX: true,   // ✅ 좌우 스크롤 허용
-	// 	columns: [
-	// 		{ data: null, render: () => `<input type="checkbox" class="row-select">` },
-	// 		{ data: 'printId' },
-	// 		{ data: 'companyContact' },
-	// 	]  // 여기서 #myTable 이 실제로 DOM에 없으면 오류
-	// });
-
-	// return;
 	// form 직렬화 (검색조건을 한 번에 쿼리스트링으로)
 		const query = $('#searchForm').serialize();
 
@@ -93,9 +76,6 @@ $(document).ready(function () {
 			{ data: 'printTeam' },
 			{ data: 'printSide' },
 			{ data: 'printCount' },
-			// { data: 'colorData1' },
-			// { data: 'colorData2' },
-			// { data: 'colorData3' },
 
 			{ data: 'logoSamplePath' },
 			{ data: 'boxSize' },
@@ -117,53 +97,7 @@ $(document).ready(function () {
 			{ data: 'pickingDate', title: '피킹인쇄완료', className: 'dt-center' },
 			{ data: 'pickingDate', title: '출고준비', className: 'dt-center' },
 			{ data: 'pickingDate', title: '발송마감일', className: 'dt-center' },
-
-// { data: 'phoneNumber' },
 		],
-		// columns: [
-		// 	{
-		// 		title: '',  // 체크박스 컬럼
-		// 		orderable: false,
-		// 		className: 'dt-body-center',
-		// 		render: function (data, type, row, meta) {
-		// 			return `<input type="checkbox" class="row-select">`;
-		// 		}
-		// 	},
-		// 	{ data: 'orderDate', title: '주문일자', className: 'dt-center' },
-		// 	{ data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
-		// 	{ data: 'printTeam', title: '담당팀' },
-		// 	{ data: 'companyContact', title: '업체명(고객명)' },
-		// 	{ data: 'itemName', title: '품목명' },
-		// 	{ data: 'bagColor', title: '컬러' },
-		// 	{ data: 'size', title: '사이즈' },
-		// 	{ data: 'quantity', title: '장수' },
-		// 	{
-		// 		data: "pickingYn", title: "피킹완료"
-		// 		, className: 'dt-center'
-		// 		, render: function (data, type, row) {
-		// 			if (type === 'display') {
-		// 				return `<input type="checkbox" ${data == '1' ? 'checked' : ''} disabled>`;
-		// 			}
-		// 			return data;
-		// 		}
-		// 	},
-		// 	{ data: 'phoneNumber', title: '전화번호' },
-		// 	{ data: 'deliveryZip', title: '우편번호', className: 'dt-center' },
-		// 	{ data: 'deliveryAddress', title: '주소' },
-		// 	{ data: 'sizeText', title: '박스규격' },
-		// 	{ data: 'quantity', title: '수량' },
-		// 	{ data: 'printMethod', title: '발송마감일', className: 'dt-center' },
-		// 	{
-		// 		data: "outReadyYn", title: "출고준비"
-		// 		, className: 'dt-center'
-		// 		, render: function (data, type, row) {
-		// 			if (type === 'display') {
-		// 				return `<input type="checkbox" ${data == '1' ? 'checked' : ''} disabled>`;
-		// 			}
-		// 			return data;
-		// 		}
-		// 	},
-		// ],
 		searching: false, // 기본 검색 기능 비활성화
 		lengthChange: false, // 표시 건수 변경 기능 비활성화
 		pageLength: 15, // 기본 페이지당 행 수

@@ -300,6 +300,17 @@ public class PrintInfo {
     /** 인쇄 방식 */
     private String printType;
 
+    /** 로고 인쇄 색상 */
+    private String logoColor;
+
+	public String getLogoColor() {
+		return logoColor;
+	}
+
+	public void setLogoColor(String logoColor) {
+		this.logoColor = logoColor;
+	}
+
     /** 로고 인쇄 크기 */
     private String logoSize;
 
@@ -500,6 +511,28 @@ public class PrintInfo {
 
     /** 인쇄 로고 예시 (파일 경로 또는 이름) */
     private String logoSamplePath;
+
+	//인쇄완료
+	private String printEndYn;
+
+	//기존주문
+	private String oldOrderYn;
+
+	public String getOldOrderYn() {
+		return oldOrderYn;
+	}
+
+	public void setOldOrderYn(String oldOrderYn) {
+		this.oldOrderYn = oldOrderYn;
+	}
+
+	public String getPrintEndYn() {
+		return printEndYn;
+	}
+
+	public void setPrintEndYn(String printEndYn) {
+		this.printEndYn = printEndYn;
+	}
 
 	private String sizeText;
 	private String team;
