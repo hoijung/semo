@@ -1,31 +1,31 @@
 function calculateVat() {
-      // 공급가액 입력 필드에서 값 가져오기
-      const supplyPriceInput = document.getElementById('공급가액');
-      const supplyPrice = parseFloat(removeCommas(supplyPriceInput.value));
+	// 공급가액 입력 필드에서 값 가져오기
+	const supplyPriceInput = document.getElementById('공급가액');
+	const supplyPrice = parseFloat(removeCommas(supplyPriceInput.value));
 
-      // 부가세 및 합계금액 필드 가져오기
-      const vatInput = document.getElementById('부가세액');
-      const totalPriceInput = document.getElementById('합계금액');
+	// 부가세 및 합계금액 필드 가져오기
+	const vatInput = document.getElementById('부가세액');
+	const totalPriceInput = document.getElementById('합계금액');
 
-      // 값이 숫자인지 확인
-      if (!isNaN(supplyPrice)) {
-        // 부가세 계산 (공급가액의 10%)
-        const vat = supplyPrice * 0.1;
-        // 합계금액 계산 (공급가액 + 부가세)
-        const totalPrice = supplyPrice + vat;
+	// 값이 숫자인지 확인
+	if (!isNaN(supplyPrice)) {
+		// 부가세 계산 (공급가액의 10%)
+		const vat = supplyPrice * 0.1;
+		// 합계금액 계산 (공급가액 + 부가세)
+		const totalPrice = supplyPrice + vat;
 
-        // 결과 표시
-        vatInput.value = vat.toFixed(0); // 소수점 없이 표시
-        totalPriceInput.value = totalPrice.toFixed(0); // 소수점 없이 표시
+		// 결과 표시
+		vatInput.value = vat.toFixed(0); // 소수점 없이 표시
+		totalPriceInput.value = totalPrice.toFixed(0); // 소수점 없이 표시
 
 		onlyNumberWithComma(vatInput);
 		onlyNumberWithComma(totalPriceInput);
-      } else {
-        // 숫자가 아니면 필드 비우기
-        vatInput.value = '';
-        totalPriceInput.value = '';
-      }
-    }
+	} else {
+		// 숫자가 아니면 필드 비우기
+		vatInput.value = '';
+		totalPriceInput.value = '';
+	}
+}
 
 // Function to remove commas from a string
 function removeCommas(str) {
@@ -44,19 +44,28 @@ function onlyNumberWithComma(obj) {
 
 // jQuery의 document.ready()를 사용하여 DOM이 완전히 로드된 후 스크립트를 실행합니다.
 // 이는 페이지별 JavaScript를 초기화하는 표준적이고 안정적인 방법입니다.
-$(document).ready(function () {
-    fetch('/api/auth/user')
-        .then(response => response.json())
-        .then(user => {
-            document.getElementById('greeting').textContent = `${user.userName} 님`;
-        })
-        .catch(error => console.error('Error fetching user data:', error));
+$(document).ready(function() {
+	fetch('/api/auth/user')
+		.then(response => response.json())
+		.then(user => {
+			document.getElementById('greeting').textContent = `${user.userName} 님`;
+
+			const authority = user.authority;
+			if (authority !== '관리자' ) {
+				$('#btnDistribute').hide();
+				$('#btnCancelDistribute').hide();
+				$('#btnAdd').hide();
+				$('#btnUpdate').hide();
+				$('#btnDelete').hide();
+			}
+		})
+		.catch(error => console.error('Error fetching user data:', error));
 	let table;
 	let selectedRow = null;
 	let currentSelectedId = null;
 
 	// 1. .menu-container에 menu.html을 로드합니다.
-	$('.menu-container').load('menu.html', function () {
+	$('.menu-container').load('menu.html', function() {
 		// 2. 메뉴 로드가 완료된 후, 이벤트 리스너를 설정하고 현재 페이지 메뉴를 활성화합니다.
 		const menuBar = document.getElementById('menuBar');
 		if (menuBar) {
@@ -82,18 +91,18 @@ $(document).ready(function () {
 	});
 
 	function getTableHeight() {
-        // 예: 화면 높이에서 200px 여유 공간 빼기
-        return $(window).height() - 200 + "px";
-    }
+		// 예: 화면 높이에서 200px 여유 공간 빼기
+		return $(window).height() - 200 + "px";
+	}
 
 	table = $('#printTable').DataTable({
 		ajax: { url: '/api/prints', dataSrc: '' },
 		scrollY: getTableHeight(), // 동적으로 높이 지정
 		columns: [
-			{ data: '인쇄ID' , title: 'No' },
+			{ data: '인쇄ID', title: 'No' },
 			{ data: '주문일자' },
 			{
-				data: '배분여부', title:'배분', // Assuming this field exists in the API response
+				data: '배분여부', title: '배분', // Assuming this field exists in the API response
 				render: function(data, type, row) {
 					return data ? 'Y' : 'N'; // Display 'Y' for true, 'N' for false
 				}
@@ -116,7 +125,7 @@ $(document).ready(function () {
 	});
 
 	// 테이블 행 클릭 이벤트
-	$('#printTable tbody').on('click', 'tr', function () {
+	$('#printTable tbody').on('click', 'tr', function() {
 		const data = table.row(this).data();
 		if (!data) return;
 
@@ -176,9 +185,9 @@ $(document).ready(function () {
 			const $image = $('<img>', { src: fileUrl, alt: '로고 이미지', style: 'max-width: 100%; max-height: 100px; margin-top: 5px; display: block;' });
 			$displayDiv.append($link).append($image);
 		}
-        
-        // Set initial state of tax info section
-        toggleTaxInfoSection();
+
+		// Set initial state of tax info section
+		toggleTaxInfoSection();
 	}
 
 	function createMultipartFormData(data) {
@@ -193,7 +202,7 @@ $(document).ready(function () {
 
 	function getFormData() {
 		const formData = {};
-		$('.detail-card').find('input, textarea, select').each(function () {
+		$('.detail-card').find('input, textarea, select').each(function() {
 			const id = $(this).attr('id');
 			if (!id || this.type === 'file') return;
 
@@ -214,10 +223,10 @@ $(document).ready(function () {
 	}
 
 	function reloadTableAndRestoreSelection() {
-		table.ajax.reload(function () {
+		table.ajax.reload(function() {
 			if (currentSelectedId !== null) {
 				let foundRow = null;
-				table.rows().every(function () {
+				table.rows().every(function() {
 					const rowData = this.data();
 					if (rowData && rowData.인쇄ID === currentSelectedId) {
 						foundRow = this.node();
@@ -253,8 +262,8 @@ $(document).ready(function () {
 
 		// Assuming an API endpoint for distribution
 		fetch('/api/prints/' + id + '/distribute', {
-				method: 'POST' // Or PUT, depending on API design
-			})
+			method: 'POST' // Or PUT, depending on API design
+		})
 			.then(response => {
 				if (!response.ok) {
 					return response.text().then(text => { throw new Error('Network response was not ok: ' + text) });
@@ -281,8 +290,8 @@ $(document).ready(function () {
 
 		// Assuming an API endpoint for canceling distribution
 		fetch('/api/prints/' + id + '/cancelDistribute', {
-				method: 'POST' // Or PUT, depending on API design
-			})
+			method: 'POST' // Or PUT, depending on API design
+		})
 			.then(response => {
 				if (!response.ok) {
 					// Read the error message from the response
@@ -421,7 +430,7 @@ $(document).ready(function () {
 	function toggleTaxInfoSection() {
 		const salesChannel = $('#판매채널').val();
 		const isDirectDeposit = salesChannel === '직접입금';
-		
+
 		// Enable/disable all inputs, selects, and buttons within the tax info group
 		$('#tax-info-group').find('input, select, button').prop('disabled', !isDirectDeposit);
 	}
@@ -437,16 +446,16 @@ $(document).ready(function () {
 				data.forEach(code => {
 					salesChannelSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
 				});
-                // After loading, set the initial state for the tax section
-                toggleTaxInfoSection();
+				// After loading, set the initial state for the tax section
+				toggleTaxInfoSection();
 			})
 			.catch(error => console.error('Error loading sales channels:', error));
 	}
 
 	// Call loadSalesChannels when the document is ready
 	loadSalesChannels();
-    
-    // Add change event listener to the sales channel dropdown
+
+	// Add change event listener to the sales channel dropdown
 	$('#판매채널').on('change', toggleTaxInfoSection);
 
 
