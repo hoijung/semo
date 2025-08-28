@@ -264,6 +264,24 @@ public class PrintDto {
     private String 최종배송지_우편번호;
     private String 최종배송지_주소;
 	private String 배송지주소상세;
+	private Boolean 중요여부;
+	private String 업체메모;
+
+	public String get업체메모() {
+		return 업체메모;
+	}
+
+	public void set업체메모(String 업체메모) {
+		this.업체메모 = 업체메모;
+	}
+
+	public Boolean get중요여부() {
+		return 중요여부;
+	}
+	public void set중요여부(Boolean 중요여부) {
+		this.중요여부 = 중요여부;
+	}
+
     public String get배송지주소상세() {
 		return 배송지주소상세;
 	}

@@ -246,7 +246,7 @@ $(document).ready(function() {
 
 	function getTableHeight() {
 		// 예: 화면 높이에서 200px 여유 공간 빼기
-		return $(window).height() - 200 + "px";
+		return $(window).height() - 200 + "px"; 
 	}
 
 	table = $('#printTable').DataTable({

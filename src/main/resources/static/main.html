@@ -241,7 +241,7 @@
 		}
 
 		.field-item input[type="checkbox"] {
-			margin-top: 5px;
+			margin: 0;
 			width: 18px;
 			height: 18px;
 		}
@@ -384,29 +384,6 @@
 									<input type="text" id="합계금액"  oninput="onlyNumberWithComma(this);"/>
 								</div>
 							</div>
-							<div class="field-row">
-								<div class="field-item"><span>등록팀</span><input type="text" id="등록팀"></div>
-								<div class="field-item"><span>수정팀</span><input type="text" id="수정팀"></div>
-
-							</div>
-
-							<div class="field-row">
-								<div class="field-item checkbox-item"><span>배분여부</span><input type="checkbox"
-										id="배분여부"></div>
-								<div class="field-item checkbox-item"><span>완료여부</span><input type="checkbox"
-										id="완료여부"></div>
-							</div>
-							<div class="field-row">
-								<div class="field-item checkbox-item"><span>피킹완료</span><input type="checkbox"
-										id="피킹완료"></div>
-								<div class="field-item checkbox-item"><span>출고준비</span><input type="checkbox"
-										id="출고준비"></div>
-							</div>
-							<!-- <div class="field-row">
-								<div class="field-item checkbox-item"><span>기존주문여부</span><input type="checkbox"
-										id="기존주문여부">
-								</div>
-							</div> -->
 						</div>
 
 					</div>
@@ -416,11 +393,11 @@
 						<div class="field-row-three-col">
 							<div class="field-item"><span>인쇄방법</span><select id="인쇄방법"></select></div>
 							<div class="field-item"><span>품목명</span><select id="품목명"></select></div>
-							<div class="field-item"><span>컬러</span><input type="text" id="쇼핑백색상"></div>
+							<div class="field-item"><span>쇼핑백색상</span><input type="text" id="쇼핑백색상"></div>
 						</div>
 						<div class="field-row-three-col">
 							<div class="field-item"><span>사이즈</span><input type="text" id="사이즈"></div>
-							<div class="field-item"><span>장수</span><input type="text" id="제작장수"></div>
+							<div class="field-item"><span>제작장수</span><input type="text" id="제작장수"></div>
 						</div>
 						<div class="field-row-three-col">
 							<div class="field-item"><span>인쇄담당팀</span><select id="인쇄담당팀"></select></div>
@@ -440,7 +417,7 @@
 							<div class="field-item"><span>로고인쇄색상</span><input type="text" id="로고인쇄색상"></div>
 							<div class="field-item"><span>로고인쇄크기</span><input type="text" id="로고인쇄크기"></div>
 							<div class="field-item"><span>로고인쇄위치</span><input type="text" id="로고인쇄위치"></div>
-						</div>
+						</div>						
 						<div class="field-row">
 							<div class="field-item"><span>파일명</span><input type="text" id="파일명"></div>
 							<div class="field-item">
@@ -451,6 +428,12 @@
 							</div>
 						</div>
 						<div class="field-row">
+							<div class="field-item full-width">
+								<span>업체메모</span>
+								<textarea id="업체메모"></textarea>
+							</div>
+						</div>
+						<div class="field-row">
 
 						</div>
 					</div>
@@ -458,13 +441,15 @@
 					<div class="field-group">
 						<label>고객정보</label>
 						<div class="field-row-three-col">
-							<div class="field-item"><span>주문일자</span><input type="date" id="주문일자"></div>
+							<div class="field-item" style="flex: 0 0 160px;"><span>주문일자</span><input type="date" id="주문일자"></div>
 							<div class="field-item"><span>업체명(담당자)</span><input type="text" id="업체명_담당자"></div>
+							<div class="field-item checkbox-item"><span>중요</span><input type="checkbox"
+										id="중요여부"></div>
 							<div class="field-item"><span>고객ID</span><input type="text" id="고객ID"></div>
 						</div>
 						<div class="field-row">
 							<div class="field-item"><span>전화번호</span><input type="text" id="전화번호"></div>
-							<div class="field-item"><span>발송최종기한</span><input type="date" id="발송마감기한"></div>
+							<div class="field-item" style="flex: 0 0 160px;"><span>발송최종기한</span><input type="date" id="발송마감기한"></div>
 						</div>
 						<div class="field-row">
 							<div class="field-item">
@@ -485,10 +470,6 @@
 						<div class="field-row">
 							<div class="field-item"><span>배송타입</span><select id="배송타입"></select></div>
 							<div class="field-item"><span>판매채널</span><select id="판매채널"></select></div>
-						</div>
-						<div class="field-row">
-							<div class="field-item"><span>피킹예정일</span><input type="date" id="피킹예정일"></div>
-							<div class="field-item"><span>박스규격</span><input type="text" id="박스규격"></div>
 						</div>
 					</div>
 

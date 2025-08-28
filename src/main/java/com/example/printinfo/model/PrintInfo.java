@@ -339,6 +339,42 @@ public class PrintInfo {
 	    /** 조색데이터1 */
     private String colorData1;	
 
+	/** 중요여부 */
+	private String importantYn;
+
+	/** 인쇄 참고사항 */
+    private String printMemo;
+
+
+	/** 업체메모 */
+    private String companyMemo;	
+
+	public String getCompanyMemo() {
+		return companyMemo;
+	}
+
+	public void setCompanyMemo(String companyMemo) {
+		this.companyMemo = companyMemo;
+	}
+
+	public String getPrintMemo() {
+		return printMemo;
+	}
+
+	public void setPrintMemo(String printMemo) {
+		this.printMemo = printMemo;
+	}
+
+	
+	public String getImportantYn() {
+		return importantYn;
+	}
+
+	public void setImportantYn(String importantYn) {
+		this.importantYn = importantYn;
+	}
+
+
 	public String getColorData1() {
 		return colorData1;
 	}

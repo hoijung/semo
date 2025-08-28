@@ -67,6 +67,7 @@ $(document).ready(function () {
 			{ data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
 			{ data: 'printTeam', title: '담당팀' },
 			{ data: 'companyContact', title: '업체명(고객명)' },
+			{ data: 'printMemo', title: '인쇄참고사항'},
 			{ data: 'itemName', title: '품목명' },
 			{ data: 'bagColor', title: '컬러' },
 			{ data: 'size', title: '사이즈' },
@@ -97,6 +98,15 @@ $(document).ready(function () {
 				}
 			},
 		],
+		 // 아래 'createdRow' 옵션을 추가합니다.
+        createdRow: function(row, data, dataIndex) {
+            // 'data' 객체에서 'printMemo' (인쇄참고사항) 필드를 확인합니다.
+            // 필드명이 다를 경우 실제 사용하는 필드명으로 변경해주세요. (예: data.memo)
+            if (data.printMemo && data.printMemo.trim() !== '') {
+                // printMemo에 내용이 있으면 'highlight-row' 클래스를 추가합니다.
+                $(row).addClass('highlight-row');
+            }
+        },
 		searching: false, // 기본 검색 기능 비활성화
 		lengthChange: false, // 표시 건수 변경 기능 비활성화
 		pageLength: 15, // 기본 페이지당 행 수

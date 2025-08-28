@@ -24,6 +24,7 @@ public class PrintRepository {
                 + ", 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, 등록일시, 수정일시, 등록팀, 수정팀"
                 + ", 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 배송타입, 박스규격, 기존주문여부, 인쇄방법"
                 + ", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄참고사항 "
+                + ", 중요여부, 업체메모 "
                 + " FROM semo.dbo.인쇄정보 ORDER BY 인쇄ID DESC";
         return jdbcTemplate.query(sql, (rs, rowNum) -> mapRow(rs));
     }
@@ -49,7 +50,7 @@ public class PrintRepository {
                 "대표자명=?, 이메일=?, 공급가액=?, 부가세액=?, 합계금액=?, 배분여부=?, 완료여부=?, " +
                 "수정팀=?, 피킹완료=?, 출고준비=?, 파일명=?, 인쇄로고예시=?, 피킹예정일=?, 배송타입=?, 박스규격=?, " +
                 "기존주문여부=?, 인쇄방법=?, 배송지주소상세=? , 로고인쇄색상=?, 조색데이터1 =?, 조색데이터2 = ?, 조색데이터3 =?, " +
-                "인쇄참고사항=?, " +
+                "인쇄참고사항=?, 중요여부=?,  업체메모=?, " +
                 "수정일시=GETDATE() " +
                 "WHERE 인쇄ID=?";
         return jdbcTemplate.update(sql,
@@ -62,7 +63,7 @@ public class PrintRepository {
                 dto.get수정팀(), dto.get피킹완료(), dto.get출고준비(), dto.get파일명(), dto.get인쇄로고예시(),
                 dto.get피킹예정일(), dto.get배송타입(), dto.get박스규격(), dto.get기존주문여부(), dto.get인쇄방법(),
                 dto.get배송지주소상세(), dto.get로고인쇄색상(), dto.get조색데이터1(), dto.get조색데이터2(), dto.get조색데이터3(),
-                dto.get인쇄참고사항(),
+                dto.get인쇄참고사항(), dto.get중요여부(), dto.get업체메모(),
                 dto.get인쇄ID());
     }
 
@@ -119,6 +120,8 @@ public class PrintRepository {
         dto.set조색데이터2(rs.getString("조색데이터2"));
         dto.set조색데이터3(rs.getString("조색데이터3"));
         dto.set인쇄참고사항(rs.getString("인쇄참고사항"));
+        dto.set중요여부(rs.getBoolean("중요여부"));
+        dto.set업체메모(rs.getString("업체메모"));
         return dto;
     }
 
@@ -186,7 +189,7 @@ public class PrintRepository {
                 .append("특이사항, 주문일자, 업체명_담당자, 고객ID, 전화번호, 발송마감기한, ")
                 .append("최종배송지_우편번호, 최종배송지_주소, 판매채널, 계산서발행타입, 상호명, ")
                 .append("대표자명, 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, ")
-                .append("등록일시, 수정일시, 등록팀, 수정팀, 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일 ")
+                .append("등록일시, 수정일시, 등록팀, 수정팀, 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 인쇄참고사항 ")
                 .append("FROM SEMO.dbo.인쇄정보 ")
                 .append("WHERE 배분여부 = 1 ");
 
@@ -254,6 +257,7 @@ public class PrintRepository {
             dto.setFileName(rs.getString("파일명"));
             dto.setLogoSamplePath(rs.getString("인쇄로고예시"));
             dto.setPickingDate(rs.getString("피킹예정일"));
+            dto.setPrintMemo(rs.getString("인쇄참고사항"));
             return dto;
         });
     }
@@ -428,7 +432,7 @@ public class PrintRepository {
                 .append(", 발송마감기한, 최종배송지_우편번호, 최종배송지_주소, 판매채널, 계산서발행타입, 상호명, 대표자명")
                 .append(", 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, 등록일시, 수정일시, 등록팀, 수정팀")
                 .append(", 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 배송타입, 박스규격, 박스수량, 배송타입, 기존주문여부, 인쇄방법")
-                .append(", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄완료 ")
+                .append(", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄완료, 중요여부, 업체메모, 인쇄참고사항 ")
                 .append(" FROM semo.dbo.인쇄정보 WHERE 1=1");
 
         List<Object> params = new java.util.ArrayList<>();
@@ -454,7 +458,7 @@ public class PrintRepository {
             params.add("%" + itemName + "%");
         }
 
-        sqlBuilder.append(" ORDER BY 인쇄ID DESC");
+        sqlBuilder.append(" ORDER BY 인쇄ID ASC");
 
         return jdbcTemplate.query(sqlBuilder.toString(), params.toArray(), (rs, rowNum) -> {
             PrintInfo dto = new PrintInfo();
@@ -503,6 +507,9 @@ public class PrintRepository {
             dto.setDeliveryType(rs.getString("배송타입"));
             dto.setPrintEndYn(rs.getString("인쇄완료"));
             dto.setOldOrderYn(rs.getString("기존주문여부"));
+            dto.setImportantYn(rs.getString("중요여부"));
+            dto.setPrintMemo(rs.getString("인쇄참고사항"));
+            dto.setCompanyMemo(rs.getString("업체메모"));
             return dto;
         });
     }
