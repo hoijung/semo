@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private final UserService userService = new UserService();
 
     @GetMapping("/list")
     public List<UserDto> getAllUsers() {

@@ -15,7 +15,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final UserRepository userRepository = new UserRepository();
 
     public List<UserDto> getAllUsers() {
         return userRepository.findAll();
