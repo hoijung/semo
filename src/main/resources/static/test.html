@@ -1,23 +1,110 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-</head>
 <body>
-  <div id="layer" style="width:100%;height:400px;">한글</div>
-  <script>
-    new daum.Postcode({
-      oncomplete: function(data) {
-        var fullAddr = data.address;
-        alert(fullAddr)
-        if (window.external && window.external.SetAddress) {
-          window.external.SetAddress(fullAddr);
-        } else {
-          alert(fullAddr);
-        }
-      }
-    }).embed(document.getElementById("layer")); // ✅ open() 대신 embed()
-  </script>
+    <div class="container">
+        <div class="header">
+            <h1 id="greeting"></h1>
+            <div class="menu-container">
+            </div>
+        </div>
+        <div class="content">
+            <div class="search-area">
+                <form id="searchForm">
+                    <div class="search-filters">
+                        <div class="filter-group">
+                            <label for="orderDateStart">주문일자 (시작)</label>
+                            <input type="date" id="orderDateStart" name="orderDateStart">
+                        </div>
+                        <div class="filter-group">
+                            <label for="orderDateEnd">주문일자 (종료)</label>
+                            <input type="date" id="orderDateEnd" name="orderDateEnd">
+                        </div>
+                        <div class="search-actions" style="margin-left: auto; display: flex; gap: 10px;">
+                            <button id="btnDetail">상세보기</button>
+                            <button id="btnPicking">피킹완료</button>
+                            <button id="btnOutReady">출고준비완료</button>
+                            <button id="btnSearch">조회</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="main-content">
+                <div class="table-container">
+                    <table id="grid" class="display" style="width:100%"></table>
+                </div>    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEMO</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+            <div class="contents">
+                <div class="contents_inner">
+                    <!-- 페이지 상단 제목 -->
+                    <div class="content_head mb-4">
+                        <h2>물류 관리</h2>
+                    </div>
+
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" id="logistTab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="performance-tab" data-bs-toggle="tab" data-bs-target="#performance-tab-pane" type="button" role="tab" aria-controls="performance-tab-pane" aria-selected="true">물류 실적 조회</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="tab2-tab" data-bs-toggle="tab" data-bs-target="#tab2-pane" type="button" role="tab" aria-controls="tab2-pane" aria-selected="false">두 번째 탭</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="tab3-tab" data-bs-toggle="tab" data-bs-target="#tab3-pane" type="button" role="tab" aria-controls="tab3-pane" aria-selected="false">세 번째 탭</button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content" id="logistTabContent">
+                        <!-- 첫 번째 탭: 물류 실적 조회 (기존 내용) -->
+                        <div class="tab-pane fade show active" id="performance-tab-pane" role="tabpanel" aria-labelledby="performance-tab" tabindex="0">
+                            <div class="search_box_wrap mt-3">
+                                <div class="search_box">
+                                    <div class="search_item">
+                                        <label for="search_1">거래처</label>
+                                        <div class="input_group">
+                                            <input type="text" id="search_1" class="sm" placeholder="거래처코드">
+                                            <input type="text" class="lg" placeholder="거래처명">
+                                            <button type="button" class="btn_search_box"></button>
+                                        </div>
+                                    </div>
+                                    <div class="search_item">
+                                        <label for="search_2">기간</label>
+                                        <div class="input_group">
+                                            <input type="date" id="search_2">
+                                            <span class="tilde">~</span>
+                                            <input type="date">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn_wrap">
+                                    <button type="button" class="btn_search">조회</button>
+                                </div>
+                            </div>
+                            <div class="grid_wrap">
+                                <!-- 기존 테이블 내용이 여기에 위치합니다. -->
+                            </div>
+                        </div>
+                        <!-- 두 번째 탭 -->
+                        <div class="tab-pane fade p-3" id="tab2-pane" role="tabpanel" aria-labelledby="tab2-tab" tabindex="0">
+                            <p>두 번째 탭의 내용이 여기에 표시됩니다.</p>
+                        </div>
+                        <!-- 세 번째 탭 -->
+                        <div class="tab-pane fade p-3" id="tab3-pane" role="tabpanel" aria-labelledby="tab3-tab" tabindex="0">
+                            <p>세 번째 탭의 내용이 여기에 표시됩니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- footer -->
+        <footer th:replace="~{fragments/footer :: footer}"></footer>
+    </div>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
