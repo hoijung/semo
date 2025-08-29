@@ -189,9 +189,9 @@ public class PrintRepository {
                 .append("특이사항, 주문일자, 업체명_담당자, 고객ID, 전화번호, 발송마감기한, ")
                 .append("최종배송지_우편번호, 최종배송지_주소, 판매채널, 계산서발행타입, 상호명, ")
                 .append("대표자명, 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, ")
-                .append("등록일시, 수정일시, 등록팀, 수정팀, 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 인쇄참고사항 ")
+                .append("등록일시, 수정일시, 등록팀, 수정팀, 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 인쇄참고사항, 중요여부 ")
                 .append("FROM SEMO.dbo.인쇄정보 ")
-                .append("WHERE 배분여부 = 1 ");
+                .append("WHERE 배분여부 = 1 order by 인쇄ID ");
 
         List<Object> params = new java.util.ArrayList<>();
 
@@ -258,6 +258,7 @@ public class PrintRepository {
             dto.setLogoSamplePath(rs.getString("인쇄로고예시"));
             dto.setPickingDate(rs.getString("피킹예정일"));
             dto.setPrintMemo(rs.getString("인쇄참고사항"));
+            dto.setImportantYn(rs.getString("중요여부"));
             return dto;
         });
     }

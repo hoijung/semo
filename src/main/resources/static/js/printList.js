@@ -1,28 +1,28 @@
 $(document).ready(function () {
-    // Fetch user authority and set up UI
-    fetch('/api/auth/user')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Not authenticated');
-            }
-            return response.json();
-        })
-        .then(user => {
-            document.getElementById('greeting').textContent = `${user.userName} 님`;
-            const authority = user.authority;
-            if (authority !== '관리자' && authority !== '인쇄팀') {
-                $('#btnPrintEnd').hide();
-                $('#btnPrintEndCnl').hide();
-            }
-            if (authority === '모든 데이터 조회') {
-                $('#btnDetail').hide();
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching user data:', error);
-            // Redirect to login page if not authenticated
-            window.location.href = '/login.html';
-        });
+	// Fetch user authority and set up UI
+	fetch('/api/auth/user')
+		.then(response => {
+			if (!response.ok) {
+				throw new Error('Not authenticated');
+			}
+			return response.json();
+		})
+		.then(user => {
+			document.getElementById('greeting').textContent = `${user.userName} 님`;
+			const authority = user.authority;
+			if (authority !== '관리자' && authority !== '인쇄팀') {
+				$('#btnPrintEnd').hide();
+				$('#btnPrintEndCnl').hide();
+			}
+			if (authority === '모든 데이터 조회') {
+				$('#btnDetail').hide();
+			}
+		})
+		.catch(error => {
+			console.error('Error fetching user data:', error);
+			// Redirect to login page if not authenticated
+			window.location.href = '/login.html';
+		});
 	loadMenu('printList.html');
 
 	const inputStart = document.getElementById("orderDateStart");
@@ -61,9 +61,19 @@ $(document).ready(function () {
 					return `<input type="checkbox" class="row-select">`;
 				}
 			},
-			{ data: 'printTeam'},
-			{ data: 'companyContact'},
-			{ data: 'printMemo'},
+			{ data: 'printTeam' },
+			{ data: 'companyContact' },
+			{
+				data: "importantYn", title: "중요"
+				, className: 'dt-center'
+				, render: function (data, type, row) {
+					if (type === 'display') {
+						return `<input type="checkbox" ${data == '1' ? 'checked' : ''} disabled>`;
+					}
+					return data;
+				}
+			},
+			{ data: 'printMemo' },
 			{ data: 'itemName', title: '품목명' },
 			{ data: 'bagColor', title: '컬러' },
 			{ data: 'size', title: '사이즈' },
@@ -103,15 +113,15 @@ $(document).ready(function () {
 
 		],
 
-		 // 아래 'createdRow' 옵션을 추가합니다.
-        createdRow: function(row, data, dataIndex) {
-            // 'data' 객체에서 'printMemo' (인쇄참고사항) 필드를 확인합니다.
-            // 필드명이 다를 경우 실제 사용하는 필드명으로 변경해주세요. (예: data.memo)
-            if (data.printMemo && data.printMemo.trim() !== '') {
-                // printMemo에 내용이 있으면 'highlight-row' 클래스를 추가합니다.
-                $(row).addClass('highlight-row');
-            }
-        },
+		// 아래 'createdRow' 옵션을 추가합니다.
+		createdRow: function (row, data, dataIndex) {
+			// 'data' 객체에서 'printMemo' (인쇄참고사항) 필드를 확인합니다.
+			// 필드명이 다를 경우 실제 사용하는 필드명으로 변경해주세요. (예: data.memo)
+			if (data.importantYn === '1') {
+				// printMemo에 내용이 있으면 'highlight-row' 클래스를 추가합니다.
+				$(row).addClass('highlight-row');
+			}
+		},
 
 		searching: false, // 기본 검색 기능 비활성화
 		lengthChange: false, // 표시 건수 변경 기능 비활성화
