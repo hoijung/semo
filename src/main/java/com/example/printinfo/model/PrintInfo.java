@@ -241,13 +241,13 @@ public class PrintInfo {
 		this.updatedBy = updatedBy;
 	}
 
-	public Boolean getPickingCompleted() {
-		return pickingCompleted;
-	}
-
-	public void setPickingCompleted(Boolean pickingCompleted) {
-		this.pickingCompleted = pickingCompleted;
-	}
+//	public Boolean getPickingCompleted() {
+//		return pickingCompleted;
+//	}
+//
+//	public void setPickingCompleted(Boolean pickingCompleted) {
+//		this.pickingCompleted = pickingCompleted;
+//	}
 
 	public Boolean getReadyForShipment() {
 		return readyForShipment;
@@ -537,7 +537,7 @@ public class PrintInfo {
     private String updatedBy;
 
     /** 피킹 완료 여부 */
-    private Boolean pickingCompleted;
+//    private Boolean pickingCompleted;
 
     /** 출고 준비 여부 */
     private Boolean readyForShipment;

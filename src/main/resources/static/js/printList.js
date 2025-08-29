@@ -45,7 +45,7 @@ $(document).ready(function () {
 	inputStart.value = formattedStart;
 
 	// 공통 컬럼 렌더러
-	const renderCheckbox = (data, type) => type === 'display' ? `<input type="checkbox" ${data == '1' ? 'checked' : ''} disabled>` : data;
+	const renderCheckbox = (data, type) => type === 'display' ? `<input type="checkbox" ${eval(data) ? 'checked' : ''} disabled>` : data;
 
 	const table = $('#grid').DataTable({
 		responsive: true,
@@ -67,16 +67,7 @@ $(document).ready(function () {
 			{ data: 'orderDate', title: '주문일자', className: 'dt-center' },
 			{ data: 'printTeam' },
 			{ data: 'companyContact' },
-			{
-				data: "importantYn", title: "중요"
-				, className: 'dt-center'
-				, render: function (data, type, row) {
-					if (type === 'display') {
-						return `<input type="checkbox" ${data == '1' ? 'checked' : ''} disabled>`;
-					}
-					return data;
-				}
-			},
+			{ data: "importantYn", title: "중요", render: renderCheckbox },
 			{ data: 'printMemo' },
 			{ data: 'itemName', title: '품목명' },
 			{ data: 'bagColor', title: '컬러' },
@@ -182,34 +173,45 @@ $(document).ready(function () {
 		window.open(`assetDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=1000');
 	});
 
-	// 인쇄완료 버튼
-	$('#btnPrintEnd').click(function () {
+	// 공통 액션 처리 함수 (인쇄완료, 취소 등)
+	function handleBatchAction(actionName, urlPath) {
 		const selected = getSelectedRows();
 		if (selected.length === 0) {
 			alert("행을 선택해주세요.");
 			return;
 		}
-		// AJAX 호출로 서버 업데이트 예시
-		selected.forEach(row => {
-			$.post(`/api/print-info/${row.printId}/printEnd`, { status: 'Y' });
-		});
-		alert("선택한 행 인쇄완료 처리되었습니다.");
-		$('#grid').DataTable().ajax.reload(); // 테이블 새로고침
-	});
+
+		if (!confirm(`선택한 ${selected.length}개의 항목을 ${actionName} 처리하시겠습니까?`)) {
+			return;
+		}
+
+		const requests = selected.map(row =>
+			$.post(`/api/print-info/${row.printId}/${urlPath}`)
+		);
+
+		Promise.all(requests)
+			.then(responses => {
+				alert(`${responses.length}개의 항목이 성공적으로 ${actionName} 처리되었습니다.`);
+				table.ajax.reload(null, false); // 페이징 유지하고 새로고침
+			})
+			.catch(error => {
+				console.error(`${actionName} 처리 중 오류 발생:`, error);
+				let errorMessage = "처리 중 오류가 발생했습니다. 콘솔을 확인해주세요.";
+				// Spring Boot에서 보내는 기본 오류 메시지 형식(JSON)을 파싱합니다.
+				if (error && error.responseJSON && error.responseJSON.message) {
+					errorMessage = error.responseJSON.message;
+				} else if (error && error.responseText) {
+					errorMessage = error.responseText;
+				}
+				alert(errorMessage);
+				table.ajax.reload(null, false); // 오류 발생 후에도 최신 상태를 반영하기 위해 새로고침
+			});
+	}
+
+	// 인쇄완료 버튼
+	$('#btnPrintEnd').click(() => handleBatchAction('인쇄완료', 'printEnd'));
 
 	// 인쇄완료 취소 버튼
-	$('#btnPrintEndCnl').click(function () {
-		const selected = getSelectedRows();
-		if (selected.length === 0) {
-			alert("행을 선택해주세요.");
-			return;
-		}
-		// AJAX 호출로 서버 업데이트 예시
-		selected.forEach(row => {
-			$.post(`/api/print-info/${row.printId}/cancel-printEnd`, { status: 'Y' });
-		});
-		alert("선택한 행 인쇄완료 취소되었습니다.");
-		$('#grid').DataTable().ajax.reload(); // 테이블 새로고침
-	});
+	$('#btnPrintEndCnl').click(() => handleBatchAction('인쇄완료 취소', 'cancel-printEnd'));
 
 });

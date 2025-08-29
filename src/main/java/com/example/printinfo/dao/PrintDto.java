@@ -166,16 +166,16 @@ public class PrintDto {
 	public void set합계금액(BigDecimal 합계금액) {
 		this.합계금액 = 합계금액;
 	}
-	public Boolean get배분여부() {
+	public String get배분여부() {
 		return 배분여부;
 	}
-	public void set배분여부(Boolean 배분여부) {
+	public void set배분여부(String 배분여부) {
 		this.배분여부 = 배분여부;
 	}
-	public Boolean get완료여부() {
+	public String get완료여부() {
 		return 완료여부;
 	}
-	public void set완료여부(Boolean 완료여부) {
+	public void set완료여부(String 완료여부) {
 		this.완료여부 = 완료여부;
 	}
 	public String get등록팀() {
@@ -190,16 +190,16 @@ public class PrintDto {
 	public void set수정팀(String 수정팀) {
 		this.수정팀 = 수정팀;
 	}
-	public Boolean get피킹완료() {
+	public String get피킹완료() {
 		return 피킹완료;
 	}
-	public void set피킹완료(Boolean 피킹완료) {
+	public void set피킹완료(String 피킹완료) {
 		this.피킹완료 = 피킹완료;
 	}
-	public Boolean get출고준비() {
+	public String get출고준비() {
 		return 출고준비;
 	}
-	public void set출고준비(Boolean 출고준비) {
+	public void set출고준비(String 출고준비) {
 		this.출고준비 = 출고준비;
 	}
 	public String get파일명() {
@@ -264,7 +264,7 @@ public class PrintDto {
     private String 최종배송지_우편번호;
     private String 최종배송지_주소;
 	private String 배송지주소상세;
-	private Boolean 중요여부;
+	private String 중요여부;
 	private String 업체메모;
 
 	public String get업체메모() {
@@ -275,10 +275,10 @@ public class PrintDto {
 		this.업체메모 = 업체메모;
 	}
 
-	public Boolean get중요여부() {
+	public String get중요여부() {
 		return 중요여부;
 	}
-	public void set중요여부(Boolean 중요여부) {
+	public void set중요여부(String 중요여부) {
 		this.중요여부 = 중요여부;
 	}
 
@@ -302,12 +302,12 @@ public class PrintDto {
     private BigDecimal 공급가액;
     private BigDecimal 부가세액;
     private BigDecimal 합계금액;
-    private Boolean 배분여부;
-    private Boolean 완료여부;
+    private String 배분여부;
+    private String 완료여부;
     private String 등록팀;
     private String 수정팀;
-    private Boolean 피킹완료;
-    private Boolean 출고준비;
+    private String 피킹완료;
+    private String 출고준비;
     private String 파일명;
     private String 인쇄로고예시;
     private String 피킹예정일;

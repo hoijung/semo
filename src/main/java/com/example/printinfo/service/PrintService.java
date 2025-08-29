@@ -44,8 +44,8 @@ public class PrintService {
     public PrintDto distributePrint(Integer id) {
         PrintDto dto = repository.findById(id);
         if (dto != null) {
-            dto.set배분여부(true);
-            repository.update(dto);
+            dto.set배분여부("true");
+            repository.distributePrint(dto);
         }
         return dto;
     }
@@ -57,12 +57,12 @@ public class PrintService {
             throw new IllegalArgumentException("Print record not found with ID: " + id);
         }
 
-        if (dto.get피킹완료() != null && dto.get피킹완료()) {
+        if (dto.get피킹완료() != null && dto.get피킹완료().equals("1")) {
             throw new IllegalStateException("피킹이 완료된 레코드는 배분을 취소할 수 없습니다.");
         }
 
-        dto.set배분여부(false);
-        repository.update(dto);
+        dto.set배분여부("false");
+        repository.cancelDistributePrint(dto); 
         return dto;
     }
 

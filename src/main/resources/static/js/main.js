@@ -258,7 +258,7 @@ $(document).ready(function() {
 			{
 				data: '배분여부', title: '배분', // Assuming this field exists in the API response
 				render: function(data, type, row) {
-					return data ? 'Y' : 'N'; // Display 'Y' for true, 'N' for false
+					return eval(data) ? 'Y' : 'N'; // Display 'Y' for true, 'N' for false
 				}
 			}
 		],
@@ -313,7 +313,8 @@ $(document).ready(function() {
 			const el = $('#' + key);
 			if (el.length) {
 				if (el.attr('type') === 'checkbox') {
-					el.prop('checked', data[key]);
+					// debugger
+					el.prop('checked', eval(data[key]));
 				} else if (el.attr('type') === 'date') {
 					if (data[key]) {
 						el.val(data[key].substring(0, 10));

@@ -63,7 +63,7 @@ $(document).ready(function () {
 			scrollX: true,   // ✅ 좌우 스크롤 허용
 			columns: columnsConfig,
 			createdRow: function (row, data, dataIndex) {
-				if (data.importantYn === '1') {
+				if (eval(data.importantYn)) {
 					$(row).addClass('highlight-row');
 				}
 			},
@@ -81,7 +81,7 @@ $(document).ready(function () {
 	}
 
 	// 공통 컬럼 렌더러
-	const renderCheckbox = (data, type) => type === 'display' ? `<input type="checkbox" ${data == '1' ? 'checked' : ''} disabled>` : data;
+	const renderCheckbox = (data, type) => type === 'display' ? `<input type="checkbox" ${eval(data) ? 'checked' : ''} disabled>` : data;
 
 	// 각 그리드에 대한 컬럼 정의
 	const baseColumns = [
@@ -247,8 +247,14 @@ $(document).ready(function () {
 		$('.tab-content').hide();
 
 		const activeTabContentId = $(this).data('tab');
-		$('#' + activeTabContentId).css('display', 'flex');
+		const $activeTabContent = $('#' + activeTabContentId);
+		$activeTabContent.css('display', 'flex');
 
+		// 탭이 표시된 후 DataTables의 컬럼 너비를 다시 계산하여 헤더 깨짐을 방지합니다.
 		$.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        
+		// 해당 탭의 그리드 데이터를 다시 조회합니다.
+		const tableInstance = $activeTabContent.find('table.display').DataTable();
+		tableInstance.ajax.reload();
 	});
 });

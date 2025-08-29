@@ -131,73 +131,38 @@ public class PrintInfoController {
     
  // 피킹 완료 처리
     @PostMapping("/{printId}/picking")
-    public ResponseEntity<String> updatePicking(@PathVariable int printId) {
-        boolean updated = service.updatePickingStatus(printId); 
-        if (updated) {
-            return ResponseEntity.ok("피킹 완료 처리 성공");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 데이터 없음");
-        }
+    public void updatePicking(@PathVariable int printId) {
+        service.updatePickingEnd(printId); 
     }   
 
     // 피킹 취소 처리 (New)
     @PostMapping("/{printId}/cancel-picking")
-    public ResponseEntity<String> cancelPicking(@PathVariable int printId) {
-        boolean updated = service.cancelPickingStatus(printId);
-        if (updated) {
-            return ResponseEntity.ok("피킹 취소 처리 성공");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 데이터 없음");
-        }
+    public void cancelPicking(@PathVariable int printId) {
+        service.cancelPickingEnd(printId);
     }
 
     // 출고준비 완료 처리
     @PostMapping("/{printId}/out-ready")
-    public ResponseEntity<String> updateOutReady(@PathVariable int printId) {
-        boolean updated = service.updateOutReadyStatus(printId); 
-        if (updated) {
-            return ResponseEntity.ok("출고준비 완료 처리 성공");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 데이터 없음");
-        }
+    public void updateOutReady(@PathVariable int printId) {
+        service.updateOutReadyStatus(printId); 
     }
 
     // 출고준비 취소 처리 (New)
     @PostMapping("/{printId}/cancel-out-ready")
-    public ResponseEntity<String> cancelOutReady(@PathVariable int printId) {
-        try {
-            boolean updated = service.cancelOutReadyStatus(printId);
-            if (updated) {
-                return ResponseEntity.ok("출고준비 취소 처리 성공");
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 데이터 없음");
-            }
-        } catch (IllegalStateException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+    public void cancelOutReady(@PathVariable int printId) {
+        
+            service.cancelOutReadyStatus(printId);
     }
 
  // 인쇄 완료 처리
     @PostMapping("/{printId}/printEnd")
-    public ResponseEntity<String> printEnd(@PathVariable int printId, @RequestParam String status) {
-        boolean updated = service.updatePrintEnd(printId); 
-        if (updated) {
-            return ResponseEntity.ok("인쇄완료 처리 성공");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 데이터 없음");
-        }
+    public void printEnd(@PathVariable int printId) {
+         service.updatePrintEnd(printId); 
     }   
 
     // 인쇄완료 취소 처리 (New)
     @PostMapping("/{printId}/cancel-printEnd")
-    public ResponseEntity<String> cancelPrintEnd(@PathVariable int printId) {
-        boolean updated = service.cancelPrintEnd(printId);
-        if (updated) {
-            return ResponseEntity.ok("인쇄완료 취소 처리 성공");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 데이터 없음");
-        }
+    public void cancelPrintEnd(@PathVariable int printId) {
+         service.cancelPrintEnd(printId);
     }    
 }   
