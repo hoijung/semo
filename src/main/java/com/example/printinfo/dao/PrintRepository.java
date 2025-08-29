@@ -254,7 +254,7 @@ public class PrintRepository {
             params.add("%" + itemName + "%");
         }
 
-        sqlBuilder.append(" ORDER BY 인쇄ID ASC");
+        sqlBuilder.append(" ORDER BY 주문일자 DESC");
 
         return jdbcTemplate.query(sqlBuilder.toString(), params.toArray(), (rs, rowNum) -> mapRowToPrintInfo(rs));
     }

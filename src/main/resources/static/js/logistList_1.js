@@ -59,7 +59,8 @@ $(document).ready(function () {
 					});
 				}
 			},
-			scrollY: getTableHeight("370"),
+			scrollY: getTableHeight("440"),
+			scrollX: true,   // ✅ 좌우 스크롤 허용
 			columns: columnsConfig,
 			createdRow: function (row, data, dataIndex) {
 				if (data.importantYn === '1') {
@@ -85,6 +86,7 @@ $(document).ready(function () {
 	// 각 그리드에 대한 컬럼 정의
 	const baseColumns = [
 		{ title: '', orderable: false, className: 'dt-body-center', render: (data, type, row) => `<input type="checkbox" class="row-select" value="${row.printId || ''}">` },
+		{ data: 'orderDate', title: '주문일자', className: 'dt-center' },
 		{ data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
 		{ data: 'printTeam', title: '담당팀' },
 		{ data: 'companyContact', title: '업체명(고객명)' },

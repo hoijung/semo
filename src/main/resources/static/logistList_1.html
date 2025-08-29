@@ -254,21 +254,21 @@
             <div id="dashboard" class="tab-content" style="display: flex;">
                 <!-- 기존 콘텐츠를 첫 번째 탭 패널로 이동 -->
                 <div class="search-area">
-                    <form id="searchForm">
+                    <form id="searchForm1" class="search-form">
                         <div class="search-filters">
                             <div class="filter-group">
-                                <label for="orderDateStart">주문일자 (시작)</label>
-                                <input type="date" id="orderDateStart1" name="orderDateStart1">
+                                <label for="orderDateStart1">주문일자 (시작)</label>
+                                <input type="date" id="orderDateStart1" name="orderDateStart">
                             </div>
                             <div class="filter-group">
-                                <label for="orderDateEnd">주문일자 (종료)</label>
-                                <input type="date" id="orderDateEnd1" name="orderDateEnd1">
+                                <label for="orderDateEnd1">주문일자 (종료)</label>
+                                <input type="date" id="orderDateEnd1" name="orderDateEnd">
                             </div>
                             <div class="search-actions" style="margin-left: auto; display: flex; gap: 10px;">
-                                <button id="btnDetail">상세보기</button>
+                                <button type="button" id="btnDetail1" class="btn-detail">상세보기</button>
                                 <!-- <button id="btnPicking">피킹완료</button>
                                 <button id="btnOutReady">출고준비완료</button> -->
-                                <button id="btnSearch">조회</button>
+                                <button type="button" id="btnSearch" class="btn-search">조회</button>
                             </div>
                         </div>
                     </form>
@@ -282,21 +282,21 @@
 
             <div id="tab2" class="tab-content">
                 <div class="search-area">
-                    <form id="searchForm">
+                    <form id="searchForm2" class="search-form">
                         <div class="search-filters">
                             <div class="filter-group">
-                                <label for="orderDateStart">주문일자 (시작)</label>
-                                <input type="date" id="orderDateStart2" name="orderDateStart2">
+                                <label for="orderDateStart2">주문일자 (시작)</label>
+                                <input type="date" id="orderDateStart2" name="orderDateStart">
                             </div>
                             <div class="filter-group">
-                                <label for="orderDateEnd">주문일자 (종료)</label>
-                                <input type="date" id="orderDateEnd2" name="orderDateEnd2">
+                                <label for="orderDateEnd2">주문일자 (종료)</label>
+                                <input type="date" id="orderDateEnd2" name="orderDateEnd">
                             </div>
                             <div class="search-actions" style="margin-left: auto; display: flex; gap: 10px;">
-                                <button id="btnDetail">상세보기</button>
-                                <button id="btnPicking">피킹완료</button>
+                                <button type="button" id="btnDetail2" class="btn-detail">상세보기</button>
+                                <button type="button" id="btnPicking2" class="btn-picking">피킹완료</button>
                                 <!-- <button id="btnOutReady">출고준비완료</button> -->
-                                <button id="btnSearch">조회</button>
+                                <button type="button" id="btnSearch" class="btn-search">조회</button>
                             </div>
                         </div>
                     </form>
@@ -309,21 +309,21 @@
             </div>
             <div id="tab3" class="tab-content">
                 <div class="search-area">
-                    <form id="searchForm">
+                    <form id="searchForm3" class="search-form">
                         <div class="search-filters">
                             <div class="filter-group">
-                                <label for="orderDateStart">주문일자 (시작)</label>
-                                <input type="date" id="orderDateStart3" name="orderDateStart3">
+                                <label for="orderDateStart3">주문일자 (시작)</label>
+                                <input type="date" id="orderDateStart3" name="orderDateStart">
                             </div>
                             <div class="filter-group">
-                                <label for="orderDateEnd">주문일자 (종료)</label>
-                                <input type="date" id="orderDateEnd3" name="orderDateEnd3">
+                                <label for="orderDateEnd3">주문일자 (종료)</label>
+                                <input type="date" id="orderDateEnd3" name="orderDateEnd">
                             </div>
                             <div class="search-actions" style="margin-left: auto; display: flex; gap: 10px;">
-                                <button id="btnDetail">상세보기</button>
+                                <button type="button" id="btnDetail3" class="btn-detail">상세보기</button>
                                 <!-- <button id="btnPicking">피킹완료</button> -->
-                                <button id="btnOutReady">출고준비완료</button>
-                                <button id="btnSearch">조회</button>
+                                <button type="button" id="btnOutReady3" class="btn-out-ready">출고준비</button>
+                                <button type="button" id="btnSearch" class="btn-search">조회</button>
                             </div>
                         </div>
                     </form>
@@ -341,30 +341,6 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="js/common.js"></script>
     <script src="js/logistList_1.js"></script>
-    <script>
-        // 탭 전환 로직
-        const tabNav = document.querySelector('.tab-nav');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        tabNav.addEventListener('click', (e) => {
-            if (e.target.matches('.tab-button')) {
-                // 현재 활성화된 탭 비활성화
-                tabNav.querySelector('.active').classList.remove('active');
-                // 클릭된 탭 활성화
-                e.target.classList.add('active');
-
-                // 모든 탭 콘텐츠 숨기기
-                tabContents.forEach(content => content.style.display = 'none');
-
-                // 대상 탭 콘텐츠 보여주기
-                const targetId = e.target.dataset.tab;
-                const targetContent = document.getElementById(targetId);
-                if (targetContent) {
-                    targetContent.style.display = 'flex'; // 내부 레이아웃 유지를 위해 flex로 설정
-                }
-            }
-        });
-    </script>
 
 </body>
 
