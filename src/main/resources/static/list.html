@@ -263,7 +263,8 @@
                             <label for="orderDateEnd">주문일자 (종료)</label>
                             <input type="date" id="orderDateEnd" name="orderDateEnd">
                         </div>
-                        <div class="filter-group" style="margin-left: auto;">
+                        <div class="search-actions" style="margin-left: auto; display: flex; gap: 10px;">
+                            <button id="btnExcel" class="btn btn-secondary">엑셀 다운로드</button> <!-- ✅ 이 버튼을 추가하세요 -->
                             <button id="btnSearch">조회</button>
                         </div>
                     </div>
@@ -346,6 +347,17 @@
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- 엑셀 다운로드를 위해서 추가 -->
+<!-- 3. DataTables Buttons 확장 기능 (★ 중요) -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    
+    <!-- 4. JSZip (엑셀 .xlsx 파일 생성에 필수) (★ 중요) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <!-- 5. Buttons HTML5 (엑셀, CSV 등 내보내기 기능에 필요) (★ 중요) -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="/static/plugins/datatables/js/pdfmake.min.js"></script>
+
     <script src="js/common.js"></script>
     <script src="js/list.js"></script>
     <script>

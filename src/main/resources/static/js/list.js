@@ -5,34 +5,45 @@ $(document).ready(function () {
 	const inputEnd = document.getElementById("orderDateEnd");
 
 	// 오늘 날짜 구하기
-    const today = new Date();
+	const today = new Date();
 
 	// yyyy-MM-dd 형식으로 변환
-    const formattedToday = today.toISOString().split("T")[0];
-    // input 기본값 설정
-    inputEnd.value = formattedToday;
+	const formattedToday = today.toISOString().split("T")[0];
+	// input 기본값 설정
+	inputEnd.value = formattedToday;
 
 	const startDay = new Date();
-    // 14일(=2주) 전 날짜 구하기
-    startDay.setDate(startDay.getDate() - 31);
-    // yyyy-MM-dd 형식으로 변환
-    const formattedStart = startDay.toISOString().split("T")[0];
-    // input 기본값 설정
-    inputStart.value = formattedStart;
+	// 14일(=2주) 전 날짜 구하기
+	startDay.setDate(startDay.getDate() - 31);
+	// yyyy-MM-dd 형식으로 변환
+	const formattedStart = startDay.toISOString().split("T")[0];
+	// input 기본값 설정
+	inputStart.value = formattedStart;
 
-	
+
 	// form 직렬화 (검색조건을 한 번에 쿼리스트링으로)
-		const query = $('#searchForm').serialize();
+	const query = $('#searchForm').serialize();
 
-		// 새로운 url로 다시 로드
-		//table.ajax.url('/api/prints/search?' + query).load();
+	// 새로운 url로 다시 로드
+	//table.ajax.url('/api/prints/search?' + query).load();
 
 	const table = $('#grid').DataTable({
 		responsive: true,
+		dom: 'frtip', // 'B'를 제거하여 기본 버튼 컨테이너를 숨김
 		ajax: {
 			url: '/api/prints/search?' + $('#searchForm').serialize(),
 			dataSrc: 'data'
 		},
+		buttons: [
+			// { extend: "copy", className: "btn-sm" },
+			// { extend: "csv", className: "btn-sm" },
+			{
+				extend: "excel",
+				className: "btn-sm",
+				title: "인쇄 작업 목록", // 엑셀 파일의 제목
+				filename: `인쇄작업목록_${formattedToday}` // 오늘 날짜를 포함한 파일명
+			}
+		],
 		scrollY: getTableHeight("410"), // 동적으로 높이 지정
 		scrollX: true,   // ✅ 좌우 스크롤 허용
 		columns: [
@@ -41,7 +52,7 @@ $(document).ready(function () {
 			{ data: 'companyContact' },
 			{ data: 'customerId' },
 			{ data: 'printTeam' },
-			
+
 
 			{ data: 'salesChannel' },
 			{ data: 'printMethod' },
@@ -88,8 +99,8 @@ $(document).ready(function () {
 		lengthChange: false, // 표시 건수 변경 기능 비활성화
 		pageLength: 15, // 기본 페이지당 행 수
 		columnDefs: [
-            { targets: "_all", className: "dt-center" } // 전체 컬럼 가운데 정렬
-        ],
+			{ targets: "_all", className: "dt-center" } // 전체 컬럼 가운데 정렬
+		],
 		language: {
 			emptyTable: "데이터가 없습니다.",
 			info: "총 _TOTAL_개",
@@ -114,6 +125,12 @@ $(document).ready(function () {
 
 		// 새로운 url로 다시 로드
 		table.ajax.url('/api/prints/search?' + query).load();
+	});
+
+	// 엑셀 다운로드 버튼 클릭 이벤트
+	$('#btnExcel').on('click', function () {
+		// DataTables의 excel 버튼 기능을 프로그래밍 방식으로 실행
+		table.buttons('.buttons-excel').trigger();
 	});
 
 
