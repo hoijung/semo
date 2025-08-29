@@ -94,7 +94,7 @@ $(document).ready(function () {
 		createdRow: function (row, data, dataIndex) {
 			// 'data' 객체에서 'printMemo' (인쇄참고사항) 필드를 확인합니다.
 			// 필드명이 다를 경우 실제 사용하는 필드명으로 변경해주세요. (예: data.memo)
-			if (data.importantYn === '1') {
+			if (eval(data.importantYn)) {
 				// printMemo에 내용이 있으면 'highlight-row' 클래스를 추가합니다.
 				$(row).addClass('highlight-row');
 			}
