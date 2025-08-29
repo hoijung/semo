@@ -179,9 +179,9 @@ public class PrintRepository {
      * 탭 1: 배분완료 목록 조회 (피킹되지 않은 건)
      * @return 배분은 되었지만 아직 피킹되지 않은 작업 목록
      */
-    public List<PrintInfo> findAllocatedPrints(String pickingDateStart, String pickingDateEnd, String printTeam, String companyContact, String itemName) {
+    public List<PrintInfo> findAllocatedPrints(String pickingDateStart, String pickingDateEnd) {
         String baseWhereClause = " WHERE 배분여부 = 1 AND (피킹완료 = 0 OR 피킹완료 IS NULL)";
-        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
+        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
     }
 
     /**
@@ -190,7 +190,7 @@ public class PrintRepository {
      */
     public List<PrintInfo> findPickedPrints(String pickingDateStart, String pickingDateEnd, String printTeam, String companyContact, String itemName) {
         String baseWhereClause = " WHERE 피킹완료 = 1 AND (출고준비 = 0 OR 출고준비 IS NULL)";
-        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
+        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
     }
 
     /**
@@ -199,14 +199,20 @@ public class PrintRepository {
      */
     public List<PrintInfo> findReadyForDispatchPrints(String pickingDateStart, String pickingDateEnd, String printTeam, String companyContact, String itemName) {
         String baseWhereClause = " WHERE 출고준비 = 1";
-        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
+        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
     }
 
+        /**
+     * [참고] 모든 인쇄 정보를 검색해야 할 경우 사용 (기존 findPrintsByCriteria 대체)
+     */
+    public List<PrintInfo> findAllPrints() {
+        return findPrints("", "", "", "", "", "");
+    }
     /**
      * [참고] 모든 인쇄 정보를 검색해야 할 경우 사용 (기존 findPrintsByCriteria 대체)
      */
     public List<PrintInfo> findAllPrints(String pickingDateStart, String pickingDateEnd, String printTeam, String companyContact, String itemName) {
-        return findPrints(" WHERE 1=1", pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
+        return findPrints(" WHERE 1=1", pickingDateStart, pickingDateEnd, "", "", "");
     }
 
     /**

@@ -9,13 +9,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.printinfo.dao.UserRepository;
 import com.example.printinfo.model.UserDto;
 
-import lombok.RequiredArgsConstructor;
-
 @Service
-@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public List<UserDto> getAllUsers() {
         return userRepository.findAll();

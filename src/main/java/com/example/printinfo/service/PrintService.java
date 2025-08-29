@@ -15,18 +15,31 @@ public class PrintService {
     @Autowired
     private PrintRepository repository;
 
-    public List<PrintDto> findAll() { return repository.findAll(); }
+    public List<PrintDto> findAll() {
+        return repository.findAll();
+    }
 
     // New search method for list.html
     public List<PrintInfo> searchPrints(String orderDateStart, String orderDateEnd,
-                                       String printTeam, String companyContact, String itemName) {
-        return repository.findPrintsByCriteria(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
+            String printTeam, String companyContact, String itemName) {
+        return repository.findAllPrints(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
     }
 
-    public PrintDto findById(Integer id) { return repository.findById(id); }
-    public int insert(PrintDto dto) { return repository.insert(dto); }
-    public int update(PrintDto dto) { return repository.update(dto); }
-    public int delete(Integer id) { return repository.delete(id); }
+    public PrintDto findById(Integer id) {
+        return repository.findById(id);
+    }
+
+    public int insert(PrintDto dto) {
+        return repository.insert(dto);
+    }
+
+    public int update(PrintDto dto) {
+        return repository.update(dto);
+    }
+
+    public int delete(Integer id) {
+        return repository.delete(id);
+    }
 
     public PrintDto distributePrint(Integer id) {
         PrintDto dto = repository.findById(id);
@@ -52,28 +65,27 @@ public class PrintService {
         repository.update(dto);
         return dto;
     }
-    
-    
-// 전체 조회
- public List<PrintInfo> getAllPrintInfo1(String pickingDateStart, String pickingDateEnd,
-                                         String printTeam, String companyContact, String itemName) {
-     return repository.findAll1(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
- }
- 
- // 전체 조회
- public List<PrintInfo> getList(String pickingDateStart, String pickingDateEnd,
-                                String printTeam, String companyContact, String itemName) {
-     return repository.getList(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
- }    
 
- // 전체 조회
- public List<PrintInfo> getAllPrintInfo2() {
-     return repository.findAll2();
- }
- 
- // 전체 조회
- public List<PrintInfo> getAllPrintInfo3() {
-     return repository.findAll3();
- }
-    
+    // 전체 조회
+    public List<PrintInfo> getAllPrintInfo1(String pickingDateStart, String pickingDateEnd,
+            String printTeam, String companyContact, String itemName) {
+        return repository.findAllPrints(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
+    }
+
+    // 전체 조회
+    public List<PrintInfo> getList(String pickingDateStart, String pickingDateEnd,
+            String printTeam, String companyContact, String itemName) {
+        return repository.findAllPrints(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
+    }
+
+    // 전체 조회
+    public List<PrintInfo> getAllPrintInfo2() {
+        return repository.findAllPrints();
+    }
+
+    // 전체 조회
+    public List<PrintInfo> getAllPrintInfo3() {
+        return repository.findAllPrints();
+    }
+
 }
