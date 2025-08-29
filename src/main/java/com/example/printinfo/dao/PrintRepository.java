@@ -18,24 +18,24 @@ public class PrintRepository {
 
     public List<PrintDto> findAll() {
         String sql = "SELECT 인쇄ID, 품목명, 쇼핑백색상, 사이즈, 제작장수, 인쇄담당팀, 인쇄면, 인쇄도수"
-                + ", 인쇄방식, 로고인쇄크기, 로고인쇄위치, 특이사항, CONVERT(VARCHAR(10), 주문일자, 23) AS 주문일자"
+                + ", 인쇄방식, 로고인쇄크기, 로고인쇄위치, 특이사항, 주문일자"
                 + ", 업체명_담당자, 고객ID, 전화번호"
                 + ", 발송마감기한, 최종배송지_우편번호, 최종배송지_주소, 판매채널, 계산서발행타입, 상호명, 대표자명"
                 + ", 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, 등록일시, 수정일시, 등록팀, 수정팀"
                 + ", 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 배송타입, 박스규격, 기존주문여부, 인쇄방법"
                 + ", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄참고사항 "
                 + ", 중요여부, 업체메모 "
-                + " FROM semo.dbo.인쇄정보 ORDER BY 인쇄ID DESC";
+                + " FROM 인쇄정보 ORDER BY 인쇄ID DESC";
         return jdbcTemplate.query(sql, (rs, rowNum) -> mapRow(rs));
     }
 
     public PrintDto findById(Integer id) {
-        String sql = "SELECT * FROM semo.dbo.인쇄정보 WHERE 인쇄ID = ?";
+        String sql = "SELECT * FROM 인쇄정보 WHERE 인쇄ID = ?";
         return jdbcTemplate.queryForObject(sql, new Object[] { id }, (rs, rowNum) -> mapRow(rs));
     }
 
     public int insert(PrintDto dto) {
-        String sql = "INSERT INTO semo.dbo.인쇄정보 (품목명, 쇼핑백색상, 사이즈, 제작장수, 인쇄담당팀, 특이사항, 고객ID, 주문일자, 완료여부) " +
+        String sql = "INSERT INTO 인쇄정보 (품목명, 쇼핑백색상, 사이즈, 제작장수, 인쇄담당팀, 특이사항, 고객ID, 주문일자, 완료여부) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         return jdbcTemplate.update(sql,
                 dto.get품목명(), dto.get쇼핑백색상(), dto.get사이즈(), dto.get제작장수(),
@@ -43,7 +43,7 @@ public class PrintRepository {
     }
 
     public int update(PrintDto dto) {
-        String sql = "UPDATE semo.dbo.인쇄정보 SET " +
+        String sql = "UPDATE 인쇄정보 SET " +
                 "품목명=?, 쇼핑백색상=?, 사이즈=?, 제작장수=?, 인쇄담당팀=?, 인쇄면=?, 인쇄도수=?, 인쇄방식=?, " +
                 "로고인쇄크기=?, 로고인쇄위치=?, 특이사항=?, 주문일자=?, 업체명_담당자=?, 고객ID=?, 전화번호=?, " +
                 "발송마감기한=?, 최종배송지_우편번호=?, 최종배송지_주소=?, 판매채널=?, 계산서발행타입=?, 상호명=?, " +
@@ -68,7 +68,7 @@ public class PrintRepository {
     }
 
     public int delete(Integer id) {
-        String sql = "DELETE FROM semo.dbo.인쇄정보 WHERE 인쇄ID=?";
+        String sql = "DELETE FROM 인쇄정보 WHERE 인쇄ID=?";
         return jdbcTemplate.update(sql, id);
     }
 
@@ -180,7 +180,7 @@ public class PrintRepository {
      * @return 배분은 된 목록
      */
     public List<PrintInfo> findAllocatedPrints(String pickingDateStart, String pickingDateEnd) {
-        String baseWhereClause = " WHERE 배분여부 = 1";
+        String baseWhereClause = " WHERE (배분여부::int) = 1 ";
         return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
     }
 
@@ -189,7 +189,7 @@ public class PrintRepository {
      * @return 피킹은 완료되었지만 아직 출고 준비가 되지 않은 작업 목록
      */
     public List<PrintInfo> findPickedPrints(String pickingDateStart, String pickingDateEnd) {
-        String baseWhereClause = " WHERE 피킹완료 = 1 ";
+        String baseWhereClause = " WHERE (피킹완료::int) = 1 ";
         return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
     }
 
@@ -198,7 +198,7 @@ public class PrintRepository {
      * @return 출고 준비가 완료된 작업 목록
      */
     public List<PrintInfo> findReadyForDispatchPrints(String pickingDateStart, String pickingDateEnd) {
-        String baseWhereClause = " WHERE 출고준비 = 1";
+        String baseWhereClause = " WHERE (출고준비::int) = 1";
         return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
     }
 
@@ -220,7 +220,7 @@ public class PrintRepository {
      */
     private List<PrintInfo> findPrints(String baseWhereClause, String pickingDateStart, String pickingDateEnd, String printTeam, String companyContact, String itemName) {
         String selectClause = "SELECT 인쇄ID, 품목명, 쇼핑백색상, 사이즈, 제작장수, 인쇄담당팀, 인쇄면, 인쇄도수"
-                + ", 인쇄방식, 로고인쇄크기, 로고인쇄위치, 특이사항, CONVERT(VARCHAR(10), 주문일자, 23) AS 주문일자"
+                + ", 인쇄방식, 로고인쇄크기, 로고인쇄위치, 특이사항, 주문일자"
                 + ", 업체명_담당자, 고객ID, 전화번호"
                 + ", 발송마감기한, 최종배송지_우편번호, 최종배송지_주소, 판매채널, 계산서발행타입, 상호명, 대표자명"
                 + ", 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, 등록일시, 수정일시, 등록팀, 수정팀"
@@ -228,7 +228,7 @@ public class PrintRepository {
                 + ", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄완료, 중요여부, 업체메모, 인쇄참고사항 ";
 
         StringBuilder sqlBuilder = new StringBuilder(selectClause)
-                .append(" FROM semo.dbo.인쇄정보 ")
+                .append(" FROM 인쇄정보 ")
                 .append(baseWhereClause);
 
         List<Object> params = new java.util.ArrayList<>();

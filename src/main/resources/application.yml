@@ -36,10 +36,10 @@ spring:
         - file:C:\Users\love\git\semo\src\main\resources\static\ # 개발 시 소스 경로 직접 참조
         - classpath:/static/
   datasource:
-    url: jdbc:p6spy:sqlserver://;serverName=semo.cxyu028u2mcy.ap-northeast-2.rds.amazonaws.com;databaseName=semo;encrypt=false
-    username: admin
+    url: jdbc:postgresql://sem.cxyu028u2mcy.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    username: postgres
     password: 12345678
-    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    driver-class-name: org.postgresql.Driver
 
 file:
   upload-dir: C:\Users\love\git\semo\src\main\resources\static\File
@@ -54,10 +54,10 @@ spring:
       on-profile: prod
   datasource:
     # !!! 중요: 운영 서버의 DB 정보로 반드시 수정해야 합니다. !!!
-    url: jdbc:p6spy:sqlserver://;serverName=semo.cxyu028u2mcy.ap-northeast-2.rds.amazonaws.com;databaseName=semo;encrypt=false
-    username: admin
+    url: jdbc:postgresql://sem.cxyu028u2mcy.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    username: postgres
     password: 12345678 # 보안을 위해 환경 변수나 외부 설정 파일 사용을 강력히 권장합니다.
-    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    driver-class-name: org.postgresql.Driver
 
 file:
   # JAR 배포 시 서버의 실제 파일 저장 경로
