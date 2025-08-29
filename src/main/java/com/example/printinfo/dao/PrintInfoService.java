@@ -21,24 +21,37 @@ public class PrintInfoService {
         return repository.findById(printId);
     }
  
-	public boolean updatePickingStatus(int printId, String status) {
+	public boolean updatePickingStatus(int printId) {
 		// TODO Auto-generated method stub
 		repository.updatePickingYn(printId, true);
 		return true;
 	}   
     
-	public boolean updateOutReadyStatus(int printId, String status) {
+	public boolean updateOutReadyStatus(int printId) {
 		// TODO Auto-generated method stub
 		repository.updateOutReadyYn(printId, true);
 		return true;
 	}
+    
 
     public boolean cancelPickingStatus(int printId) {
+        PrintInfo printInfo = repository.findById(printId);
+        if (printInfo == null) {
+            throw new IllegalArgumentException("Print record not found with ID: " + printId);
+        }
+
+        if (printInfo.getOutReadyYn().equals("1")) { //출고준비완료건 
+            throw new IllegalArgumentException("출고준비 완료건은 피킹취소할 수 없습니다 " + printId);
+        }
         // Assuming a method in repository to update picking status to false
         return repository.updatePickingYn(printId, false);
     }
 
-	public boolean updatePrintEnd(int printId, String status) {
+	public boolean updatePrintEnd(int printId) {
+        PrintInfo printInfo = repository.findById(printId);
+        if (printInfo.getOutReadyYn().equals("1")) { //출고준비완료건 
+            // throw new IllegalArgumentException("출고준비 완료건은 피킹취소할 수 없습니다 " + printId);
+        }
 		// TODO Auto-generated method stub
 		repository.updatePrintEnd(printId, true);
 		return true;
@@ -53,13 +66,8 @@ public class PrintInfoService {
     public boolean cancelOutReadyStatus(int printId) {
         PrintInfo printInfo = repository.findById(printId);
         if (printInfo == null) {
-            throw new IllegalArgumentException("Print record not found with ID: " + printId);
+            throw new IllegalArgumentException("출고준비완료건은 피킹취소 불가합니다 " + printId);
         }
-        // Assuming 'outReadyYn' in PrintInfo model represents '출고완료'
-        // and it's a String "1" for true, "0" for false
-//        if ("1".equals(printInfo.getOutReadyYn())) { // Check if already "출고완료"
-//            throw new IllegalStateException("출고완료된 레코드는 출고준비를 취소할 수 없습니다.");
-//        }
         return repository.updateOutReadyYn(printId, false);
     }
 }

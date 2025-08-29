@@ -66,12 +66,7 @@ public class PrintService {
         return dto;
     }
 
-    // 전체 조회
-    public List<PrintInfo> getAllPrintInfo1(String pickingDateStart, String pickingDateEnd,
-            String printTeam, String companyContact, String itemName) {
-        return repository.findAllPrints(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName);
-    }
-
+    
     // 전체 조회
     public List<PrintInfo> getList(String pickingDateStart, String pickingDateEnd,
             String printTeam, String companyContact, String itemName) {
@@ -79,13 +74,21 @@ public class PrintService {
     }
 
     // 전체 조회
-    public List<PrintInfo> getAllPrintInfo2() {
-        return repository.findAllPrints();
+    public List<PrintInfo> getAllPrintInfo1(String pickingDateStart, String pickingDateEnd,
+            String printTeam, String companyContact, String itemName) {
+        return repository.findAllocatedPrints(pickingDateStart, pickingDateEnd);
     }
 
     // 전체 조회
-    public List<PrintInfo> getAllPrintInfo3() {
-        return repository.findAllPrints();
+    public List<PrintInfo> getAllPrintInfo2(String pickingDateStart, String pickingDateEnd,
+            String printTeam, String companyContact, String itemName) {
+        return repository.findAllocatedPrints(pickingDateStart, pickingDateEnd);
+    }
+
+    // 전체 조회
+    public List<PrintInfo> getAllPrintInfo3(String pickingDateStart, String pickingDateEnd,
+            String printTeam, String companyContact, String itemName) {
+        return repository.findPickedPrints(pickingDateStart, pickingDateEnd);
     }
 
 }

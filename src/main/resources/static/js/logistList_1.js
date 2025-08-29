@@ -122,9 +122,9 @@ $(document).ready(function () {
 	const columnsForGrid2And3 = [...baseColumns, ...extendedColumns];
 
 	// DataTables 인스턴스 생성
-	const table = initializeDataTable('#grid1', '/api/print-info/list1', columnsForGrid1);
-	const table2 = initializeDataTable('#grid2', '/api/print-info/list1', columnsForGrid2And3); // TODO: API URL 변경 필요
-	const table3 = initializeDataTable('#grid3', '/api/print-info/list1', columnsForGrid2And3); // TODO: API URL 변경 필요
+	const table = initializeDataTable('#grid1', '/api/print-info/logistic-list1', columnsForGrid1);
+	const table2 = initializeDataTable('#grid2', '/api/print-info/logistic-list2', columnsForGrid2And3); // TODO: API URL 변경 필요
+	const table3 = initializeDataTable('#grid3', '/api/print-info/logistic-list3', columnsForGrid2And3); // TODO: API URL 변경 필요
 
 	// 조회 버튼 클릭 이벤트
 	$(document).on('click', '.btn-search', function (e) {

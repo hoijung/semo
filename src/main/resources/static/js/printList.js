@@ -44,6 +44,9 @@ $(document).ready(function () {
 	// input 기본값 설정
 	inputStart.value = formattedStart;
 
+	// 공통 컬럼 렌더러
+	const renderCheckbox = (data, type) => type === 'display' ? `<input type="checkbox" ${data == '1' ? 'checked' : ''} disabled>` : data;
+
 	const table = $('#grid').DataTable({
 		responsive: true,
 		ajax: {
@@ -61,6 +64,7 @@ $(document).ready(function () {
 					return `<input type="checkbox" class="row-select">`;
 				}
 			},
+			{ data: 'orderDate', title: '주문일자', className: 'dt-center' },
 			{ data: 'printTeam' },
 			{ data: 'companyContact' },
 			{
@@ -90,26 +94,8 @@ $(document).ready(function () {
 			{ data: 'logoPosition', title: '로고위치' },
 			{ data: 'quantity', title: '박스수량' },
 			{ data: 'printMethod', title: '발송최종기한', className: 'dt-center' },
-			// {
-			// 	data: "outReadyYn", title: "작업완료"
-			// 	, className: 'dt-center'
-			// 	, render: function (data, type, row) {
-			// 		if (type === 'display') {
-			// 			return `<input type="checkbox" ${data == '1' ? 'checked' : ''} disabled>`;
-			// 		}
-			// 		return data;
-			// 	}
-			// },
-			{
-				data: "printEndYn", title: "인쇄완료"
-				, className: 'dt-center'
-				, render: function (data, type, row) {
-					if (type === 'display') {
-						return `<input type="checkbox" ${data == '1' ? 'checked' : ''} disabled>`;
-					}
-					return data;
-				}
-			}
+			{ data: "pickingYn", title: "피킹완료", className: 'dt-center', render: renderCheckbox },
+			{ data: "printEndYn", title: "인쇄완료", className: 'dt-center', render: renderCheckbox },
 
 		],
 

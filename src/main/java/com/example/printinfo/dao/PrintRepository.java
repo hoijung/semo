@@ -176,11 +176,11 @@ public class PrintRepository {
     }
 
     /**
-     * 탭 1: 배분완료 목록 조회 (피킹되지 않은 건)
-     * @return 배분은 되었지만 아직 피킹되지 않은 작업 목록
+     * 탭 1: 물류팀 - 전체 목록 조회 (피킹되지 않은 건)
+     * @return 배분은 된 목록
      */
     public List<PrintInfo> findAllocatedPrints(String pickingDateStart, String pickingDateEnd) {
-        String baseWhereClause = " WHERE 배분여부 = 1 AND (피킹완료 = 0 OR 피킹완료 IS NULL)";
+        String baseWhereClause = " WHERE 배분여부 = 1";
         return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
     }
 
@@ -188,8 +188,8 @@ public class PrintRepository {
      * 탭 2: 피킹완료 목록 조회 (출고준비되지 않은 건)
      * @return 피킹은 완료되었지만 아직 출고 준비가 되지 않은 작업 목록
      */
-    public List<PrintInfo> findPickedPrints(String pickingDateStart, String pickingDateEnd, String printTeam, String companyContact, String itemName) {
-        String baseWhereClause = " WHERE 피킹완료 = 1 AND (출고준비 = 0 OR 출고준비 IS NULL)";
+    public List<PrintInfo> findPickedPrints(String pickingDateStart, String pickingDateEnd) {
+        String baseWhereClause = " WHERE 피킹완료 = 1 ";
         return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
     }
 
@@ -197,7 +197,7 @@ public class PrintRepository {
      * 탭 3: 출고준비 목록 조회
      * @return 출고 준비가 완료된 작업 목록
      */
-    public List<PrintInfo> findReadyForDispatchPrints(String pickingDateStart, String pickingDateEnd, String printTeam, String companyContact, String itemName) {
+    public List<PrintInfo> findReadyForDispatchPrints(String pickingDateStart, String pickingDateEnd) {
         String baseWhereClause = " WHERE 출고준비 = 1";
         return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
     }

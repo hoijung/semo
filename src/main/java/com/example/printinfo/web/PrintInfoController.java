@@ -61,7 +61,7 @@ public class PrintInfoController {
     }
     
     // 전체 목록
-    @GetMapping("/list1")
+    @GetMapping("/logistic-list1")
     public Map<String,Object> getAll1(
             @RequestParam(required = false) String orderDateStart,
             @RequestParam(required = false) String orderDateEnd,
@@ -82,19 +82,31 @@ public class PrintInfoController {
         return response;
     }
 
-    // 전체 목록
-    @GetMapping("/list2")
-    public Map<String,Object> getAll2() {
-        List<PrintInfo> list = service2.getAllPrintInfo2();
+    // 피킹완료 목록
+    @GetMapping("/logistic-list2")
+    public Map<String,Object> getAll2(
+            @RequestParam(required = false) String orderDateStart,
+            @RequestParam(required = false) String orderDateEnd,
+            @RequestParam(required = false) String printTeam,
+            @RequestParam(required = false) String companyContact,
+            @RequestParam(required = false) String itemName) {
+        List<PrintInfo> list = service2.getAllPrintInfo2(orderDateStart, orderDateEnd,
+                                                        printTeam, companyContact, itemName);
         Map<String,Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
         return response;
     }
     
-    // 전체 목록
-    @GetMapping("/list3")
-    public Map<String,Object> getAll3() {
-        List<PrintInfo> list = service2.getAllPrintInfo3();
+    // 출고준비 목록
+    @GetMapping("/logistic-list3")
+    public Map<String,Object> getAll3(
+            @RequestParam(required = false) String orderDateStart,
+            @RequestParam(required = false) String orderDateEnd,
+            @RequestParam(required = false) String printTeam,
+            @RequestParam(required = false) String companyContact,
+            @RequestParam(required = false) String itemName) {
+        List<PrintInfo> list = service2.getAllPrintInfo3(orderDateStart, orderDateEnd,
+                                                        printTeam, companyContact, itemName);
         Map<String,Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
         return response;
@@ -119,8 +131,8 @@ public class PrintInfoController {
     
  // 피킹 완료 처리
     @PostMapping("/{printId}/picking")
-    public ResponseEntity<String> updatePicking(@PathVariable int printId, @RequestParam String status) {
-        boolean updated = service.updatePickingStatus(printId, status); 
+    public ResponseEntity<String> updatePicking(@PathVariable int printId) {
+        boolean updated = service.updatePickingStatus(printId); 
         if (updated) {
             return ResponseEntity.ok("피킹 완료 처리 성공");
         } else {
@@ -141,8 +153,8 @@ public class PrintInfoController {
 
     // 출고준비 완료 처리
     @PostMapping("/{printId}/out-ready")
-    public ResponseEntity<String> updateOutReady(@PathVariable int printId, @RequestParam String status) {
-        boolean updated = service.updateOutReadyStatus(printId, status); 
+    public ResponseEntity<String> updateOutReady(@PathVariable int printId) {
+        boolean updated = service.updateOutReadyStatus(printId); 
         if (updated) {
             return ResponseEntity.ok("출고준비 완료 처리 성공");
         } else {
@@ -170,7 +182,7 @@ public class PrintInfoController {
  // 인쇄 완료 처리
     @PostMapping("/{printId}/printEnd")
     public ResponseEntity<String> printEnd(@PathVariable int printId, @RequestParam String status) {
-        boolean updated = service.updatePrintEnd(printId, status); 
+        boolean updated = service.updatePrintEnd(printId); 
         if (updated) {
             return ResponseEntity.ok("인쇄완료 처리 성공");
         } else {
