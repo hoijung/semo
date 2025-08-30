@@ -50,7 +50,7 @@ $(document).ready(function() {
     function initializeDataTable(selector, ajaxUrl, columnsConfig) {
         return $(selector).DataTable({
             responsive: true,
-            dom: 'Bfrtip', // 'B'를 추가하여 버튼 기능을 활성화합니다. (버튼은 CSS로 숨겨집니다)
+            dom: 'frtip', // 'B'를 추가하여 버튼 기능을 활성화합니다. (버튼은 CSS로 숨겨집니다)
             ajax: {
                 url: ajaxUrl,
                 dataSrc: 'data',
@@ -80,7 +80,7 @@ $(document).ready(function() {
             columns: columnsConfig,
             createdRow: function(row, data, dataIndex) {
                 // 'eval'은 보안에 취약하므로 안전한 비교로 변경합니다.
-                if (data.importantYn === '1' || data.importantYn === true) {
+                if (data.importantYn === '1' || data.importantYn === 'true') {
                     $(row).addClass('highlight-row');
                 }
             },
