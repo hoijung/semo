@@ -32,6 +32,7 @@ $(document).ready(function () {
 			url: '/api/print-info/list3',
 			dataSrc: 'data'
 		},
+		scrollY: getTableHeight("370"), // 동적으로 높이 지정
 		columns: [
 			{
 				title: '',  // 체크박스 컬럼

@@ -33,6 +33,7 @@ $(document).ready(function () {
 			url: '/api/prints/search?' + $('#searchForm').serialize(),
 			dataSrc: 'data'
 		},
+		scrollY: getTableHeight("410"), // 동적으로 높이 지정
 		scrollX: true,   // ✅ 좌우 스크롤 허용
 		columns: [
 			{ data: null, render: () => `<input type="checkbox" class="row-select">` },
@@ -44,7 +45,7 @@ $(document).ready(function () {
 
 			{ data: 'salesChannel' },
 			{ data: 'printMethod' },
-			{ data: 'orderYn' },
+			{ data: 'oldOrderYn' },
 			{ data: 'itemName' },
 			{ data: 'bagColor' },
 			{ data: 'size' },

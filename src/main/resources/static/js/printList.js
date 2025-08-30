@@ -44,18 +44,13 @@ $(document).ready(function () {
 	// input 기본값 설정
 	inputStart.value = formattedStart;
 
-	function getTableHeight() {
-        // 예: 화면 높이에서 200px 여유 공간 빼기
-        return $(window).height() - 300 + "px";
-    }
-
 	const table = $('#grid').DataTable({
 		responsive: true,
 		ajax: {
 			url: '/api/prints/printList1',
 			dataSrc: 'data'
 		},
-		scrollY: getTableHeight(), // 동적으로 높이 지정
+		scrollY: getTableHeight("370"), // 동적으로 높이 지정
 		scrollX: true,   // ✅ 좌우 스크롤 허용
 		columns: [
 			{

@@ -23,7 +23,7 @@ public class PrintRepository {
                 + ", 발송마감기한, 최종배송지_우편번호, 최종배송지_주소, 판매채널, 계산서발행타입, 상호명, 대표자명"
                 + ", 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, 등록일시, 수정일시, 등록팀, 수정팀"
                 + ", 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 배송타입, 박스규격, 기존주문여부, 인쇄방법"
-                + ", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3 "
+                + ", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄참고사항 "
                 + " FROM semo.dbo.인쇄정보 ORDER BY 인쇄ID DESC";
         return jdbcTemplate.query(sql, (rs, rowNum) -> mapRow(rs));
     }
@@ -49,6 +49,7 @@ public class PrintRepository {
                 "대표자명=?, 이메일=?, 공급가액=?, 부가세액=?, 합계금액=?, 배분여부=?, 완료여부=?, " +
                 "수정팀=?, 피킹완료=?, 출고준비=?, 파일명=?, 인쇄로고예시=?, 피킹예정일=?, 배송타입=?, 박스규격=?, " +
                 "기존주문여부=?, 인쇄방법=?, 배송지주소상세=? , 로고인쇄색상=?, 조색데이터1 =?, 조색데이터2 = ?, 조색데이터3 =?, " +
+                "인쇄참고사항=?, " +
                 "수정일시=GETDATE() " +
                 "WHERE 인쇄ID=?";
         return jdbcTemplate.update(sql,
@@ -61,6 +62,7 @@ public class PrintRepository {
                 dto.get수정팀(), dto.get피킹완료(), dto.get출고준비(), dto.get파일명(), dto.get인쇄로고예시(),
                 dto.get피킹예정일(), dto.get배송타입(), dto.get박스규격(), dto.get기존주문여부(), dto.get인쇄방법(),
                 dto.get배송지주소상세(), dto.get로고인쇄색상(), dto.get조색데이터1(), dto.get조색데이터2(), dto.get조색데이터3(),
+                dto.get인쇄참고사항(),
                 dto.get인쇄ID());
     }
 
@@ -109,13 +111,14 @@ public class PrintRepository {
         dto.set피킹예정일(rs.getString("피킹예정일"));
         dto.set배송타입(rs.getString("배송타입"));
         dto.set박스규격(rs.getString("박스규격"));
-        dto.set기존주문여부(rs.getBoolean("기존주문여부"));
+        dto.set기존주문여부(rs.getString("기존주문여부"));
         dto.set인쇄방법(rs.getString("인쇄방법"));
         dto.set배송지주소상세(rs.getString("배송지주소상세"));
         dto.set로고인쇄색상(rs.getString("로고인쇄색상"));
         dto.set조색데이터1(rs.getString("조색데이터1"));
         dto.set조색데이터2(rs.getString("조색데이터2"));
         dto.set조색데이터3(rs.getString("조색데이터3"));
+        dto.set인쇄참고사항(rs.getString("인쇄참고사항"));
         return dto;
     }
 

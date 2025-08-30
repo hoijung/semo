@@ -232,10 +232,10 @@ public class PrintDto {
 	public void set박스규격(String 박스규격) {
 		this.박스규격 = 박스규격;
 	}
-	public Boolean get기존주문여부() {
+	public String get기존주문여부() {
 		return 기존주문여부;
 	}
-	public void set기존주문여부(Boolean 기존주문여부) {
+	public void set기존주문여부(String 기존주문여부) {
 		this.기존주문여부 = 기존주문여부;
 	}
 	public String get인쇄방법() {
@@ -295,7 +295,7 @@ public class PrintDto {
     private String 피킹예정일;
     private String 배송타입;
     private String 박스규격;
-    private Boolean 기존주문여부;
+    private String 기존주문여부;
     private String 인쇄방법;
     private String 로고인쇄색상;
     private String 조색데이터1;
@@ -319,6 +319,14 @@ public class PrintDto {
 	}
 	private String 조색데이터2;
     private String 조색데이터3;
+	private String 인쇄참고사항;
+	
+	public String get인쇄참고사항() {
+		return 인쇄참고사항;
+	}
+    public void set인쇄참고사항(String 인쇄참고사항) {
+        this.인쇄참고사항 = 인쇄참고사항;
+    }
 
     // Getter/Setter 생략 (Lombok 사용 가능)
 }
