@@ -44,10 +44,13 @@ $(document).ready(function() {
         if (inputStart.length) inputStart.val(formattedStart);
     });
 
+    const today = new Date();
+    const formattedToday = today.toISOString().split("T")[0];
     // DataTables 초기화 함수 (코드 중복 제거)
     function initializeDataTable(selector, ajaxUrl, columnsConfig) {
         return $(selector).DataTable({
             responsive: true,
+            dom: 'Bfrtip', // 'B'를 추가하여 버튼 기능을 활성화합니다. (버튼은 CSS로 숨겨집니다)
             ajax: {
                 url: ajaxUrl,
                 dataSrc: 'data',
@@ -59,11 +62,25 @@ $(document).ready(function() {
                     });
                 }
             },
+            buttons: [
+                // { extend: "copy", className: "btn-sm" },
+                // { extend: "csv", className: "btn-sm" },
+                {
+                    extend: "excel",
+                    className: "buttons-excel", // 프로그래밍 방식 호출을 위한 클래스
+                    title: "물류 작업 목록", // 엑셀 파일의 제목
+                    filename: `물류작업목록_${formattedToday}`, // 오늘 날짜를 포함한 파일명
+                    exportOptions: {
+                        rows: '.selected' // .selected 클래스를 가진 행만 내보냅니다.
+                    }
+                }
+            ],
             scrollY: getTableHeight("440"),
             scrollX: true,   // ✅ 좌우 스크롤 허용
             columns: columnsConfig,
             createdRow: function(row, data, dataIndex) {
-                if (eval(data.importantYn)) {
+                // 'eval'은 보안에 취약하므로 안전한 비교로 변경합니다.
+                if (data.importantYn === '1' || data.importantYn === true) {
                     $(row).addClass('highlight-row');
                 }
             },
@@ -81,7 +98,14 @@ $(document).ready(function() {
     }
 
     // 공통 컬럼 렌더러
-    const renderCheckbox = (data, type) => type === 'display' ? `<input type="checkbox" ${eval(data) ? 'checked' : ''} disabled>` : data;
+    const renderCheckbox = (data, type) => {
+		if (type === 'display') {
+			// 'eval'은 보안에 취약하므로 안전한 비교로 변경합니다.
+			const isChecked = data === '1' || data === true || data === 'true';
+			return `<input type="checkbox" ${isChecked ? 'checked' : ''} disabled>`;
+		}
+		return data;
+	};
 
     // 각 그리드에 대한 컬럼 정의
     const baseColumns = [
@@ -164,25 +188,15 @@ $(document).ready(function() {
         const tableInstance = $(this).closest('table.display').DataTable();
         const data = tableInstance.row(this).data();
         if (data) {
-          //  window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1500,height=900');
+            //  window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1500,height=900');
         }
     });
 
-    // 체크박스 클릭 시 해당 행 선택/해제 (단일 선택)
+    // 체크박스 클릭 시 해당 행 선택/해제 (다중 선택)
     $(document).on('click', '.main-content table.display tbody input.row-select', function(e) {
         e.stopPropagation(); // 행 클릭 이벤트 전파 방지
-        const $table = $(this).closest('table.display');
-        const $row = $(this).closest('tr');
-
-        if ($(this).is(':checked')) {
-            $table.find('tbody tr.selected').removeClass('selected');
-            $table.find('tbody input.row-select').not(this).prop('checked', false);
-            $row.addClass('selected');
-        } else {
-            $row.removeClass('selected');
-        }
+        $(this).closest('tr').toggleClass('selected', this.checked);
     });
-
     // 선택된 행 가져오기
     function getSelectedRows(tableInstance) {
         return tableInstance.rows('.selected').data().toArray();
@@ -198,6 +212,19 @@ $(document).ready(function() {
         }
         const data = selected[0];
         window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1500,height=900');
+    });
+
+    // 엑셀 다운로드 버튼 클릭 이벤트
+    $(document).on('click', '.btn-excel', function() {
+        const tableInstance = $(this).closest('.tab-content').find('table.display').DataTable();
+        const selectedRows = tableInstance.rows('.selected').count();
+
+        if (selectedRows === 0) {
+            alert('엑셀로 다운로드할 행을 선택해주세요.');
+            return;
+        }
+        // DataTables의 excel 버튼 기능을 프로그래밍 방식으로 실행
+        tableInstance.buttons('.buttons-excel').trigger();
     });
 
     // 공통 액션 처리 함수
