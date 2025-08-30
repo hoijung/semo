@@ -170,7 +170,7 @@ $(document).ready(function () {
 		}
 		// 여러 행 선택 가능, 첫 번째 행 상세 보기
 		const data = selected[0];
-		window.open(`assetDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=1000');
+		window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1500,height=900');
 	});
 
 	// 공통 액션 처리 함수 (인쇄완료, 취소 등)

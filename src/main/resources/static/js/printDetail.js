@@ -1,59 +1,89 @@
 function getQueryParam(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
 
-        function loadDetail(id) {
-            fetch(`/api/print-info/${id}/detail`)
-                .then(res => res.json())
-                .then(data => {
-                    const info = data.info;
-                    const tbody = document.querySelector("#detailTable tbody");
-                    tbody.innerHTML = "";
-                    const fields = [
-                        {key: "printId", label: "인쇄ID"},
-                        {key: "printMethod", label: "인쇄방법"},
-                        {key: "itemName", label: "품목명"},
-                        {key: "bagColor", label: "쇼핑백색상"},
-                        {key: "sizeText", label: "사이즈"},
-                        {key: "quantity", label: "제작장수"},
-                        {key: "team", label: "인쇄담당팀"},
-                        {key: "sides", label: "인쇄면"}
-                    ];
-                    fields.forEach(f => {
-                        const tr = document.createElement("tr");
-                        const th = document.createElement("th");
-                        th.textContent = f.label;
-                        const td = document.createElement("td");
-                        td.textContent = info[f.key] ?? "";
-                        tr.appendChild(th);
-                        tr.appendChild(td);
-                        tbody.appendChild(tr);
-                    });
+function loadDetail(id) {
+    fetch(`/api/print-info/${id}/detail`)
+        .then(res => {
+            if (!res.ok) {
+                // 서버에서 4xx, 5xx 응답을 받으면 에러를 발생시킵니다.
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+        })
+        .then(data => {
+            // API 응답 구조에 맞게 'info' 객체를 가져옵니다.
+            // 만약 데이터가 최상위에 있다면 const info = data; 로 변경하세요.
+            const info = data.info;
 
-                    // 첨부파일
-                    const ul = document.getElementById("attachmentList");
-                    ul.innerHTML = "";
-                    //debugger
+            if (!info) {
+                alert('상세 정보를 불러오지 못했습니다.');
+                return;
+            }
 
-                    const li = document.createElement("li");
+            // 페이지 제목에 업체명을 추가합니다. (ID 오타 수정: companyConatact -> companyContact)
+            const titleElement = document.getElementById('companyContact');
+            if (titleElement && info.companyContact) { // API 응답에 companyContact 필드가 있다고 가정합니다.
+                titleElement.textContent = `${info.companyContact}`;
+            }
 
-                    // 이미지인 경우 <img>로 표시
-                    const img = document.createElement("img");
+            // 각 필드의 값을 안전하게 설정하는 헬퍼 함수
+            const setText = (elementId, value) => {
+                const element = document.getElementById(elementId);
+                if (element) {
+                    // 값이 null이나 undefined일 경우 빈 문자열로 표시합니다.
+                    element.textContent = value ?? '';
+                }
+            };
 
-                    const fileName = info.printSample.split(///|\\/).pop();
+            // API 응답의 필드명(예: info.orderDate)과 HTML의 ID를 매핑합니다.
+            // 아래 필드명은 예시이므로, 실제 API 응답에 맞게 수정해야 합니다.
+            setText('companyContact', info.companyContact);
+            setText('orderDate', info.orderDate);
+            setText('shippingDeadline', info.shippingDeadline);
+            setText('printTeam', info.printTeam);
+            setText('previousOrderCount', info.previousOrderCount);
+            setText('itemName', info.itemName);
+            setText('size', info.size);
+            setText('color', info.color);
+            setText('quantity', info.quantity);
+            setText('printSide', info.printSide);
+            setText('printColors', info.printColors);
+            setText('colorMixingData', info.colorMixingData);
+            setText('logoColor', info.logoColor);
+            setText('printPosition', info.printPosition);
+            setText('logoSize', info.logoSize);
+            setText('printNotes', info.printNotes);
 
-                    img.src = "/File/" + fileName;
-                    //img.alt = file.fileName;
-                    img.style.maxWidth = "800px";
-                    li.appendChild(img);
-                    ul.appendChild(li);
-                    //    }
-                })
-            //  .catch(err => alert("상세 조회 중 오류"));
-        }
+            // 첨부파일 처리
+            const attachmentList = document.getElementById("attachmentList");
+            attachmentList.innerHTML = "";
 
-        window.onload = function () {
-            const id = getQueryParam("printId");
-            if (id) loadDetail(id);
-        }
+            if (info.logoSamplePath) {
+                const li = document.createElement("li");
+                const img = document.createElement("img");
+
+                // [오류 수정] 잘못된 정규식을 수정하여 파일 경로에서 파일명만 추출합니다.
+                const fileName = info.logoSamplePath.split(/[/\\]/).pop();
+
+                img.src = "/File/" + fileName;
+                img.alt = "인쇄 샘플 이미지";
+                img.style.maxWidth = "100%"; // 컨테이너 너비에 맞게 이미지 크기 조정
+                img.style.height = "auto";
+                li.appendChild(img);
+                attachmentList.appendChild(li);
+            }
+        })
+        .catch(err => {
+            console.error("상세 조회 중 오류:", err);
+            alert("상세 정보를 조회하는 중 오류가 발생했습니다.");
+        });
+}
+
+window.onload = function () {
+    const id = getQueryParam("printId");
+    if (id) {
+        loadDetail(id);
+    }
+}

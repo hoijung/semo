@@ -1,25 +1,209 @@
 <!DOCTYPE html>
-<html lang="ko"> 
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
     <title>자산관리 상세</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css"> <!-- 일반적인 css 경로로 수정 -->
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            margin: 20px;
+            background-color: #fff; /* 간격 색상을 위한 배경색 지정 */
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-end; /* 버튼을 오른쪽으로 정렬 */
+            align-items: center;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            position: relative; /* 제목의 absolute 포지셔닝을 위한 기준점 */
+        }
+
+        #companyContact {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0; /* h2의 기본 마진 제거 */
+        }
+
+        .btn-print {
+            padding: 8px 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
+
+        .btn-print:hover {
+            background-color: #0056b3;
+        }
+
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ddd; /* 테이블 전체에 바깥 테두리를 추가합니다. */
+        }
+
+        .detail-table + .detail-table {
+            margin-top: 22px; /* 영역 간 간격을 설정합니다. */
+        }
+
+        .detail-table th,
+        .detail-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        /* 4열 레이아웃을 위한 스타일 수정 */
+        .detail-table td:nth-child(2n-1) { /* 홀수번째 td (레이블) */
+            background-color: #f9f9f9;
+            font-weight: bold;
+            width: 15%;
+            text-align: center;
+        }
+
+        .detail-table td:nth-child(2n) { /* 짝수번째 td (값) */
+            width: 35%;
+        }
+
+        .section-header th {
+            background-color: #f2f2f2;
+            text-align: center;
+            font-size: 1.1em;
+            color: #555;
+        }
+
+        h3 {
+            margin-top: 30px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+
+        /* 2-column layout for main content */
+        .content-wrapper {
+            display: flex;
+            align-items: stretch; /* Key for making columns same height */
+            gap: 20px; /* Space between table and attachment box */
+        }
+
+        .table-wrapper {
+            flex-basis: 70%;
+            flex-grow: 1;
+        }
+
+        .attachment-section {
+            flex-basis: 30%;
+            border: 1px solid #ddd;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .attachment-section h3 {
+            margin-top: 0;
+            flex-shrink: 0;
+        }
+
+        .attachment-section ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            overflow-y: auto; /* Add scroll for long attachment lists */
+            flex-grow: 1;
+        }
+    </style>
 </head>
 
 <body>
     <div class="header">
-        <h2>물류정보 상세조회</h2>
+        <h2 id="companyContact"></h2>
         <button class="btn-print" onclick="window.print()">프린트</button>
     </div>
 
-    <table id="detailTable">
-        <tbody>
-        </tbody>
-    </table>
+    <div class="content-wrapper">
+        <div class="table-wrapper">
+            <table class="detail-table">
+                <tbody class="section-body">
+                    <tr class="section-header" style="text-align: center;">
+                        <th colspan="4">발송정보</th>
+                    </tr>
+                    <tr>
+                        <td>주문일자</td>
+                        <td id="orderDate"></td>
+                        <td>발송최종기한</td>
+                        <td id="shippingDeadline"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="detail-table">
+                <tbody class="section-body">
+                    <tr class="section-header">
+                        <th colspan="4">쇼핑백정보</th>
+                    </tr>
+                    <tr>
+                        <td>인쇄팀</td>
+                        <td id="printTeam"></td>
+                        <td>기존주문횟수</td>
+                        <td id="previousOrderCount"></td>
+                    </tr>
+                    <tr>
+                        <td>상품명</td>
+                        <td id="itemName"></td>
+                        <td>사이즈</td>
+                        <td id="size"></td>
+                    </tr>
+                    <tr>
+                        <td>색상</td>
+                        <td id="color"></td>
+                        <td>제작장수</td>
+                        <td id="quantity"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="detail-table">
+                <tbody class="section-body">
+                    <tr class="section-header">
+                        <th colspan="4">인쇄사양</th>
+                    </tr>
+                    <tr>
+                        <td>인쇄면</td>
+                        <td id="printSide"></td>
+                        <td>인쇄도수</td>
+                        <td id="printColors"></td>
+                    </tr>
+                    <tr>
+                        <td>조색데이터</td>
+                        <td id="colorMixingData"></td>
+                        <td>인쇄로고색상</td>
+                        <td id="logoColor"></td>
+                    </tr>
+                    <tr>
+                        <td>인쇄위치</td>
+                        <td id="printPosition"></td>
+                        <td>로고크기</td>
+                        <td id="logoSize"></td>
+                    </tr>
+                    <tr>
+                        <td>인쇄특이사항</td>
+                        <td id="printNotes" colspan="3"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-    <h3>첨부파일</h3>
-    <ul id="attachmentList"></ul>
+        <div class="attachment-section">
+            <h3>첨부파일</h3>
+            <ul id="attachmentList"></ul>
+        </div>
+    </div>
 
 
     <script src="js/printDetail.js"></script>

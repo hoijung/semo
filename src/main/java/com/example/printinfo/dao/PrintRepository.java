@@ -143,27 +143,32 @@ public class PrintRepository {
         return dto;
     }
 
-    public PrintInfo findById(int printId) {
-        String sql = "SELECT 인쇄ID AS printId, 인쇄방법 AS printMethod, 품목명 AS itemName, " +
-                "쇼핑백색상 AS bagColor, 사이즈 AS sizeText, 제작장수 AS quantity, " +
-                "인쇄담당팀 AS team, 인쇄면 AS sides , 피킹완료 AS pickingYn, 출고준비 outReadyYn, 인쇄로고예시 as printSample " +
-                "FROM 인쇄정보 WHERE 인쇄ID = ?";
+    // public PrintDto findById(Integer id) {
+    //     String sql = "SELECT * FROM 인쇄정보 WHERE 인쇄ID = ?";
+    //     return jdbcTemplate.queryForObject(sql, new Object[] { id }, (rs, rowNum) -> mapRow(rs));
+    // }
 
-        return jdbcTemplate.queryForObject(sql, new Object[] { printId }, (rs, rowNum) -> {
-            PrintInfo info = new PrintInfo();
-            info.setPrintId(rs.getLong("printId"));
-            info.setPrintMethod(rs.getString("printMethod"));
-            info.setItemName(rs.getString("itemName"));
-            info.setBagColor(rs.getString("bagColor"));
-            info.setSizeText(rs.getString("sizeText"));
-            info.setQuantity(rs.getInt("quantity"));
-            info.setTeam(rs.getString("team"));
-            info.setSides(rs.getString("sides"));
-            info.setPickingYn(rs.getString("pickingYn"));
-            info.setOutReadyYn(rs.getString("outReadyYn"));
-            info.setPrintSample(rs.getString("printSample"));
-            return info;
-        });
+    public PrintInfo findById(int printId) {
+        String sql = "SELECT * "
+                + "FROM 인쇄정보 WHERE 인쇄ID = ?";
+
+        return jdbcTemplate.queryForObject(sql, new Object[] { printId }, (rs, rowNum) -> mapRowToPrintInfo(rs));
+
+        // return jdbcTemplate.queryForObject(sql, new Object[] { printId }, (rs, rowNum) -> {
+        //     PrintInfo info = new PrintInfo();
+        //     info.setPrintId(rs.getLong("인쇄ID"));
+        //     info.setPrintMethod(rs.getString("printMethod"));
+        //     info.setItemName(rs.getString("itemName"));
+        //     info.setBagColor(rs.getString("bagColor"));
+        //     info.setSizeText(rs.getString("sizeText"));
+        //     info.setQuantity(rs.getInt("quantity"));
+        //     info.setTeam(rs.getString("team"));
+        //     info.setSides(rs.getString("sides"));
+        //     info.setPickingYn(rs.getString("pickingYn"));
+        //     info.setOutReadyYn(rs.getString("outReadyYn"));
+        //     info.setPrintSample(rs.getString("printSample"));
+        //     return info;
+        // });
     }
 
     public boolean updatePickingEnd(int printId) {
