@@ -39,7 +39,7 @@ public class CommonCodeRepository {
     }
 
     public List<CommonCode> findByCodeGroup(String codeGroup) {
-        String sql = "SELECT * FROM 공통코드 WHERE 코드그룹 = ? AND 사용여부 = 1";
+        String sql = "SELECT * FROM 공통코드 WHERE 코드그룹 = ? AND 사용여부 = '1' ";
         return jdbcTemplate.query(sql, new Object[]{codeGroup}, commonCodeRowMapper);
     }
 

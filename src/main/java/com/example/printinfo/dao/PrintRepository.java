@@ -253,7 +253,7 @@ public class PrintRepository {
      * [참고] 모든 인쇄 정보를 검색해야 할 경우 사용 (기존 findPrintsByCriteria 대체)
      */
     public List<PrintInfo> findAllPrints(String pickingDateStart, String pickingDateEnd, String printTeam, String companyContact, String itemName) {
-        return findPrints(" WHERE 1=1 and 배분여부 = 'true' ", pickingDateStart, pickingDateEnd, "", "", "");
+        return findPrints(" WHERE 1=1 and 배분여부 = 'true' ", pickingDateStart, pickingDateEnd, printTeam, "", "");
     }
 
     /**
