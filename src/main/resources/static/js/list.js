@@ -1,6 +1,24 @@
 $(document).ready(function () {
 	loadMenu('list.html');
 
+	// 이미지 팝업 열기
+	$('#grid').on('click', '.image-popup-trigger', function (e) {
+		e.preventDefault();
+		const imageUrl = $(this).data('image-url');
+		if (imageUrl) {
+			$('#popupImage').attr('src', imageUrl);
+			$('#imagePopup').css('display', 'flex');
+		}
+	});
+
+	// 이미지 팝업 닫기 (팝업 외부 또는 닫기 버튼 클릭)
+	$(document).on('click', '#imagePopup, .image-popup-close', function (e) {
+		// 이미지 자체를 클릭했을 때는 닫히지 않도록 함
+		if (e.target === this || $(e.target).hasClass('image-popup-close')) {
+			$('#imagePopup').hide();
+		}
+	});
+
 	const inputStart = document.getElementById("orderDateStart");
 	const inputEnd = document.getElementById("orderDateEnd");
 
@@ -65,7 +83,17 @@ $(document).ready(function () {
 			{ data: 'printSide' },
 			{ data: 'printCount' },
 
-			{ data: 'logoSamplePath' },
+			{
+				data: 'logoSamplePath',
+				title: '예시파일명',
+				render: function (data, type, row) {
+					if (data) {
+						// 파일명을 클릭 가능한 링크로 만들고, 이미지 URL을 data 속성에 저장
+						return `<a href="#" class="image-popup-trigger" data-image-url="/File/${data}">${data}</a>`;
+					}
+					return ''; // 데이터가 없으면 빈 문자열 반환
+				}
+			},
 			{ data: 'boxSize' },
 			{ data: 'boxCount' },
 			{ data: 'deliveryType' },

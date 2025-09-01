@@ -241,8 +241,26 @@ $(document).ready(function() {
 	let table;
 	let selectedRow = null;
 	let currentSelectedId = null;
+	let isFormDirty = false; // 폼 변경 여부를 추적하는 플래그
 
 	loadMenu('main.html');
+
+	// 이미지 팝업 열기
+	$('#detail-container').on('click', '.image-popup-trigger', function (e) {
+		e.preventDefault();
+		const imageUrl = $(this).data('image-url');
+		if (imageUrl) {
+			$('#popupImage').attr('src', imageUrl);
+			$('#imagePopup').css('display', 'flex');
+		}
+	});
+
+	// 이미지 팝업 닫기 (팝업 외부 또는 닫기 버튼 클릭)
+	$(document).on('click', '#imagePopup, .image-popup-close', function (e) {
+		if (e.target === this || $(e.target).hasClass('image-popup-close')) {
+			$('#imagePopup').hide();
+		}
+	});
 
 	function getTableHeight() {
 		// 예: 화면 높이에서 200px 여유 공간 빼기
@@ -281,6 +299,15 @@ $(document).ready(function() {
 
 	// 테이블 행 클릭 이벤트
 	$('#printTable tbody').on('click', 'tr', function() {
+		// 폼에 저장되지 않은 변경사항이 있는지 확인
+		if (isFormDirty) {
+			if (!confirm('변경사항이 저장되지 않았습니다. 다른 항목을 선택하시겠습니까?')) {
+				return; // 사용자가 '취소'를 누르면 아무 작업도 하지 않음
+			}
+			// 사용자가 '확인'을 누르면 isFormDirty를 초기화하고 계속 진행
+			isFormDirty = false;
+		}
+
 		const data = table.row(this).data();
 		if (!data) return;
 
@@ -303,6 +330,12 @@ $(document).ready(function() {
 	$('#btnAdd').on('click', addRecord);
 	$('#btnUpdate').on('click', updateRecord);
 	$('#btnDelete').on('click', deleteRecord);
+
+	// 폼 내의 모든 입력 요소에 대한 변경 감지
+	$('#detail-container').on('change', 'input, select, textarea', function() {
+		isFormDirty = true;
+		console.log("Form is now dirty.");
+	});
 
 	// 초기 버튼 상태 설정 (수정/삭제 비활성화)
 	updateButtonState(false);
@@ -337,13 +370,16 @@ $(document).ready(function() {
 		const $displayDiv = $('#인쇄로고예시_display');
 		if (logoFileName) {
 			const fileUrl = `/File/${logoFileName}`;
-			const $link = $('<a>', { href: fileUrl, text: logoFileName, target: '_blank' });
+			// 팝업을 띄우는 링크로 변경
+			const $link = $('<a>', { href: '#', text: logoFileName, 'data-image-url': fileUrl, 'class': 'image-popup-trigger' });
 			const $image = $('<img>', { src: fileUrl, alt: '로고 이미지', style: 'max-width: 100%; max-height: 100px; margin-top: 5px; display: block;' });
+			
 			$displayDiv.append($link).append($image);
 		}
 
 		// Set initial state of tax info section
 		toggleTaxInfoSection();
+		isFormDirty = false; // 행 선택 시 폼 상태 초기화
 	}
 
 	function createMultipartFormData(data) {
@@ -493,6 +529,7 @@ $(document).ready(function() {
 			.then(data => {
 				alert("새 레코드가 등록되었습니다.");
 				currentSelectedId = data.인쇄ID; // 새로 추가된 레코드의 ID를 설정합니다.
+				isFormDirty = false; // 등록 후 폼 상태 초기화
 				reloadTableAndRestoreSelection();
 			})
 			.catch(error => {
@@ -535,6 +572,7 @@ $(document).ready(function() {
 				return response.json();
 			})
 			.then(data => {
+				isFormDirty = false; // 수정 후 폼 상태 초기화
 				reloadTableAndRestoreSelection();
 			})
 			.catch(error => {
@@ -568,6 +606,7 @@ $(document).ready(function() {
 		$('#인쇄ID').val('');
 		$('#인쇄로고예시_display').empty();
 		$('#인쇄로고예시_file').val('');
+		isFormDirty = false; // 폼 값 초기화 시 상태 초기화
 	}
 
 	function resetDetailForm() {
