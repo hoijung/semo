@@ -38,8 +38,8 @@ public class PrintRepository {
         String sql = "INSERT INTO 인쇄정보 (품목명, 쇼핑백색상, 사이즈, 제작장수, 인쇄담당팀, 특이사항, 고객ID, 주문일자, 완료여부) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         return jdbcTemplate.update(sql,
-                dto.get품목명(), dto.get쇼핑백색상(), dto.get사이즈(), dto.get제작장수(),
-                dto.get인쇄담당팀(), dto.get특이사항(), dto.get고객ID(), dto.get주문일자(), dto.get완료여부());
+                "", "", "", 0,
+                "", "", "", "", "");
     }
     
     public int distributePrint(PrintDto dto) {

@@ -251,6 +251,7 @@ $(document).ready(function() {
 
 	table = $('#printTable').DataTable({
 		ajax: { url: '/api/prints', dataSrc: '' },
+		order: [[0, 'desc']],
 		scrollY: getTableHeight(), // 동적으로 높이 지정
 		columns: [
 			{ data: '인쇄ID', title: 'No' },
