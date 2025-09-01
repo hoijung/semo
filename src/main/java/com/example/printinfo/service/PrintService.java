@@ -57,7 +57,7 @@ public class PrintService {
             throw new IllegalArgumentException("Print record not found with ID: " + id);
         }
 
-        if (dto.get피킹완료() != null && dto.get피킹완료().equals("1")) {
+        if (dto.get피킹완료() != null && dto.get피킹완료().equals("true")) {
             throw new IllegalStateException("피킹이 완료된 레코드는 배분을 취소할 수 없습니다.");
         }
 

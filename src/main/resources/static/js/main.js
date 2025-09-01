@@ -414,6 +414,10 @@ $(document).ready(function() {
 			alert("배분할 레코드를 선택하세요.");
 			return;
 		}
+		if ('true' == $('#배분여부').val()) {
+			alert("이미 배분된 레코드입니다.");
+			return;
+		}
 		if (!confirm("선택된 레코드를 부서배분 하시겠습니까?")) return;
 
 		// Assuming an API endpoint for distribution
@@ -440,6 +444,10 @@ $(document).ready(function() {
 		const id = $('#인쇄ID').val();
 		if (!id) {
 			alert("취소할 레코드를 선택하세요.");
+			return;
+		}
+		if ('false' == $('#배분여부').val()) {
+			alert("배분된 건만 가능합니다.");
 			return;
 		}
 		if (!confirm("선택된 레코드의 부서배분을 취소하시겠습니까?")) return;
@@ -496,6 +504,21 @@ $(document).ready(function() {
 	function updateRecord() {
 		const id = $('#인쇄ID').val();
 		if (!id) { alert("수정할 레코드를 선택하세요."); return; }
+
+		// 유효성 검사: 주문일자, 업체명(담당자)
+		const orderDate = $('#주문일자').val();
+		if (!orderDate) {
+			alert('주문일자를 입력해주세요.');
+			$('#주문일자').focus();
+			return;
+		}
+		const companyName = $('#업체명_담당자').val().trim();
+		if (!companyName) {
+			alert('업체명(담당자)을 입력해주세요.');
+			$('#업체명_담당자').focus();
+			return;
+		}
+
 		if (!confirm("수정 하시겠습니까?")) return;
 
 		const jsonData = getFormData();

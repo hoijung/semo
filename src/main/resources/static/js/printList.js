@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Fetch user authority and set up UI
     fetch('/api/auth/user')
         .then(response => {
@@ -71,11 +71,12 @@ $(document).ready(function() {
                 title: '',  // 체크박스 컬럼
                 orderable: false,
                 className: 'dt-body-center',
-                render: function(data, type, row, meta) {
+                render: function (data, type, row, meta) {
                     return `<input type="checkbox" class="row-select">`;
                 }
             },
             { data: 'orderDate', title: '주문일자', className: 'dt-center' },
+            { data: 'weekDay' },
             { data: 'printTeam' },
             { data: 'companyContact' },
             { data: "importantYn", title: "중요", render: renderCheckbox },
@@ -102,7 +103,7 @@ $(document).ready(function() {
         ],
 
         // 아래 'createdRow' 옵션을 추가합니다.
-        createdRow: function(row, data, dataIndex) {
+        createdRow: function (row, data, dataIndex) {
             // 'data' 객체에서 'printMemo' (인쇄참고사항) 필드를 확인합니다.
             // 필드명이 다를 경우 실제 사용하는 필드명으로 변경해주세요. (예: data.memo)
             if (eval(data.importantYn)) {
@@ -129,7 +130,7 @@ $(document).ready(function() {
     });
 
     // 조회 버튼 클릭 이벤트
-    $('#btnSearch').on('click', function(e) {
+    $('#btnSearch').on('click', function (e) {
         e.preventDefault();   // form submit 방지
         e.stopPropagation();  // 이벤트 전파 방지 (선택사항)
 
@@ -141,7 +142,7 @@ $(document).ready(function() {
         table.ajax.url('/api/prints/search?' + query).load();
     });
 
-    $('#printTeam').on('change', function(e) {
+    $('#printTeam').on('change', function (e) {
         e.preventDefault();   // form submit 방지
         e.stopPropagation();  // 이벤트 전파 방지 (선택사항)
 
@@ -154,13 +155,13 @@ $(document).ready(function() {
     });
 
     // 엑셀 다운로드 버튼 클릭 이벤트
-    $('#btnExcel').on('click', function() {
+    $('#btnExcel').on('click', function () {
         // DataTables의 excel 버튼 기능을 프로그래밍 방식으로 실행
         table.buttons('.buttons-excel').trigger();
     });
 
     // 클릭 이벤트
-    $('#grid tbody').on('click', 'tr', function() {
+    $('#grid tbody').on('click', 'tr', function () {
         const data = table.row(this).data();
         if (data) {
             // window.open(`assetDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=700');
@@ -168,7 +169,7 @@ $(document).ready(function() {
     });
 
     // 체크박스 클릭 시 해당 행 선택/해제
-    $('#grid tbody').on('click', 'input.row-select', function(e) {
+    $('#grid tbody').on('click', 'input.row-select', function (e) {
         const $table = $('#grid');
         const $row = $(this).closest('tr');
 
@@ -185,13 +186,13 @@ $(document).ready(function() {
 
     // 선택된 행 가져오기
     function getSelectedRows() {
-        return $('#grid tbody tr.selected').map(function() {
+        return $('#grid tbody tr.selected').map(function () {
             return $('#grid').DataTable().row(this).data();
         }).get();
     }
 
     // 상세보기 버튼
-    $('#btnDetail').click(function() {
+    $('#btnDetail').click(function () {
         const selected = getSelectedRows();
         if (selected.length === 0) {
             alert("행을 선택해주세요.");
@@ -209,6 +210,36 @@ $(document).ready(function() {
             alert("행을 선택해주세요.");
             return;
         }
+
+        let endChk = true;
+        selected.map(row => {
+            if ('printEnd' == urlPath) {
+                if ('true' == row.printEndYn) {
+                    endChk = false;
+                }
+            }
+        });
+
+        if (!endChk) {
+            alert("이미 인쇄완료 된건 입니다.");
+            return;
+        }
+
+        let notEndChk = true;
+        selected.map(row => {
+            if ('cancel-printEnd' == urlPath) {
+                if ('false' == row.printEndYn) {
+                    notEndChk = false;
+                }
+            }
+        });
+
+        if (!notEndChk) {
+            alert("인쇄완료 된건만 취소가능 합니다.");
+            return;
+        }
+
+
 
         if (!confirm(`선택한 ${selected.length}개의 항목을 ${actionName} 처리하시겠습니까?`)) {
             return;

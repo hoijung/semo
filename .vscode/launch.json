@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-SemoApplication", // 원하는 이름으로 변경 가능
+            "request": "launch",
+            "mainClass": "com.example.printinfo.PrintInfoApplication", // 실제 메인 클래스 경로로 수정해주세요.
+            "projectName": "print", // pom.xml의 <artifactId>와 일치시키는 것이 좋습니다.
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": [
+                "-Dfile.encoding=UTF-8" // ✅ 한글 깨짐 방지를 위한 VM 인수 추가
+            ]
+        }
+    ]
+}

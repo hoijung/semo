@@ -193,19 +193,19 @@ public class PrintInfo {
 		this.totalAmount = totalAmount;
 	}
 
-	public Boolean getAllocationStatus() {
+	public String getAllocationStatus() {
 		return allocationStatus;
 	}
 
-	public void setAllocationStatus(Boolean allocationStatus) {
+	public void setAllocationStatus(String allocationStatus) {
 		this.allocationStatus = allocationStatus;
 	}
 
-	public Boolean getCompleted() {
+	public String getCompleted() {
 		return completed;
 	}
 
-	public void setCompleted(Boolean completed) {
+	public void setCompleted(String completed) {
 		this.completed = completed;
 	}
 
@@ -249,11 +249,11 @@ public class PrintInfo {
 //		this.pickingCompleted = pickingCompleted;
 //	}
 
-	public Boolean getReadyForShipment() {
+	public String getReadyForShipment() {
 		return readyForShipment;
 	}
 
-	public void setReadyForShipment(Boolean readyForShipment) {
+	public void setReadyForShipment(String readyForShipment) {
 		this.readyForShipment = readyForShipment;
 	}
 
@@ -348,6 +348,18 @@ public class PrintInfo {
 
 	/** 업체메모 */
     private String companyMemo;	
+
+		/** 요일 */
+    private String weekDay;	
+
+	public String getWeekDay() {
+		return weekDay;
+	}
+
+	public void setWeekDay(String weekDay) {
+		this.weekDay = weekDay;
+	}
+
 
 	public String getCompanyMemo() {
 		return companyMemo;
@@ -519,10 +531,10 @@ public class PrintInfo {
     private BigDecimal totalAmount;
 
     /** 배분 여부 */
-    private Boolean allocationStatus;
+    private String allocationStatus;
 
     /** 완료 여부 */
-    private Boolean completed;
+    private String completed;
 
     /** 등록일시 */
     private LocalDateTime createdAt;
@@ -540,7 +552,7 @@ public class PrintInfo {
 //    private Boolean pickingCompleted;
 
     /** 출고 준비 여부 */
-    private Boolean readyForShipment;
+    private String readyForShipment;
 
     /** 파일명 */
     private String fileName;

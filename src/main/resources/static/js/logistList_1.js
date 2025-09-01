@@ -111,6 +111,7 @@ $(document).ready(function() {
     const baseColumns = [
         { title: '', orderable: false, className: 'dt-body-center', render: (data, type, row) => `<input type="checkbox" class="row-select" value="${row.printId || ''}">` },
         { data: 'orderDate', title: '주문일자', className: 'dt-center' },
+        { data: 'weekDay', title: '요일', className: 'dt-center'  },
         { data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
         { data: 'printTeam', title: '담당팀' },
         { data: 'companyContact', title: '업체명(고객명)' },
@@ -236,8 +237,32 @@ $(document).ready(function() {
             return;
         }
 
+        if (urlPath === 'picking') {
+            const chkItems = selected.filter(row => row.pickingYn == 'true');
+            if (chkItems.length > 0) {
+                alert("피킹미완료 항목만 피킹완료 할 수 있습니다.");
+                return;
+            }
+        }
+
+        if (urlPath === 'cancel-picking') {
+            const chkItems = selected.filter(row => row.pickingYn == 'false');
+            if (chkItems.length > 0) {
+                alert("피킹완료 항목만 피킹완료 취소할 수 있습니다.");
+                return;
+            }
+        }
+
+        if (urlPath === 'out-ready') {
+            const chkItems = selected.filter(row => row.outReadyYn == 'true');
+            if (chkItems.length > 0) {
+                alert("출고미완료 항목만 출고준비완료 할 수 있습니다.");
+                return;
+            }
+        }
+
         if (urlPath === 'cancel-out-ready') {
-            const notOutReadyItems = selected.filter(row => row.outReadyYn !== '1');
+            const notOutReadyItems = selected.filter(row => row.outReadyYn !== 'true');
             if (notOutReadyItems.length > 0) {
                 alert("출고완료된 항목만 출고준비를 취소할 수 있습니다.");
                 return;

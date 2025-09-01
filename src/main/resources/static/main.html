@@ -358,35 +358,9 @@
 				</div>
 				<div class="detail-card">
 					<input type="hidden" id="인쇄ID">
+					<input type="hidden" id="배분여부">
 
-					<div class="field-group" id="tax-info-group">
-						<label>세금계산서 발행정보</label>
 
-						<div class="field-row-three-col">
-							<div class="field-item"><span>계산서발행타입</span><select id="계산서발행타입"></select></div>
-							<div class="field-item"><span>상호명</span><input type="text" id="상호명"></div>
-							<div class="field-item"><span>대표자명</span><input type="text" id="대표자명"></div>
-						</div>
-						<div class="field-row">
-							<div class="field-item"><span>이메일</span><input type="text" id="이메일"></div>
-							<div class="field-item"><span>사업자등록번호</span>
-
-							</div>
-							<div class="field-row-three-col">
-								<div class="field-item">
-									<span>공급가액</span>
-									<input type="text" id="공급가액"  oninput="onlyNumberWithComma(this); calculateVat();"/>
-								</div>
-								<div class="field-item"><span>부가세액</span>
-									<input type="text" id="부가세액"  oninput="onlyNumberWithComma(this);"/>
-								</div>
-								<div class="field-item"><span>합계금액</span>
-									<input type="text" id="합계금액"  oninput="onlyNumberWithComma(this);"/>
-								</div>
-							</div>
-						</div>
-
-					</div>
 
 					<div class="field-group">
 						<label>인쇄 정보</label>
@@ -417,7 +391,7 @@
 							<div class="field-item"><span>로고인쇄색상</span><input type="text" id="로고인쇄색상"></div>
 							<div class="field-item"><span>로고인쇄크기</span><input type="text" id="로고인쇄크기"></div>
 							<div class="field-item"><span>로고인쇄위치</span><input type="text" id="로고인쇄위치"></div>
-						</div>						
+						</div>
 						<div class="field-row">
 							<div class="field-item">
 								<span>인쇄로고예시</span>
@@ -440,15 +414,16 @@
 					<div class="field-group">
 						<label>고객정보</label>
 						<div class="field-row-three-col">
-							<div class="field-item" style="flex: 0 0 160px;"><span>주문일자</span><input type="date" id="주문일자"></div>
+							<div class="field-item" style="flex: 0 0 160px;"><span>주문일자</span><input type="date"
+									id="주문일자"></div>
 							<div class="field-item"><span>업체명(담당자)</span><input type="text" id="업체명_담당자"></div>
-							<div class="field-item checkbox-item"><span>중요</span><input type="checkbox"
-										id="중요여부"></div>
+							<div class="field-item checkbox-item"><span>중요</span><input type="checkbox" id="중요여부"></div>
 							<div class="field-item"><span>고객ID</span><input type="text" id="고객ID"></div>
 						</div>
 						<div class="field-row">
 							<div class="field-item"><span>전화번호</span><input type="text" id="전화번호"></div>
-							<div class="field-item" style="flex: 0 0 160px;"><span>발송최종기한</span><input type="date" id="발송마감기한"></div>
+							<div class="field-item" style="flex: 0 0 160px;"><span>발송최종기한</span><input type="date"
+									id="발송마감기한"></div>
 						</div>
 						<div class="field-row">
 							<div class="field-item">
@@ -471,6 +446,37 @@
 							<div class="field-item"><span>판매채널</span><select id="판매채널"></select></div>
 						</div>
 					</div>
+
+					<div class="field-group" id="tax-info-group">
+						<label>세금계산서 발행정보</label>
+
+						<div class="field-row-three-col">
+							<div class="field-item"><span>계산서발행타입</span><select id="계산서발행타입"></select></div>
+							<div class="field-item"><span>상호명</span><input type="text" id="상호명"></div>
+							<div class="field-item"><span>대표자명</span><input type="text" id="대표자명"></div>
+						</div>
+						<div class="field-row">
+							<div class="field-item"><span>이메일</span><input type="text" id="이메일"></div>
+							<div class="field-item"><span>사업자등록번호</span>
+
+							</div>
+							<div class="field-row-three-col">
+								<div class="field-item">
+									<span>공급가액</span>
+									<input type="text" id="공급가액" oninput="onlyNumberWithComma(this); calculateVat();" />
+								</div>
+								<div class="field-item"><span>부가세액</span>
+									<input type="text" id="부가세액" oninput="onlyNumberWithComma(this);" />
+								</div>
+								<div class="field-item"><span>합계금액</span>
+									<input type="text" id="합계금액" oninput="onlyNumberWithComma(this);" />
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+
 
 
 				</div>
@@ -505,6 +511,30 @@
 						document.getElementById('배송지주소상세').focus();
 					}
 				}).open();
+			});
+
+			// 인쇄로고예시 파일 선택 시 이미지 미리보기
+			document.getElementById('인쇄로고예시_file').addEventListener('change', function(event) {
+				const displayDiv = document.getElementById('인쇄로고예시_display');
+				displayDiv.innerHTML = ''; // 기존 미리보기 내용 초기화
+
+				const file = event.target.files[0];
+				if (file && file.type.startsWith('image/')) {
+					const reader = new FileReader();
+
+					reader.onload = function(e) {
+						const img = document.createElement('img');
+						img.src = e.target.result;
+						displayDiv.appendChild(img);
+					};
+
+					reader.readAsDataURL(file);
+				} else if (file) {
+					// 이미지 파일이 아닌 경우
+					const notImageMsg = document.createElement('p');
+					notImageMsg.textContent = '선택된 파일은 이미지 파일이 아닙니다.';
+					displayDiv.appendChild(notImageMsg);
+				}
 			});
 		</script>
 </body>

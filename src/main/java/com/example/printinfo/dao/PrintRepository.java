@@ -25,7 +25,7 @@ public class PrintRepository {
                 + ", 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 배송타입, 박스규격, 기존주문여부, 인쇄방법"
                 + ", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄참고사항 "
                 + ", 중요여부, 업체메모 "
-                + " FROM 인쇄정보 ORDER BY 인쇄ID DESC";
+                + " FROM 인쇄정보 ORDER BY 주문일자 DESC";
         return jdbcTemplate.query(sql, (rs, rowNum) -> mapRow(rs));
     }
 
@@ -41,7 +41,7 @@ public class PrintRepository {
                 "", "", "", 0,
                 "", "", "", "", "");
     }
-    
+
     public int distributePrint(PrintDto dto) {
         String sql = "UPDATE 인쇄정보 SET " +
                 "배분여부 = 'true' " +
@@ -50,7 +50,7 @@ public class PrintRepository {
         return jdbcTemplate.update(sql,
                 dto.get인쇄ID());
     }
-    
+
     public int cancelDistributePrint(PrintDto dto) {
         String sql = "UPDATE 인쇄정보 SET " +
                 "배분여부 = 'false' " +
@@ -58,7 +58,7 @@ public class PrintRepository {
                 "WHERE 인쇄ID=?";
         return jdbcTemplate.update(sql,
                 dto.get인쇄ID());
-    }     
+    }
 
     public int update(PrintDto dto) {
         String sql = "UPDATE 인쇄정보 SET " +
@@ -77,7 +77,7 @@ public class PrintRepository {
                 dto.get특이사항(), dto.get주문일자(), dto.get업체명_담당자(), dto.get고객ID(), dto.get전화번호(),
                 dto.get발송마감기한(), dto.get최종배송지_우편번호(), dto.get최종배송지_주소(), dto.get판매채널(),
                 dto.get계산서발행타입(), dto.get상호명(), dto.get대표자명(), dto.get이메일(), dto.get공급가액(),
-                dto.get부가세액(), dto.get합계금액(), 
+                dto.get부가세액(), dto.get합계금액(),
                 dto.get수정팀(), dto.get피킹완료(), dto.get출고준비(), dto.get파일명(), dto.get인쇄로고예시(),
                 dto.get피킹예정일(), dto.get배송타입(), dto.get박스규격(), dto.get기존주문여부(), dto.get인쇄방법(),
                 dto.get배송지주소상세(), dto.get로고인쇄색상(), dto.get조색데이터1(), dto.get조색데이터2(), dto.get조색데이터3(),
@@ -144,8 +144,9 @@ public class PrintRepository {
     }
 
     // public PrintDto findById(Integer id) {
-    //     String sql = "SELECT * FROM 인쇄정보 WHERE 인쇄ID = ?";
-    //     return jdbcTemplate.queryForObject(sql, new Object[] { id }, (rs, rowNum) -> mapRow(rs));
+    // String sql = "SELECT * FROM 인쇄정보 WHERE 인쇄ID = ?";
+    // return jdbcTemplate.queryForObject(sql, new Object[] { id }, (rs, rowNum) ->
+    // mapRow(rs));
     // }
 
     public PrintInfo findById(int printId) {
@@ -154,20 +155,21 @@ public class PrintRepository {
 
         return jdbcTemplate.queryForObject(sql, new Object[] { printId }, (rs, rowNum) -> mapRowToPrintInfo(rs));
 
-        // return jdbcTemplate.queryForObject(sql, new Object[] { printId }, (rs, rowNum) -> {
-        //     PrintInfo info = new PrintInfo();
-        //     info.setPrintId(rs.getLong("인쇄ID"));
-        //     info.setPrintMethod(rs.getString("printMethod"));
-        //     info.setItemName(rs.getString("itemName"));
-        //     info.setBagColor(rs.getString("bagColor"));
-        //     info.setSizeText(rs.getString("sizeText"));
-        //     info.setQuantity(rs.getInt("quantity"));
-        //     info.setTeam(rs.getString("team"));
-        //     info.setSides(rs.getString("sides"));
-        //     info.setPickingYn(rs.getString("pickingYn"));
-        //     info.setOutReadyYn(rs.getString("outReadyYn"));
-        //     info.setPrintSample(rs.getString("printSample"));
-        //     return info;
+        // return jdbcTemplate.queryForObject(sql, new Object[] { printId }, (rs,
+        // rowNum) -> {
+        // PrintInfo info = new PrintInfo();
+        // info.setPrintId(rs.getLong("인쇄ID"));
+        // info.setPrintMethod(rs.getString("printMethod"));
+        // info.setItemName(rs.getString("itemName"));
+        // info.setBagColor(rs.getString("bagColor"));
+        // info.setSizeText(rs.getString("sizeText"));
+        // info.setQuantity(rs.getInt("quantity"));
+        // info.setTeam(rs.getString("team"));
+        // info.setSides(rs.getString("sides"));
+        // info.setPickingYn(rs.getString("pickingYn"));
+        // info.setOutReadyYn(rs.getString("outReadyYn"));
+        // info.setPrintSample(rs.getString("printSample"));
+        // return info;
         // });
     }
 
@@ -176,18 +178,18 @@ public class PrintRepository {
                 "SET 피킹완료 = 'true' " +
                 "WHERE 인쇄ID = ?";
 
-        int updated = jdbcTemplate.update(sql,  printId);
+        int updated = jdbcTemplate.update(sql, printId);
         return updated > 0;
     }
-    
+
     public boolean cancelPickingEnd(int printId) {
         String sql = "UPDATE 인쇄정보 " +
                 "SET 피킹완료 = 'false' " +
                 "WHERE 인쇄ID = ?";
 
-        int updated = jdbcTemplate.update(sql,  printId);
+        int updated = jdbcTemplate.update(sql, printId);
         return updated > 0;
-    }    
+    }
 
     public boolean updatePrintEnd(int printId) {
         String sql = "UPDATE 인쇄정보 " +
@@ -196,8 +198,8 @@ public class PrintRepository {
 
         int updated = jdbcTemplate.update(sql, printId);
         return updated > 0;
-    }    
-    
+    }
+
     public boolean cancelUpdatePrintEnd(int printId) {
         String sql = "UPDATE 인쇄정보 " +
                 "SET 인쇄완료 = 'false' " +
@@ -205,7 +207,7 @@ public class PrintRepository {
 
         int updated = jdbcTemplate.update(sql, printId);
         return updated > 0;
-    }    
+    }
 
     public boolean updateOutReadyYn(int printId, boolean status) {
         String sql = "UPDATE 인쇄정보 " +
@@ -218,6 +220,7 @@ public class PrintRepository {
 
     /**
      * 탭 1: 물류팀 - 전체 목록 조회 (피킹되지 않은 건)
+     * 
      * @return 배분은 된 목록
      */
     public List<PrintInfo> findAllocatedPrints(String pickingDateStart, String pickingDateEnd) {
@@ -227,6 +230,7 @@ public class PrintRepository {
 
     /**
      * 탭 2: 피킹완료 목록 조회 (출고준비되지 않은 건)
+     * 
      * @return 피킹은 완료되었지만 아직 출고 준비가 되지 않은 작업 목록
      */
     public List<PrintInfo> findPickedPrints(String pickingDateStart, String pickingDateEnd) {
@@ -236,6 +240,7 @@ public class PrintRepository {
 
     /**
      * 탭 3: 출고준비 목록 조회
+     * 
      * @return 출고 준비가 완료된 작업 목록
      */
     public List<PrintInfo> findReadyForDispatchPrints(String pickingDateStart, String pickingDateEnd) {
@@ -243,30 +248,43 @@ public class PrintRepository {
         return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
     }
 
-        /**
+    /**
      * [참고] 모든 인쇄 정보를 검색해야 할 경우 사용 (기존 findPrintsByCriteria 대체)
      */
     public List<PrintInfo> findAllPrints() {
         return findPrints("", "", "", "", "", "");
     }
+
     /**
      * [참고] 모든 인쇄 정보를 검색해야 할 경우 사용 (기존 findPrintsByCriteria 대체)
      */
-    public List<PrintInfo> findAllPrints(String pickingDateStart, String pickingDateEnd, String printTeam, String companyContact, String itemName) {
+    public List<PrintInfo> findAllPrints(String pickingDateStart, String pickingDateEnd, String printTeam,
+            String companyContact, String itemName) {
         return findPrints(" WHERE 1=1 and 배분여부 = 'true' ", pickingDateStart, pickingDateEnd, printTeam, "", "");
     }
 
     /**
      * [리팩토링] 동적 쿼리 생성을 위한 공통 메소드
      */
-    private List<PrintInfo> findPrints(String baseWhereClause, String pickingDateStart, String pickingDateEnd, String printTeam, String companyContact, String itemName) {
+    private List<PrintInfo> findPrints(String baseWhereClause, String pickingDateStart, String pickingDateEnd,
+            String printTeam, String companyContact, String itemName) {
         String selectClause = "SELECT 인쇄ID, 품목명, 쇼핑백색상, 사이즈, 제작장수, 인쇄담당팀, 인쇄면, 인쇄도수"
                 + ", 인쇄방식, 로고인쇄크기, 로고인쇄위치, 특이사항, 주문일자"
                 + ", 업체명_담당자, 고객ID, 전화번호"
                 + ", 발송마감기한, 최종배송지_우편번호, 최종배송지_주소, 판매채널, 계산서발행타입, 상호명, 대표자명"
                 + ", 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, 등록일시, 수정일시, 등록팀, 수정팀"
                 + ", 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 배송타입, 박스규격, 박스수량, 기존주문여부, 인쇄방법" // 중복된 배송타입 제거
-                + ", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄완료, 중요여부, 업체메모, 인쇄참고사항 ";
+                + ", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄완료, 중요여부, 업체메모, 인쇄참고사항 "
+                + ", CASE EXTRACT(DOW FROM  CASE  WHEN 주문일자 LIKE '%-%'  "
+                + " THEN TO_DATE(주문일자, 'YYYY-MM-DD') ELSE TO_DATE(주문일자, 'YYYYMMDD') END  ) "
+                + " WHEN 0 THEN '일' "
+                + " WHEN 1 THEN '월' "
+                + " WHEN 2 THEN '화' "
+                + " WHEN 3 THEN '수' "
+                + " WHEN 4 THEN '목' "
+                + " WHEN 5 THEN '금' "
+                + " WHEN 6 THEN '토' "
+                + " END AS 요일 ";
 
         StringBuilder sqlBuilder = new StringBuilder(selectClause)
                 .append(" FROM 인쇄정보 ")
@@ -334,8 +352,8 @@ public class PrintRepository {
         dto.setSupplyAmount(rs.getBigDecimal("공급가액"));
         dto.setTaxAmount(rs.getBigDecimal("부가세액"));
         dto.setTotalAmount(rs.getBigDecimal("합계금액"));
-        dto.setAllocationStatus(rs.getBoolean("배분여부"));
-        dto.setCompleted(rs.getBoolean("완료여부"));
+        dto.setAllocationStatus(rs.getString("배분여부"));
+        dto.setCompleted(rs.getString("완료여부"));
         dto.setCreatedAt(rs.getTimestamp("등록일시") != null ? rs.getTimestamp("등록일시").toLocalDateTime() : null);
         dto.setUpdatedAt(rs.getTimestamp("수정일시") != null ? rs.getTimestamp("수정일시").toLocalDateTime() : null);
         dto.setCreatedBy(rs.getString("등록팀"));
@@ -353,6 +371,7 @@ public class PrintRepository {
         dto.setImportantYn(rs.getString("중요여부"));
         dto.setPrintMemo(rs.getString("인쇄참고사항"));
         dto.setCompanyMemo(rs.getString("업체메모"));
+        dto.setWeekDay(rs.getString("요일"));
         return dto;
     }
 }
