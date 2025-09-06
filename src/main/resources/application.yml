@@ -54,7 +54,7 @@ spring:
       on-profile: prod
   datasource:
     # !!! 중요: 운영 서버의 DB 정보로 반드시 수정해야 합니다. !!!
-    url: jdbc:postgresql://sem.cxyu028u2mcy.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    url: jdbc:postgresql://semo.ch26amamu9to.ap-northeast-2.rds.amazonaws.com:5432/postgres
     username: postgres
     password: 12345678 # 보안을 위해 환경 변수나 외부 설정 파일 사용을 강력히 권장합니다.
     driver-class-name: org.postgresql.Driver
