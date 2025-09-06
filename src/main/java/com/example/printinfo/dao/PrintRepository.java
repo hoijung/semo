@@ -301,7 +301,7 @@ public class PrintRepository {
                 + ", 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, 등록일시, 수정일시, 등록팀, 수정팀"
                 + ", 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 배송타입, 박스규격, 박스수량, 기존주문여부, 인쇄방법" // 중복된 배송타입 제거
                 + ", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄완료, 중요여부, 업체메모, 인쇄참고사항 "
-                + ", 피킹완료일시, 인쇄완료일시 "
+                + ", to_char(피킹완료일시,'yyyy-mm-dd hh:mm:ss') 피킹완료일시, to_char(인쇄완료일시,'yyyy-mm-dd hh:mm:ss') 인쇄완료일시 , to_char(출고완료일시,'yyyy-mm-dd hh:mm:ss') 출고완료일시 "
                 + ", CASE EXTRACT(DOW FROM  CASE  WHEN 주문일자 LIKE '%-%'  "                
                 + " THEN TO_DATE(주문일자, 'YYYY-MM-DD') ELSE TO_DATE(주문일자, 'YYYYMMDD') END  ) "
                 + " WHEN 0 THEN '일' "
@@ -384,8 +384,8 @@ public class PrintRepository {
         dto.setTotalAmount(rs.getBigDecimal("합계금액"));
         dto.setAllocationStatus(rs.getString("배분여부"));
         dto.setCompleted(rs.getString("완료여부"));
-        dto.setCreatedAt(rs.getTimestamp("등록일시") != null ? rs.getTimestamp("등록일시").toLocalDateTime() : null);
-        dto.setUpdatedAt(rs.getTimestamp("수정일시") != null ? rs.getTimestamp("수정일시").toLocalDateTime() : null);
+        dto.setCreatedAt(rs.getString("등록일시") );
+        dto.setUpdatedAt(rs.getString("수정일시") );
         dto.setCreatedBy(rs.getString("등록팀"));
         dto.setUpdatedBy(rs.getString("수정팀"));
         dto.setPickingYn(rs.getString("피킹완료"));
@@ -402,6 +402,9 @@ public class PrintRepository {
         dto.setPrintMemo(rs.getString("인쇄참고사항"));
         dto.setCompanyMemo(rs.getString("업체메모"));
         dto.setWeekDay(rs.getString("요일"));
+        dto.setPickingEndAt(rs.getString("피킹완료일시"));
+        dto.setPrintEndAt(rs.getString("인쇄완료일시"));
+        dto.setOutReadyAt(rs.getString("출고완료일시"));
         return dto;
     }
 
@@ -441,8 +444,8 @@ public class PrintRepository {
         dto.setTotalAmount(rs.getBigDecimal("합계금액"));
         dto.setAllocationStatus(rs.getString("배분여부"));
         dto.setCompleted(rs.getString("완료여부"));
-        dto.setCreatedAt(rs.getTimestamp("등록일시") != null ? rs.getTimestamp("등록일시").toLocalDateTime() : null);
-        dto.setUpdatedAt(rs.getTimestamp("수정일시") != null ? rs.getTimestamp("수정일시").toLocalDateTime() : null);
+        dto.setCreatedAt(rs.getString("등록일시") );
+        dto.setUpdatedAt(rs.getString("수정일시") );
         dto.setCreatedBy(rs.getString("등록팀"));
         dto.setUpdatedBy(rs.getString("수정팀"));
         dto.setPickingYn(rs.getString("피킹완료"));
@@ -458,6 +461,9 @@ public class PrintRepository {
         dto.setImportantYn(rs.getString("중요여부"));
         dto.setPrintMemo(rs.getString("인쇄참고사항"));
         dto.setCompanyMemo(rs.getString("업체메모"));
+        dto.setPickingEndAt(rs.getString("피킹완료일시"));
+        dto.setPrintEndAt(rs.getString("인쇄완료일시"));
+        dto.setOutReadyAt(rs.getString("출고완료일시"));
         return dto;
     }
 }

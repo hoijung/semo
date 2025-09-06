@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(function () {
     // Fetch user authority and set up UI
     fetch('/api/auth/user')
         .then(response => {
@@ -29,7 +29,7 @@ $(document).ready(function() {
     loadMenu('logistList_1.html');
 
     // 모든 검색 폼의 날짜 기본값 설정 (HTML에 .search-form 클래스 필요)
-    $('.search-form').each(function() {
+    $('.search-form').each(function () {
         const $form = $(this);
         const inputStart = $form.find('input[name="orderDateStart"]');
         const inputEnd = $form.find('input[name="orderDateEnd"]');
@@ -54,10 +54,10 @@ $(document).ready(function() {
             ajax: {
                 url: ajaxUrl,
                 dataSrc: 'data',
-                data: function(d) {
+                data: function (d) {
                     // DataTables가 데이터를 요청할 때마다 해당 탭의 검색 폼 데이터를 파라미터에 추가
                     const searchData = $(selector).closest('.tab-content').find('.search-form').serializeArray();
-                    $.each(searchData, function(i, field) {
+                    $.each(searchData, function (i, field) {
                         d[field.name] = field.value;
                     });
                 }
@@ -75,43 +75,43 @@ $(document).ready(function() {
                     }
                 }
             ],
-            scrollY: getTableHeight("440"),
+            scrollY: getTableHeight("390"),
             scrollX: true,   // ✅ 좌우 스크롤 허용
             columns: columnsConfig,
-            createdRow: function(row, data, dataIndex) {
+            createdRow: function (row, data, dataIndex) {
                 // 'eval'은 보안에 취약하므로 안전한 비교로 변경합니다.
                 if (data.importantYn === '1' || data.importantYn === 'true') {
                     $(row).addClass('highlight-row');
                 }
             },
-            searching: false,
-            lengthChange: false,
-            pageLength: 15,
+            searching: false, // 기본 검색 기능 비활성화
+            lengthChange: false, // 표시 건수 변경 기능 비활성화
+            paging: false, // 페이징 기능 비활성화
+            info: false, // '총 n개'와 같은 정보 표시 비활성화
+            columnDefs: [
+                { targets: "_all", className: "dt-center" } // 전체 컬럼 가운데 정렬
+            ],
             language: {
-                emptyTable: "데이터가 없습니다.",
-                info: "총 _TOTAL_개",
-                infoEmpty: "",
-                infoFiltered: "(_MAX_개 중에서 필터링됨)",
-                paginate: { first: "<<", last: ">>", next: ">", previous: "<" }
+                emptyTable: "데이터가 없습니다."
             }
         });
     }
 
     // 공통 컬럼 렌더러
     const renderCheckbox = (data, type) => {
-		if (type === 'display') {
-			// 'eval'은 보안에 취약하므로 안전한 비교로 변경합니다.
-			const isChecked = data === '1' || data === true || data === 'true';
-			return `<input type="checkbox" ${isChecked ? 'checked' : ''} disabled>`;
-		}
-		return data;
-	};
+        if (type === 'display') {
+            // 'eval'은 보안에 취약하므로 안전한 비교로 변경합니다.
+            const isChecked = data === '1' || data === true || data === 'true';
+            return `<input type="checkbox" ${isChecked ? 'checked' : ''} disabled>`;
+        }
+        return data;
+    };
 
     // 각 그리드에 대한 컬럼 정의
     const baseColumns = [
         { title: '', orderable: false, className: 'dt-body-center', render: (data, type, row) => `<input type="checkbox" class="row-select" value="${row.printId || ''}">` },
         { data: 'orderDate', title: '주문일자', className: 'dt-center' },
-        { data: 'weekDay', title: '요일', className: 'dt-center'  },
+        { data: 'weekDay', title: '요일', className: 'dt-center' },
         { data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
         { data: 'printTeam', title: '담당팀' },
         { data: 'companyContact', title: '업체명(고객명)' },
@@ -136,7 +136,7 @@ $(document).ready(function() {
         { data: "importantYn", title: "중요", className: 'dt-center', render: renderCheckbox },
         {
             data: 'printMemo', title: '인쇄참고사항',
-            createdCell: function(td, cellData, rowData, row, col) {
+            createdCell: function (td, cellData, rowData, row, col) {
                 // 요청하신 대로 '인쇄참고사항' 내용의 색상을 빨간색으로 변경합니다.
                 $(td).css('color', 'red');
             }
@@ -176,7 +176,7 @@ $(document).ready(function() {
     const table3 = initializeDataTable('#grid3', '/api/print-info/logistic-list3', columnsForGrid3); // TODO: API URL 변경 필요
 
     // 조회 버튼 클릭 이벤트
-    $(document).on('click', '.btn-search', function(e) {
+    $(document).on('click', '.btn-search', function (e) {
         e.preventDefault(); // form submit 방지
         // 현재 탭의 DataTables 인스턴스를 찾아 ajax.reload()를 호출
         const tableInstance = $(this).closest('.tab-content').find('table.display').DataTable();
@@ -184,7 +184,7 @@ $(document).ready(function() {
     });
 
     // 행 클릭 이벤트 (상세 팝업)
-    $(document).on('click', '.main-content table.display tbody tr', function(e) {
+    $(document).on('click', '.main-content table.display tbody tr', function (e) {
         if ($(e.target).is('input, a')) return; // 체크박스나 링크 클릭 시 제외
         const tableInstance = $(this).closest('table.display').DataTable();
         const data = tableInstance.row(this).data();
@@ -194,7 +194,7 @@ $(document).ready(function() {
     });
 
     // 체크박스 클릭 시 해당 행 선택/해제 (다중 선택)
-    $(document).on('click', '.main-content table.display tbody input.row-select', function(e) {
+    $(document).on('click', '.main-content table.display tbody input.row-select', function (e) {
         e.stopPropagation(); // 행 클릭 이벤트 전파 방지
         $(this).closest('tr').toggleClass('selected', this.checked);
     });
@@ -204,7 +204,7 @@ $(document).ready(function() {
     }
 
     // 상세보기 버튼
-    $(document).on('click', '.btn-detail', function() {
+    $(document).on('click', '.btn-detail', function () {
         const tableInstance = $(this).closest('.tab-content').find('table.display').DataTable();
         const selected = getSelectedRows(tableInstance);
         if (selected.length === 0) {
@@ -216,7 +216,7 @@ $(document).ready(function() {
     });
 
     // 엑셀 다운로드 버튼 클릭 이벤트
-    $(document).on('click', '.btn-excel', function() {
+    $(document).on('click', '.btn-excel', function () {
         const tableInstance = $(this).closest('.tab-content').find('table.display').DataTable();
         const selectedRows = tableInstance.rows('.selected').count();
 
@@ -293,27 +293,27 @@ $(document).ready(function() {
     }
 
     // 피킹완료 버튼
-    $(document).on('click', '.btn-picking', function() {
+    $(document).on('click', '.btn-picking', function () {
         handleBatchAction('피킹완료', 'picking', this);
     });
 
     // 피킹취소 버튼 (New)
-    $(document).on('click', '.btn-cancel-picking', function() {
+    $(document).on('click', '.btn-cancel-picking', function () {
         handleBatchAction('피킹취소', 'cancel-picking', this);
     });
 
     // 출고준비완료 버튼
-    $(document).on('click', '.btn-out-ready', function() {
+    $(document).on('click', '.btn-out-ready', function () {
         handleBatchAction('출고완료', 'out-ready', this);
     });
 
     // 출고준비취소 버튼 (New)
-    $(document).on('click', '.btn-cancel-out-ready', function() {
+    $(document).on('click', '.btn-cancel-out-ready', function () {
         handleBatchAction('출고완료취소', 'cancel-out-ready', this);
     });
 
     // 탭 클릭 이벤트 핸들러
-    $(document).on('click', '.tab-button', function() {
+    $(document).on('click', '.tab-button', function () {
         const tabName = $(this).text();
         // alert(tabName);
 

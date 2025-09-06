@@ -209,19 +209,19 @@ public class PrintInfo {
 		this.completed = completed;
 	}
 
-	public LocalDateTime getCreatedAt() {
+	public String getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDateTime createdAt) {
+	public void setCreatedAt(String createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public LocalDateTime getUpdatedAt() {
+	public String getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(LocalDateTime updatedAt) {
+	public void setUpdatedAt(String updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
@@ -530,41 +530,41 @@ public class PrintInfo {
 	private String completed;
 
 	/** 등록일시 */
-	private LocalDateTime createdAt;
+	private String createdAt;
 
 	/** 수정일시 */
-	private LocalDateTime updatedAt;
+	private String updatedAt;
 
 	/** 피킹완료일시 */
-	private LocalDateTime pickingEndAt;
+	private String pickingEndAt;
 
-	public LocalDateTime getPickingEndAt() {
+	public String getPickingEndAt() {
 		return pickingEndAt;
 	}
 
-	public void setPickingEndAt(LocalDateTime pickingEndAt) {
+	public void setPickingEndAt(String pickingEndAt) {
 		this.pickingEndAt = pickingEndAt;
 	}
 
 	/** 인쇄완료일시 */
-	private LocalDateTime printEndAt;
+	private String printEndAt;
 
-	public LocalDateTime getPrintEndAt() {
+	public String getPrintEndAt() {
 		return printEndAt;
 	}
 
-	public void setPrintEndAt(LocalDateTime printEndAt) {
+	public void setPrintEndAt(String printEndAt) {
 		this.printEndAt = printEndAt;
 	}
 
 	/** 출고준비완료일시 */
-	private LocalDateTime outReadyAt;
+	private String outReadyAt;
 
-	public LocalDateTime getOutReadyAt() {
+	public String getOutReadyAt() {
 		return outReadyAt;
 	}
 
-	public void setOutReadyAt(LocalDateTime outReadyAt) {
+	public void setOutReadyAt(String outReadyAt) {
 		this.outReadyAt = outReadyAt;
 	}
 

@@ -62,7 +62,7 @@ $(document).ready(function () {
 				filename: `인쇄작업목록_${formattedToday}` // 오늘 날짜를 포함한 파일명
 			}
 		],
-		scrollY: getTableHeight("410"), // 동적으로 높이 지정
+		scrollY: getTableHeight("350"), // 동적으로 높이 지정
 		scrollX: true,   // ✅ 좌우 스크롤 허용
 		columns: [
 			{ data: null, render: () => `<input type="checkbox" class="row-select">` },
@@ -109,9 +109,9 @@ $(document).ready(function () {
 
 			{ data: 'orderDate', title: '주문일자', className: 'dt-center' },
 			{ data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
-			{ data: 'pickingDate', title: '피킹완료', className: 'dt-center' },
-			{ data: 'pickingDate', title: '피킹인쇄완료', className: 'dt-center' },
-			{ data: 'pickingDate', title: '출고완료', className: 'dt-center' },
+			{ data: 'pickingEndAt', title: '피킹완료', className: 'dt-center' },
+			{ data: 'printEndAt', title: '인쇄완료', className: 'dt-center' },
+			{ data: 'outReadyAt', title: '출고완료', className: 'dt-center' },
 			{ data: 'pickingDate', title: '발송마감일', className: 'dt-center' },
 		],
 		// 아래 'createdRow' 옵션을 추가합니다.
@@ -125,22 +125,15 @@ $(document).ready(function () {
 		},
 		searching: false, // 기본 검색 기능 비활성화
 		lengthChange: false, // 표시 건수 변경 기능 비활성화
-		pageLength: 15, // 기본 페이지당 행 수
+		paging: false, // 페이징 기능 비활성화
+		info: false, // '총 n개'와 같은 정보 표시 비활성화
 		columnDefs: [
 			{ targets: "_all", className: "dt-center" } // 전체 컬럼 가운데 정렬
 		],
 		language: {
-			emptyTable: "데이터가 없습니다.",
-			info: "총 _TOTAL_개",
-			infoEmpty: "",
-			infoFiltered: "(_MAX_개 중에서 필터링됨)",
-			paginate: {
-				first: "<<",
-				last: ">>",
-				next: ">",
-				previous: "<"
-			}
+			emptyTable: "데이터가 없습니다."
 		}
+
 	});
 
 	// 조회 버튼 클릭 이벤트
