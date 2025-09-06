@@ -51,7 +51,7 @@ $(document).ready(function () {
         responsive: true,
         dom: 'frtip', // 'B'를 제거하여 기본 버튼 컨테이너를 숨김
         ajax: {
-            url: '/api/prints/printList1',
+            url: '/api/prints/printList1?' + $('#searchForm').serialize(),
             dataSrc: 'data'
         },
         buttons: [

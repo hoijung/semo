@@ -111,7 +111,7 @@ $(document).ready(function () {
 			{ data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
 			{ data: 'pickingDate', title: '피킹완료', className: 'dt-center' },
 			{ data: 'pickingDate', title: '피킹인쇄완료', className: 'dt-center' },
-			{ data: 'pickingDate', title: '출고준비', className: 'dt-center' },
+			{ data: 'pickingDate', title: '출고완료', className: 'dt-center' },
 			{ data: 'pickingDate', title: '발송마감일', className: 'dt-center' },
 		],
 		// 아래 'createdRow' 옵션을 추가합니다.
@@ -220,7 +220,7 @@ $(document).ready(function () {
 		$('#grid').DataTable().ajax.reload(); // 테이블 새로고침
 	});
 
-	// 출고준비완료 버튼
+	// 출고완료완료 버튼
 	$('#btnOutReady').click(function () {
 		const selected = getSelectedRows();
 		if (selected.length === 0) {
@@ -230,7 +230,7 @@ $(document).ready(function () {
 		selected.forEach(row => {
 			$.post(`/api/print-info/${row.printId}/out-ready`, { status: 'Y' });
 		});
-		alert("선택한 행 출고준비 완료 처리되었습니다.");
+		alert("선택한 행 출고완료 완료 처리되었습니다.");
 		$('#grid').DataTable().ajax.reload();
 	});
 });

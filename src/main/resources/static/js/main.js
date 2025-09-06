@@ -6,24 +6,25 @@ function calculateVat() {
 	// 부가세 및 합계금액 필드 가져오기
 	const vatInput = document.getElementById('부가세액');
 	const totalPriceInput = document.getElementById('합계금액');
+	const totalPrice = parseFloat(removeCommas(totalPriceInput.value));
+
 
 	// 값이 숫자인지 확인
-	if (!isNaN(supplyPrice)) {
-		// 부가세 계산 (공급가액의 10%)
-		const vat = supplyPrice * 0.1;
-		// 합계금액 계산 (공급가액 + 부가세)
-		const totalPrice = supplyPrice + vat;
+	if (!isNaN(totalPrice)) {
+		// 합계금액에서 공급가액과 부가세액 분리 (부가세율 10%)
+		const supply = Math.round(totalPrice / 1.1);  // 공급가액
+		const vat = totalPrice - supply;  
 
 		// 결과 표시
 		vatInput.value = vat.toFixed(0); // 소수점 없이 표시
-		totalPriceInput.value = totalPrice.toFixed(0); // 소수점 없이 표시
-
+		supplyPriceInput.value = supply.toFixed(0); // 소수점 없이 표시
+		//debugger
 		onlyNumberWithComma(vatInput);
-		onlyNumberWithComma(totalPriceInput);
+		onlyNumberWithComma(supplyPriceInput);
 	} else {
 		// 숫자가 아니면 필드 비우기
 		vatInput.value = '';
-		totalPriceInput.value = '';
+		supplyPriceInput.value = '';
 	}
 }
 
@@ -291,7 +292,8 @@ $(document).ready(function() {
 				render: function(data, type, row) {
 					return eval(data) ? 'Y' : 'N'; // Display 'Y' for true, 'N' for false
 				}
-			}
+			},
+			{ data: '업체명담당자', title: '업체명_담당자' }
 		],
 		destroy: true, // 동적으로 로드되는 콘텐츠에서 재초기화를 허용하는 중요한 옵션입니다.
 		paging: false,

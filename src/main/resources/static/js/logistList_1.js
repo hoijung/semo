@@ -128,7 +128,7 @@ $(document).ready(function() {
         { data: 'deliveryAddress', title: '주소' },
         { data: 'sizeText', title: '박스규격' },
         { data: 'printMethod', title: '발송마감일', className: 'dt-center' },
-        { data: "outReadyYn", title: "출고준비", className: 'dt-center', render: renderCheckbox },
+        { data: "outReadyYn", title: "출고완료", className: 'dt-center', render: renderCheckbox },
     ];
 
     const columnsForGrid1 = [
@@ -150,7 +150,7 @@ $(document).ready(function() {
         { data: 'deliveryAddress', title: '주소' },
         { data: 'sizeText', title: '박스규격' },
         { data: 'printMethod', title: '발송마감일', className: 'dt-center' },
-        { data: "outReadyYn", title: "출고준비", className: 'dt-center', render: renderCheckbox },
+        { data: "outReadyYn", title: "출고완료", className: 'dt-center', render: renderCheckbox },
     ];
 
     const columnsForGrid2 = [...baseColumns,
@@ -167,7 +167,7 @@ $(document).ready(function() {
     { data: 'deliveryAddress', title: '주소' },
     { data: 'sizeText', title: '박스규격' },
     { data: 'printMethod', title: '발송마감일', className: 'dt-center' },
-    { data: "outReadyYn", title: "출고준비", className: 'dt-center', render: renderCheckbox },
+    { data: "outReadyYn", title: "출고완료", className: 'dt-center', render: renderCheckbox },
     ];
 
     // DataTables 인스턴스 생성
@@ -256,7 +256,7 @@ $(document).ready(function() {
         if (urlPath === 'out-ready') {
             const chkItems = selected.filter(row => row.outReadyYn == 'true');
             if (chkItems.length > 0) {
-                alert("출고미완료 항목만 출고준비완료 할 수 있습니다.");
+                alert("출고미완료 항목만 출고완료 할 수 있습니다.");
                 return;
             }
         }
@@ -264,7 +264,7 @@ $(document).ready(function() {
         if (urlPath === 'cancel-out-ready') {
             const notOutReadyItems = selected.filter(row => row.outReadyYn !== 'true');
             if (notOutReadyItems.length > 0) {
-                alert("출고완료된 항목만 출고준비를 취소할 수 있습니다.");
+                alert("출고완료된 항목만 출고완료를 취소할 수 있습니다.");
                 return;
             }
         }
@@ -304,12 +304,12 @@ $(document).ready(function() {
 
     // 출고준비완료 버튼
     $(document).on('click', '.btn-out-ready', function() {
-        handleBatchAction('출고준비완료', 'out-ready', this);
+        handleBatchAction('출고완료', 'out-ready', this);
     });
 
     // 출고준비취소 버튼 (New)
     $(document).on('click', '.btn-cancel-out-ready', function() {
-        handleBatchAction('출고준비취소', 'cancel-out-ready', this);
+        handleBatchAction('출고완료취소', 'cancel-out-ready', this);
     });
 
     // 탭 클릭 이벤트 핸들러

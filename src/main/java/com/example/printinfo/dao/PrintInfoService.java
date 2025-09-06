@@ -27,8 +27,13 @@ public class PrintInfoService {
 	}   
     
 	@Transactional
-	public void updateOutReadyStatus(int printId) {
-		repository.updateOutReadyYn(printId, true);
+	public void updateOutReadyEnd(int printId) {
+		repository.updateOutReadyEnd(printId, true);
+	}
+
+    	@Transactional
+	public void cancelOutReadyEnd(int printId) {
+		repository.cancelOutReadyEnd(printId, true);
 	}
     
 	@Transactional
@@ -71,6 +76,6 @@ public class PrintInfoService {
         if (printInfo == null) {
             throw new IllegalArgumentException("인쇄 정보를 찾을 수 없습니다. ID: " + printId);
         }
-        repository.updateOutReadyYn(printId, false);
+        repository.cancelOutReadyEnd(printId, false);
     }
 }

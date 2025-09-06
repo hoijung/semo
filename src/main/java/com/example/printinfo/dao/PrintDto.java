@@ -258,6 +258,13 @@ public class PrintDto {
     private String 특이사항;
     private String 주문일자;
     private String 업체명_담당자;
+	private String 업체명담당자;
+	public String get업체명담당자() {
+		return 업체명담당자;
+	}
+	public void set업체명담당자(String 업체명담당자) {
+		this.업체명담당자 = 업체명담당자;
+	}
     private String 고객ID;
     private String 전화번호;
     private String 발송마감기한;

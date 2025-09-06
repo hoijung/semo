@@ -377,6 +377,7 @@
 							<th>인쇄ID</th>
 							<th>주문일자</th>
 							<th>배분여부</th>
+							<th>업체명</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -401,7 +402,7 @@
 						<label>인쇄 정보</label>
 						<div class="field-row-three-col">
 							<div class="field-item"><span>인쇄방법</span><select id="인쇄방법"></select></div>
-							<div class="field-item"><span>품목명</span><select id="품목명"></select></div>
+							<div class="field-item"><span>품목명</span><input type="text" id="품목명"></div>
 							<div class="field-item"><span>쇼핑백색상</span><input type="text" id="쇼핑백색상"></div>
 						</div>
 						<div class="field-row-three-col">
@@ -410,7 +411,6 @@
 						</div>
 						<div class="field-row-three-col">
 							<div class="field-item"><span>인쇄담당팀</span><select id="인쇄담당팀"></select></div>
-							<div class="field-item"><span>기존주문</span><input type="text" id="기존주문여부"></div>
 							<div class="field-item"><span>인쇄면</span><select id="인쇄면"></select></div>
 						</div>
 						<div class="field-row">
@@ -498,13 +498,13 @@
 							<div class="field-row-three-col">
 								<div class="field-item">
 									<span>공급가액</span>
-									<input type="text" id="공급가액" oninput="onlyNumberWithComma(this); calculateVat();" />
+									<input type="text" id="공급가액" oninput="onlyNumberWithComma(this); " />
 								</div>
 								<div class="field-item"><span>부가세액</span>
 									<input type="text" id="부가세액" oninput="onlyNumberWithComma(this);" />
 								</div>
 								<div class="field-item"><span>합계금액</span>
-									<input type="text" id="합계금액" oninput="onlyNumberWithComma(this);" />
+									<input type="text" id="합계금액" oninput="onlyNumberWithComma(this); calculateVat();" />
 								</div>
 							</div>
 						</div>

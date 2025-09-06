@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 public class PrintInfo {
 
 	/** 인쇄 ID (기본키) */
-    private Long printId;
+	private Long printId;
 
-    public String getSize() {
+	public String getSize() {
 		return size;
 	}
 
@@ -241,13 +241,13 @@ public class PrintInfo {
 		this.updatedBy = updatedBy;
 	}
 
-//	public Boolean getPickingCompleted() {
-//		return pickingCompleted;
-//	}
-//
-//	public void setPickingCompleted(Boolean pickingCompleted) {
-//		this.pickingCompleted = pickingCompleted;
-//	}
+	// public Boolean getPickingCompleted() {
+	// return pickingCompleted;
+	// }
+	//
+	// public void setPickingCompleted(Boolean pickingCompleted) {
+	// this.pickingCompleted = pickingCompleted;
+	// }
 
 	public String getReadyForShipment() {
 		return readyForShipment;
@@ -274,34 +274,34 @@ public class PrintInfo {
 	}
 
 	/** 인쇄 방법 */
-    private String printMethod;
+	private String printMethod;
 
-    /** 품목명 */
-    private String itemName;
+	/** 품목명 */
+	private String itemName;
 
-    /** 쇼핑백 색상 */
-    private String bagColor;
+	/** 쇼핑백 색상 */
+	private String bagColor;
 
-    /** 사이즈 */
-    private String size;
+	/** 사이즈 */
+	private String size;
 
-    /** 제작 장수 */
-    private String quantity;
+	/** 제작 장수 */
+	private String quantity;
 
-    /** 인쇄 담당팀 */
-    private String printTeam;
+	/** 인쇄 담당팀 */
+	private String printTeam;
 
-    /** 인쇄 면 */
-    private String printSide;
+	/** 인쇄 면 */
+	private String printSide;
 
-    /** 인쇄 도수 */
-    private String printCount;
+	/** 인쇄 도수 */
+	private String printCount;
 
-    /** 인쇄 방식 */
-    private String printType;
+	/** 인쇄 방식 */
+	private String printType;
 
-    /** 로고 인쇄 색상 */
-    private String logoColor;
+	/** 로고 인쇄 색상 */
+	private String logoColor;
 
 	public String getLogoColor() {
 		return logoColor;
@@ -311,46 +311,44 @@ public class PrintInfo {
 		this.logoColor = logoColor;
 	}
 
-    /** 로고 인쇄 크기 */
-    private String logoSize;
+	/** 로고 인쇄 크기 */
+	private String logoSize;
 
-    /** 로고 인쇄 위치 */
-    private String logoPosition;
+	/** 로고 인쇄 위치 */
+	private String logoPosition;
 
-    /** 특이사항 */
-    private String remarks;
+	/** 특이사항 */
+	private String remarks;
 
-    /** 주문일자 */
-    private String orderDate;
+	/** 주문일자 */
+	private String orderDate;
 
-    /** 주문여부 */
-    private String orderYn;	
+	/** 주문여부 */
+	private String orderYn;
 
+	/** 박스규격 */
+	private String boxSize;
 
-    /** 박스규격 */
-    private String boxSize;	
+	/** 박스수량 */
+	private String boxCount;
 
-    /** 박스수량 */
-    private String boxCount;	
+	/** 사업자번호 */
+	private String bussNo;
 
-    /** 사업자번호 */
-    private String bussNo;		
-
-	    /** 조색데이터1 */
-    private String colorData1;	
+	/** 조색데이터1 */
+	private String colorData1;
 
 	/** 중요여부 */
 	private String importantYn;
 
 	/** 인쇄 참고사항 */
-    private String printMemo;
-
+	private String printMemo;
 
 	/** 업체메모 */
-    private String companyMemo;	
+	private String companyMemo;
 
-		/** 요일 */
-    private String weekDay;	
+	/** 요일 */
+	private String weekDay;
 
 	public String getWeekDay() {
 		return weekDay;
@@ -359,7 +357,6 @@ public class PrintInfo {
 	public void setWeekDay(String weekDay) {
 		this.weekDay = weekDay;
 	}
-
 
 	public String getCompanyMemo() {
 		return companyMemo;
@@ -377,7 +374,6 @@ public class PrintInfo {
 		this.printMemo = printMemo;
 	}
 
-	
 	public String getImportantYn() {
 		return importantYn;
 	}
@@ -385,7 +381,6 @@ public class PrintInfo {
 	public void setImportantYn(String importantYn) {
 		this.importantYn = importantYn;
 	}
-
 
 	public String getColorData1() {
 		return colorData1;
@@ -395,19 +390,19 @@ public class PrintInfo {
 		this.colorData1 = colorData1;
 	}
 
-	    /** 조색데이터1 */
-    private String colorData2;	
-	
+	/** 조색데이터1 */
+	private String colorData2;
+
 	public String getColorData2() {
 		return colorData2;
 	}
-	
+
 	public void setColorData2(String colorData2) {
 		this.colorData2 = colorData2;
 	}
 
-	    /** 조색데이터1 */
-    private String colorData3;		
+	/** 조색데이터1 */
+	private String colorData3;
 
 	public String getColorData3() {
 		return colorData3;
@@ -428,37 +423,35 @@ public class PrintInfo {
 	public String getBoxCount() {
 		return boxCount;
 	}
-	
+
 	public void setBoxCount(String boxCount) {
 		this.boxCount = boxCount;
 	}
-	
 
-    public void setBoxSize(String boxSize) {
+	public void setBoxSize(String boxSize) {
 		this.boxSize = boxSize;
 	}
 
-    public String getBoxSize() {
+	public String getBoxSize() {
 		return boxSize;
-	}	
+	}
 
-
-    public void setOrderYn(String orderYn) {
+	public void setOrderYn(String orderYn) {
 		this.orderYn = orderYn;
 	}
 
-    public String getOrderYn() {
+	public String getOrderYn() {
 		return orderYn;
-	}	
+	}
 
-    public void setOrderDate(String orderDate) {
+	public void setOrderDate(String orderDate) {
 		this.orderDate = orderDate;
 	}
 
 	/** 피키예정일 */
-    private String pickingDate;
-    
-    public String getPickingDate() {
+	private String pickingDate;
+
+	public String getPickingDate() {
 		return pickingDate;
 	}
 
@@ -467,28 +460,28 @@ public class PrintInfo {
 	}
 
 	/** 업체명 + 담당자 */
-    private String companyContact;
+	private String companyContact;
 
-    /** 고객 ID */
-    private String customerId;
+	/** 고객 ID */
+	private String customerId;
 
-    /** 전화번호 */
-    private String phoneNumber;
+	/** 전화번호 */
+	private String phoneNumber;
 
-    /** 발송 마감 기한 */
-    private String deliveryDeadline;
+	/** 발송 마감 기한 */
+	private String deliveryDeadline;
 
-    /** 최종 배송지 우편번호 */
-    private String deliveryZip;
+	/** 최종 배송지 우편번호 */
+	private String deliveryZip;
 
-    /** 최종 배송지 주소 */
-    private String deliveryAddress;
-    
-    /** 배송지 타입 */
-    private String deliveryType;    
+	/** 최종 배송지 주소 */
+	private String deliveryAddress;
 
-    /** 계산서발행유무 */
-    private String billPubYn;   	
+	/** 배송지 타입 */
+	private String deliveryType;
+
+	/** 계산서발행유무 */
+	private String billPubYn;
 
 	public String getBillPubYn() {
 		return billPubYn;
@@ -498,7 +491,7 @@ public class PrintInfo {
 		this.billPubYn = billPubYn;
 	}
 
-    public String getDeliveryType() {
+	public String getDeliveryType() {
 		return deliveryType;
 	}
 
@@ -507,63 +500,96 @@ public class PrintInfo {
 	}
 
 	/** 판매 채널 */
-    private String salesChannel;
+	private String salesChannel;
 
-    /** 계산서 발행 타입 */
-    private String invoiceType;
+	/** 계산서 발행 타입 */
+	private String invoiceType;
 
-    /** 상호명 */
-    private String companyName;
+	/** 상호명 */
+	private String companyName;
 
-    /** 대표자명 */
-    private String representativeName;
+	/** 대표자명 */
+	private String representativeName;
 
-    /** 이메일 */
-    private String email;
+	/** 이메일 */
+	private String email;
 
-    /** 공급가액 */
-    private BigDecimal supplyAmount;
+	/** 공급가액 */
+	private BigDecimal supplyAmount;
 
-    /** 부가세액 */
-    private BigDecimal taxAmount;
+	/** 부가세액 */
+	private BigDecimal taxAmount;
 
-    /** 합계금액 */
-    private BigDecimal totalAmount;
+	/** 합계금액 */
+	private BigDecimal totalAmount;
 
-    /** 배분 여부 */
-    private String allocationStatus;
+	/** 배분 여부 */
+	private String allocationStatus;
 
-    /** 완료 여부 */
-    private String completed;
+	/** 완료 여부 */
+	private String completed;
 
-    /** 등록일시 */
-    private LocalDateTime createdAt;
+	/** 등록일시 */
+	private LocalDateTime createdAt;
 
-    /** 수정일시 */
-    private LocalDateTime updatedAt;
+	/** 수정일시 */
+	private LocalDateTime updatedAt;
 
-    /** 등록팀 */
-    private String createdBy;
+	/** 피킹완료일시 */
+	private LocalDateTime pickingEndAt;
 
-    /** 수정팀 */
-    private String updatedBy;
+	public LocalDateTime getPickingEndAt() {
+		return pickingEndAt;
+	}
 
-    /** 피킹 완료 여부 */
-//    private Boolean pickingCompleted;
+	public void setPickingEndAt(LocalDateTime pickingEndAt) {
+		this.pickingEndAt = pickingEndAt;
+	}
 
-    /** 출고 준비 여부 */
-    private String readyForShipment;
+	/** 인쇄완료일시 */
+	private LocalDateTime printEndAt;
 
-    /** 파일명 */
-    private String fileName;
+	public LocalDateTime getPrintEndAt() {
+		return printEndAt;
+	}
 
-    /** 인쇄 로고 예시 (파일 경로 또는 이름) */
-    private String logoSamplePath;
+	public void setPrintEndAt(LocalDateTime printEndAt) {
+		this.printEndAt = printEndAt;
+	}
 
-	//인쇄완료
+	/** 출고준비완료일시 */
+	private LocalDateTime outReadyAt;
+
+	public LocalDateTime getOutReadyAt() {
+		return outReadyAt;
+	}
+
+	public void setOutReadyAt(LocalDateTime outReadyAt) {
+		this.outReadyAt = outReadyAt;
+	}
+
+	/** 등록팀 */
+	private String createdBy;
+
+	/** 수정팀 */
+	private String updatedBy;
+
+	/** 피킹 완료 여부 */
+	// private Boolean pickingCompleted;
+
+	/** 출고 준비 여부 */
+	private String readyForShipment;
+
+	/** 파일명 */
+	private String fileName;
+
+	/** 인쇄 로고 예시 (파일 경로 또는 이름) */
+	private String logoSamplePath;
+
+	// 인쇄완료
 	private String printEndYn;
 
-	//기존주문
+	// 기존주문
 	private String oldOrderYn;
 
 	public String getOldOrderYn() {

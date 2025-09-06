@@ -144,7 +144,7 @@ public class PrintInfoController {
     // 출고준비 완료 처리
     @PostMapping("/{printId}/out-ready")
     public void updateOutReady(@PathVariable int printId) {
-        service.updateOutReadyStatus(printId); 
+        service.updateOutReadyEnd(printId); 
     }
 
     // 출고준비 취소 처리 (New)
