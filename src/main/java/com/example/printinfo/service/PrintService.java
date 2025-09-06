@@ -38,6 +38,15 @@ public class PrintService {
     }
 
     public int delete(Integer id) {
+        PrintDto dto = repository.findById(id);
+        if (dto == null) {
+            // Handle not found case, e.g., throw an exception
+            throw new IllegalArgumentException("Print record not found with ID: " + id);
+        }
+
+        if (dto.get배분여부() != null && dto.get배분여부().equals("true")) {
+            throw new IllegalStateException("배분된 자료는 삭제할 수 없습니다.");
+        }
         return repository.delete(id);
     }
 

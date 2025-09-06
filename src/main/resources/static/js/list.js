@@ -123,7 +123,7 @@ $(document).ready(function () {
 				$(row).addClass('highlight-row');
 			}
 		},
-		searching: false, // 기본 검색 기능 비활성화
+		searching: true, // 기본 검색 기능 비활성화
 		lengthChange: false, // 표시 건수 변경 기능 비활성화
 		paging: false, // 페이징 기능 비활성화
 		info: false, // '총 n개'와 같은 정보 표시 비활성화

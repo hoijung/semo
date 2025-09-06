@@ -64,7 +64,7 @@ $(document).ready(function () {
                 filename: `인쇄작업목록_${formattedToday}` // 오늘 날짜를 포함한 파일명
             }
         ],
-        scrollY: getTableHeight("310"), // 동적으로 높이 지정
+        scrollY: getTableHeight("320"), // 동적으로 높이 지정
         scrollX: true,   // ✅ 좌우 스크롤 허용
         columns: [
             {

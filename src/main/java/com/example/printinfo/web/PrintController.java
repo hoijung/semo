@@ -55,16 +55,16 @@ public class PrintController {
         System.out.println("companyContact: " + companyContact);
         System.out.println("itemName: " + itemName);
 
-        List<PrintInfo> list =  service.searchPrints(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
+        List<PrintInfo> list = service.searchPrints(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
 
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
         return response;
     }
 
     // 전체 목록
     @GetMapping("/printList1")
-    public Map<String,Object> getPrintAll1(
+    public Map<String, Object> getPrintAll1(
             @RequestParam(required = false) String orderDateStart,
             @RequestParam(required = false) String orderDateEnd,
             @RequestParam(required = false) String printTeam,
@@ -78,10 +78,10 @@ public class PrintController {
         System.out.println("itemName: " + itemName);
 
         List<PrintInfo> list = service.searchPrints(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
-        Map<String,Object> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         response.put("data", list); // DataTables 기본 expects {data: [...]}
         return response;
-    }    
+    }
 
     @GetMapping("/{id}")
     public PrintDto getById(@PathVariable Integer id) {
@@ -90,7 +90,7 @@ public class PrintController {
 
     @PostMapping
     public PrintDto create(@RequestPart("dto") PrintDto dto,
-                           @RequestPart(value = "logoFile", required = false) MultipartFile logoFile) throws IOException {
+            @RequestPart(value = "logoFile", required = false) MultipartFile logoFile) throws IOException {
         // 파일이 존재하고, 파일 저장 서비스가 구현되어 있을 경우
         if (fileStorageService != null && logoFile != null && !logoFile.isEmpty()) {
             String fileName = fileStorageService.storeFile(logoFile);
@@ -102,8 +102,8 @@ public class PrintController {
 
     @PutMapping("/{id}")
     public PrintDto update(@PathVariable Integer id,
-                           @RequestPart("dto") PrintDto dto,
-                           @RequestPart(value = "logoFile", required = false) MultipartFile logoFile) throws IOException {
+            @RequestPart("dto") PrintDto dto,
+            @RequestPart(value = "logoFile", required = false) MultipartFile logoFile) throws IOException {
         // 새 파일이 업로드된 경우
         if (fileStorageService != null && logoFile != null && !logoFile.isEmpty()) {
             // 기존 파일 삭제 로직 (선택 사항)
@@ -121,8 +121,15 @@ public class PrintController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Integer id) {
-        service.delete(id);
+    public ResponseEntity<?>  delete(@PathVariable Integer id) {
+        try {
+            service.delete(id);
+            return ResponseEntity.ok(id);
+        } catch (IllegalStateException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
 
     @PostMapping("/{id}/distribute")

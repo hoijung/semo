@@ -603,14 +603,14 @@ $(document).ready(function() {
 		fetch('/api/prints/' + id, { method: 'DELETE' })
 			.then(response => {
 				if (!response.ok) {
-					return response.text().then(text => { throw new Error('Network response was not ok: ' + text) });
+					return response.text().then(text => { throw new Error(text) });
 				}
 				currentSelectedId = null;
 				reloadTableAndRestoreSelection();
 			})
 			.catch(error => {
 				console.error("Delete Error:", error);
-				alert("레코드 삭제 실패: " + error.message);
+				alert(error.message);
 			});
 	}
 
