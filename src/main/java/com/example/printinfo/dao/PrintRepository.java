@@ -96,7 +96,7 @@ public class PrintRepository {
         dto.set품목명(rs.getString("품목명"));
         dto.set쇼핑백색상(rs.getString("쇼핑백색상"));
         dto.set사이즈(rs.getString("사이즈"));
-        dto.set제작장수(rs.getInt("제작장수"));
+        dto.set제작장수(rs.getString("제작장수"));
         dto.set인쇄담당팀(rs.getString("인쇄담당팀"));
         dto.set인쇄면(rs.getString("인쇄면"));
         dto.set인쇄도수(rs.getString("인쇄도수"));

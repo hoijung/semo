@@ -28,10 +28,10 @@ public class PrintDto {
 	public void set사이즈(String 사이즈) {
 		this.사이즈 = 사이즈;
 	}
-	public Integer get제작장수() {
+	public String get제작장수() {
 		return 제작장수;
 	}
-	public void set제작장수(Integer 제작장수) {
+	public void set제작장수(String 제작장수) {
 		this.제작장수 = 제작장수;
 	}
 	public String get인쇄담당팀() {
@@ -248,7 +248,7 @@ public class PrintDto {
     private String 품목명;
     private String 쇼핑백색상;
     private String 사이즈;
-    private Integer 제작장수;
+    private String 제작장수;
     private String 인쇄담당팀;
     private String 인쇄면;
     private String 인쇄도수;

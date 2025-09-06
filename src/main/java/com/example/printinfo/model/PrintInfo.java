@@ -286,7 +286,7 @@ public class PrintInfo {
     private String size;
 
     /** 제작 장수 */
-    private Integer quantity;
+    private String quantity;
 
     /** 인쇄 담당팀 */
     private String printTeam;
@@ -646,11 +646,11 @@ public class PrintInfo {
 		this.sizeText = sizeText;
 	}
 
-	public Integer getQuantity() {
+	public String getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(String quantity) {
 		this.quantity = quantity;
 	}
 
