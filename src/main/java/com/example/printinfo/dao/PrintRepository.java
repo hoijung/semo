@@ -328,7 +328,7 @@ public class PrintRepository {
         dto.setItemName(rs.getString("품목명"));
         dto.setBagColor(rs.getString("쇼핑백색상"));
         dto.setSize(rs.getString("사이즈"));
-        dto.setQuantity(rs.getInt("제작장수"));
+        dto.setQuantity(rs.getString("제작장수"));
         dto.setPrintTeam(rs.getString("인쇄담당팀"));
         dto.setPrintSide(rs.getString("인쇄면"));
         dto.setPrintCount(rs.getString("인쇄도수"));

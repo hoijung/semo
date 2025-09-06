@@ -272,8 +272,20 @@ $(document).ready(function() {
 		order: [[0, 'desc']],
 		scrollY: getTableHeight(), // 동적으로 높이 지정
 		columns: [
-			{ data: '인쇄ID', title: 'No' },
-			{ data: '주문일자' },
+			{ data: '인쇄ID', title: 'No', visible: false },
+						{
+				data: '주문일자',
+				render: function(data, type, row) {
+					if (data) {
+						const date = new Date(data);
+						const year = date.getFullYear().toString().slice(-2);
+						const month = (date.getMonth() + 1).toString().padStart(2, '0');
+						const day = date.getDate().toString().padStart(2, '0');
+						return `${year}${month}${day}`;
+					}
+					return '';
+				}
+			},
 			{
 				data: '배분여부', title: '배분', // Assuming this field exists in the API response
 				render: function(data, type, row) {
