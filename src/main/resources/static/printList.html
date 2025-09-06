@@ -253,29 +253,37 @@
         <div class="content">
             <div class="search-area">
                 <form id="searchForm">
-                    <div class="search-filters">
-                        <div class="filter-group">
-                            <label for="orderDateStart">주문일자 (시작)</label>
-                            <input type="date" id="orderDateStart" name="orderDateStart">
+                    <div class="search-filters" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div style="display: flex; gap: 15px;">
+                            <div class="filter-group">
+                                <label for="orderDateStart">주문일자 (시작)</label>
+                                <input type="date" id="orderDateStart" name="orderDateStart">
+                            </div>
+                            <div class="filter-group">
+                                <label for="orderDateEnd">주문일자 (종료)</label>
+                                <input type="date" id="orderDateEnd" name="orderDateEnd">
+                            </div>
+                            <div class="filter-group">
+                                <label for="printTeam">인쇄담당팀</label>
+                                <select id="printTeam" name="printTeam">
+                                    <option value="">전체</option>
+                                    <option value="A팀">A팀</option>
+                                    <option value="B팀">B팀</option>
+                                    <option value="C팀">C팀</option>
+                                </select>
+                            </div>
                         </div>
+
                         <div class="filter-group">
-                            <label for="orderDateEnd">주문일자 (종료)</label>
-                            <input type="date" id="orderDateEnd" name="orderDateEnd">
+                            <label for="customSearch">통합 검색</label>
+                            <input type="text" id="customSearch" placeholder="검색..." style="width: 300px;">
                         </div>
-                        <div class="filter-group">
-                            <label for="printTeam">인쇄담당팀</label>
-                            <select id="printTeam" name="printTeam">
-                                <option value="">전체</option>
-                                <option value="A팀">A팀</option>
-                                <option value="B팀">B팀</option>
-                                <option value="C팀">C팀</option>
-                            </select>
-                        </div>
-                        <div class="search-actions" style="margin-left: auto; display: flex; gap: 10px;">
+
+                        <div class="search-actions" style="display: flex; gap: 10px;">
                             <button type="button" id="btnDetail">상세보기</button>
                             <button type="button" id="btnPrintEnd">인쇄완료</button>
                             <button type="button" id="btnPrintEndCnl">완료취소</button>
-                            <button id="btnExcel" class="btn btn-secondary">엑셀 다운로드</button> <!-- ✅ 이 버튼을 추가하세요 -->
+                            <button id="btnExcel" class="btn btn-secondary">엑셀 다운로드</button>
                             <button type="button" id="btnSearch">조회</button>
                         </div>
                     </div>

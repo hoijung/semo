@@ -206,7 +206,6 @@
             border-bottom: 2px solid #dee2e6;
             margin-bottom: 20px;
             flex-shrink: 0;
-            /* 탭 네비게이션이 줄어들지 않도록 설정 */
         }
 
         .tab-button {
@@ -218,7 +217,6 @@
             color: #495057;
             border-bottom: 2px solid transparent;
             margin-bottom: -2px;
-            /* 컨테이너의 하단 테두리와 겹치도록 설정 */
         }
 
         .tab-button:hover {
@@ -233,10 +231,8 @@
 
         .tab-content {
             display: none;
-            /* 기본적으로 숨김 */
             flex-direction: column;
             flex-grow: 1;
-            /* 남은 공간을 모두 차지하도록 설정 */
         }
     </style>
 </head>
@@ -256,24 +252,27 @@
             </div>
 
             <div id="dashboard" class="tab-content" style="display: flex;">
-                <!-- 기존 콘텐츠를 첫 번째 탭 패널로 이동 -->
                 <div class="search-area">
                     <form id="searchForm1" class="search-form">
-                        <div class="search-filters">
-                            <div class="filter-group">
-                                <label for="orderDateStart1">주문일자 (시작)</label>
-                                <input type="date" id="orderDateStart1" name="orderDateStart">
+                        <div class="search-filters" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                            <div style="display: flex; gap: 15px;">
+                                <div class="filter-group">
+                                    <label for="orderDateStart1">주문일자 (시작)</label>
+                                    <input type="date" id="orderDateStart1" name="orderDateStart">
+                                </div>
+                                <div class="filter-group">
+                                    <label for="orderDateEnd1">주문일자 (종료)</label>
+                                    <input type="date" id="orderDateEnd1" name="orderDateEnd">
+                                </div>
                             </div>
                             <div class="filter-group">
-                                <label for="orderDateEnd1">주문일자 (종료)</label>
-                                <input type="date" id="orderDateEnd1" name="orderDateEnd">
+                                <label for="customSearch1">통합 검색</label>
+                                <input type="text" id="customSearch1" class="custom-search-input" placeholder="검색..." style="width: 300px;">
                             </div>
-                            <div class="search-actions" style="margin-left: auto; display: flex; gap: 10px;">
+                            <div class="search-actions" style="display: flex; gap: 10px;">
                                 <button type="button" id="btnExcel1" class="btn-excel">선택엑셀다운</button>
                                 <button type="button" id="btnTrans1" class="btn-trans">운송장엑셀다운</button>
                                 <button type="button" id="btnDetail1" class="btn-detail">상세보기</button>
-                                <!-- <button id="btnPicking">피킹완료</button>
-                                <button id="btnOutReady">출고완료완료</button> -->
                                 <button type="button" id="btnSearch" class="btn-search">조회</button>
                             </div>
                         </div>
@@ -289,20 +288,25 @@
             <div id="tab2" class="tab-content">
                 <div class="search-area">
                     <form id="searchForm2" class="search-form">
-                        <div class="search-filters">
-                            <div class="filter-group">
-                                <label for="orderDateStart2">주문일자 (시작)</label>
-                                <input type="date" id="orderDateStart2" name="orderDateStart">
+                        <div class="search-filters" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                            <div style="display: flex; gap: 15px;">
+                                <div class="filter-group">
+                                    <label for="orderDateStart2">주문일자 (시작)</label>
+                                    <input type="date" id="orderDateStart2" name="orderDateStart">
+                                </div>
+                                <div class="filter-group">
+                                    <label for="orderDateEnd2">주문일자 (종료)</label>
+                                    <input type="date" id="orderDateEnd2" name="orderDateEnd">
+                                </div>
                             </div>
                             <div class="filter-group">
-                                <label for="orderDateEnd2">주문일자 (종료)</label>
-                                <input type="date" id="orderDateEnd2" name="orderDateEnd">
+                                <label for="customSearch2">통합 검색</label>
+                                <input type="text" id="customSearch2" class="custom-search-input" placeholder="검색..." style="width: 300px;">
                             </div>
-                            <div class="search-actions" style="margin-left: auto; display: flex; gap: 10px;">
+                            <div class="search-actions" style="display: flex; gap: 10px;">
                                 <button type="button" id="btnDetail2" class="btn-detail">상세보기</button>
                                 <button type="button" id="btnPicking2" class="btn-picking">피킹완료</button>
-                                <button type="button" id="btnPicking2" class="btn-cancel-picking">피킹취소</button>
-                                <!-- <button id="btnOutReady">출고완료완료</button> -->
+                                <button type="button" id="btnCancelPicking2" class="btn-cancel-picking">피킹취소</button>
                                 <button type="button" id="btnSearch" class="btn-search">조회</button>
                             </div>
                         </div>
@@ -314,23 +318,29 @@
                     </div>
                 </div>
             </div>
+
             <div id="tab3" class="tab-content">
                 <div class="search-area">
                     <form id="searchForm3" class="search-form">
-                        <div class="search-filters">
-                            <div class="filter-group">
-                                <label for="orderDateStart3">주문일자 (시작)</label>
-                                <input type="date" id="orderDateStart3" name="orderDateStart">
+                        <div class="search-filters" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                            <div style="display: flex; gap: 15px;">
+                                <div class="filter-group">
+                                    <label for="orderDateStart3">주문일자 (시작)</label>
+                                    <input type="date" id="orderDateStart3" name="orderDateStart">
+                                </div>
+                                <div class="filter-group">
+                                    <label for="orderDateEnd3">주문일자 (종료)</label>
+                                    <input type="date" id="orderDateEnd3" name="orderDateEnd">
+                                </div>
                             </div>
                             <div class="filter-group">
-                                <label for="orderDateEnd3">주문일자 (종료)</label>
-                                <input type="date" id="orderDateEnd3" name="orderDateEnd">
+                                <label for="customSearch3">통합 검색</label>
+                                <input type="text" id="customSearch3" class="custom-search-input" placeholder="검색..." style="width: 300px;">
                             </div>
-                            <div class="search-actions" style="margin-left: auto; display: flex; gap: 10px;">
+                            <div class="search-actions" style="display: flex; gap: 10px;">
                                 <button type="button" id="btnDetail3" class="btn-detail">상세보기</button>
-                                <!-- <button id="btnPicking">피킹완료</button> -->
                                 <button type="button" id="btnOutReady3" class="btn-out-ready">출고완료</button>
-                                <button type="button" id="btnOutReady4" class="btn-cancel-out-ready">출고완료취소</button>
+                                <button type="button" id="btnCancelOutReady3" class="btn-cancel-out-ready">출고완료취소</button>
                                 <button type="button" id="btnSearch" class="btn-search">조회</button>
                             </div>
                         </div>
@@ -347,14 +357,8 @@
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <!-- 엑셀 다운로드를 위해서 추가 -->
-    <!-- 3. DataTables Buttons 확장 기능 (★ 중요) -->
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-
-    <!-- 4. JSZip (엑셀 .xlsx 파일 생성에 필수) (★ 중요) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-
-    <!-- 5. Buttons HTML5 (엑셀, CSV 등 내보내기 기능에 필요) (★ 중요) -->
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
     <script src="/static/plugins/datatables/js/pdfmake.min.js"></script>
     <script src="js/common.js"></script>

@@ -22,22 +22,18 @@ $(document).ready(function () {
         })
         .catch(error => {
             console.error('Error fetching user data:', error);
-            // Redirect to login page if not authenticated
             window.location.href = '/login.html';
         });
 
     loadMenu('logistList_1.html');
 
-    // 모든 검색 폼의 날짜 기본값 설정 (HTML에 .search-form 클래스 필요)
     $('.search-form').each(function () {
         const $form = $(this);
         const inputStart = $form.find('input[name="orderDateStart"]');
         const inputEnd = $form.find('input[name="orderDateEnd"]');
-
         const today = new Date();
         const formattedToday = today.toISOString().split("T")[0];
         if (inputEnd.length) inputEnd.val(formattedToday);
-
         const startDay = new Date();
         startDay.setDate(startDay.getDate() - 31);
         const formattedStart = startDay.toISOString().split("T")[0];
@@ -46,16 +42,15 @@ $(document).ready(function () {
 
     const today = new Date();
     const formattedToday = today.toISOString().split("T")[0];
-    // DataTables 초기화 함수 (코드 중복 제거)
+
     function initializeDataTable(selector, ajaxUrl, columnsConfig) {
         return $(selector).DataTable({
             responsive: true,
-            dom: 'frtip', // 'B'를 추가하여 버튼 기능을 활성화합니다. (버튼은 CSS로 숨겨집니다)
+            dom: 'rtip', // 'f' 제거하여 기본 검색창 숨김
             ajax: {
                 url: ajaxUrl,
                 dataSrc: 'data',
                 data: function (d) {
-                    // DataTables가 데이터를 요청할 때마다 해당 탭의 검색 폼 데이터를 파라미터에 추가
                     const searchData = $(selector).closest('.tab-content').find('.search-form').serializeArray();
                     $.each(searchData, function (i, field) {
                         d[field.name] = field.value;
@@ -63,33 +58,30 @@ $(document).ready(function () {
                 }
             },
             buttons: [
-                // { extend: "copy", className: "btn-sm" },
-                // { extend: "csv", className: "btn-sm" },
                 {
                     extend: "excel",
-                    className: "buttons-excel", // 프로그래밍 방식 호출을 위한 클래스
-                    title: "물류 작업 목록", // 엑셀 파일의 제목
-                    filename: `물류작업목록_${formattedToday}`, // 오늘 날짜를 포함한 파일명
+                    className: "buttons-excel",
+                    title: "물류 작업 목록",
+                    filename: `물류작업목록_${formattedToday}`,
                     exportOptions: {
-                        rows: '.selected' // .selected 클래스를 가진 행만 내보냅니다.
+                        rows: '.selected'
                     }
                 }
             ],
             scrollY: getTableHeight("390"),
-            scrollX: true,   // ✅ 좌우 스크롤 허용
+            scrollX: true,
             columns: columnsConfig,
             createdRow: function (row, data, dataIndex) {
-                // 'eval'은 보안에 취약하므로 안전한 비교로 변경합니다.
                 if (data.importantYn === '1' || data.importantYn === 'true') {
                     $(row).addClass('highlight-row');
                 }
             },
-            searching: false, // 기본 검색 기능 비활성화
-            lengthChange: false, // 표시 건수 변경 기능 비활성화
-            paging: false, // 페이징 기능 비활성화
-            info: false, // '총 n개'와 같은 정보 표시 비활성화
+            searching: true, // 커스텀 검색을 위해 기능 활성화
+            lengthChange: false,
+            paging: false,
+            info: false,
             columnDefs: [
-                { targets: "_all", className: "dt-center" } // 전체 컬럼 가운데 정렬
+                { targets: "_all", className: "dt-center" }
             ],
             language: {
                 emptyTable: "데이터가 없습니다."
@@ -97,22 +89,19 @@ $(document).ready(function () {
         });
     }
 
-    // 공통 컬럼 렌더러
     const renderCheckbox = (data, type) => {
         if (type === 'display') {
-            // 'eval'은 보안에 취약하므로 안전한 비교로 변경합니다.
             const isChecked = data === '1' || data === true || data === 'true';
             return `<input type="checkbox" ${isChecked ? 'checked' : ''} disabled>`;
         }
         return data;
     };
 
-    // 각 그리드에 대한 컬럼 정의
     const baseColumns = [
         { title: '', orderable: false, className: 'dt-body-center', render: (data, type, row) => `<input type="checkbox" class="row-select" value="${row.printId || ''}">` },
         { data: 'orderDate', title: '주문일자', className: 'dt-center' },
         { data: 'weekDay', title: '요일', className: 'dt-center' },
-        { data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
+        // { data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
         { data: 'printTeam', title: '담당팀' },
         { data: 'companyContact', title: '업체명(고객명)' },
     ];
@@ -126,7 +115,7 @@ $(document).ready(function () {
         { data: 'phoneNumber', title: '전화번호' },
         { data: 'deliveryZip', title: '우편번호', className: 'dt-center' },
         { data: 'deliveryAddress', title: '주소' },
-        { data: 'sizeText', title: '박스규격' },
+        { data: 'boxCount', title: '박스수량' },
         { data: 'printMethod', title: '발송마감일', className: 'dt-center' },
         { data: "outReadyYn", title: "출고완료", className: 'dt-center', render: renderCheckbox },
     ];
@@ -137,55 +126,33 @@ $(document).ready(function () {
         {
             data: 'printMemo', title: '인쇄참고사항',
             createdCell: function (td, cellData, rowData, row, col) {
-                // 요청하신 대로 '인쇄참고사항' 내용의 색상을 빨간색으로 변경합니다.
                 $(td).css('color', 'red');
             }
         },
         ...extendedColumns
     ];
 
-    const columnsGrid3 = [
-        { data: 'phoneNumber', title: '전화번호' },
-        { data: 'deliveryZip', title: '우편번호', className: 'dt-center' },
-        { data: 'deliveryAddress', title: '주소' },
-        { data: 'sizeText', title: '박스규격' },
-        { data: 'printMethod', title: '발송마감일', className: 'dt-center' },
-        { data: "outReadyYn", title: "출고완료", className: 'dt-center', render: renderCheckbox },
-    ];
+    const columnsForGrid2 = [...baseColumns, { data: 'itemName', title: '품목명' }, { data: 'bagColor', title: '컬러' }, { data: 'size', title: '사이즈' }, { data: 'quantity', title: '장수' }, { data: "pickingYn", title: "피킹완료", className: 'dt-center', render: renderCheckbox }];
+    const columnsForGrid3 = [...baseColumns, { data: 'phoneNumber', title: '전화번호' }, { data: 'deliveryZip', title: '우편번호', className: 'dt-center' }, { data: 'deliveryAddress', title: '주소' }, { data: 'sizeText', title: '박스규격' }, { data: 'printMethod', title: '발송마감일', className: 'dt-center' }, { data: "outReadyYn", title: "출고완료", className: 'dt-center', render: renderCheckbox }];
 
-    const columnsForGrid2 = [...baseColumns,
-    { data: 'itemName', title: '품목명' },
-    { data: 'bagColor', title: '컬러' },
-    { data: 'size', title: '사이즈' },
-    { data: 'quantity', title: '장수' },
-    { data: "pickingYn", title: "피킹완료", className: 'dt-center', render: renderCheckbox },
-    ];
-
-    const columnsForGrid3 = [...baseColumns,
-    { data: 'phoneNumber', title: '전화번호' },
-    { data: 'deliveryZip', title: '우편번호', className: 'dt-center' },
-    { data: 'deliveryAddress', title: '주소' },
-    { data: 'sizeText', title: '박스규격' },
-    { data: 'printMethod', title: '발송마감일', className: 'dt-center' },
-    { data: "outReadyYn", title: "출고완료", className: 'dt-center', render: renderCheckbox },
-    ];
-
-    // DataTables 인스턴스 생성
     const table = initializeDataTable('#grid1', '/api/print-info/logistic-list1', columnsForGrid1);
-    const table2 = initializeDataTable('#grid2', '/api/print-info/logistic-list2', columnsForGrid2); // TODO: API URL 변경 필요
-    const table3 = initializeDataTable('#grid3', '/api/print-info/logistic-list3', columnsForGrid3); // TODO: API URL 변경 필요
+    const table2 = initializeDataTable('#grid2', '/api/print-info/logistic-list2', columnsForGrid2);
+    const table3 = initializeDataTable('#grid3', '/api/print-info/logistic-list3', columnsForGrid3);
 
-    // 조회 버튼 클릭 이벤트
+    // 커스텀 검색 이벤트 리스너
+    $(document).on('keyup', '.custom-search-input', function () {
+        const tableInstance = $(this).closest('.tab-content').find('table.display').DataTable();
+        tableInstance.search(this.value).draw();
+    });
+
     $(document).on('click', '.btn-search', function (e) {
-        e.preventDefault(); // form submit 방지
-        // 현재 탭의 DataTables 인스턴스를 찾아 ajax.reload()를 호출
+        e.preventDefault();
         const tableInstance = $(this).closest('.tab-content').find('table.display').DataTable();
         tableInstance.ajax.reload();
     });
 
-    // 행 클릭 이벤트 (상세 팝업)
     $(document).on('click', '.main-content table.display tbody tr', function (e) {
-        if ($(e.target).is('input, a')) return; // 체크박스나 링크 클릭 시 제외
+        if ($(e.target).is('input, a')) return;
         const tableInstance = $(this).closest('table.display').DataTable();
         const data = tableInstance.row(this).data();
         if (data) {
@@ -193,17 +160,15 @@ $(document).ready(function () {
         }
     });
 
-    // 체크박스 클릭 시 해당 행 선택/해제 (다중 선택)
     $(document).on('click', '.main-content table.display tbody input.row-select', function (e) {
-        e.stopPropagation(); // 행 클릭 이벤트 전파 방지
+        e.stopPropagation();
         $(this).closest('tr').toggleClass('selected', this.checked);
     });
-    // 선택된 행 가져오기
+
     function getSelectedRows(tableInstance) {
         return tableInstance.rows('.selected').data().toArray();
     }
 
-    // 상세보기 버튼
     $(document).on('click', '.btn-detail', function () {
         const tableInstance = $(this).closest('.tab-content').find('table.display').DataTable();
         const selected = getSelectedRows(tableInstance);
@@ -215,20 +180,16 @@ $(document).ready(function () {
         window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1500,height=900');
     });
 
-    // 엑셀 다운로드 버튼 클릭 이벤트
     $(document).on('click', '.btn-excel', function () {
         const tableInstance = $(this).closest('.tab-content').find('table.display').DataTable();
         const selectedRows = tableInstance.rows('.selected').count();
-
         if (selectedRows === 0) {
             alert('엑셀로 다운로드할 행을 선택해주세요.');
             return;
         }
-        // DataTables의 excel 버튼 기능을 프로그래밍 방식으로 실행
         tableInstance.buttons('.buttons-excel').trigger();
     });
 
-    // 공통 액션 처리 함수
     function handleBatchAction(actionName, urlPath, button) {
         const tableInstance = $(button).closest('.tab-content').find('table.display').DataTable();
         const selected = getSelectedRows(tableInstance);
@@ -277,7 +238,7 @@ $(document).ready(function () {
         Promise.all(requests)
             .then(responses => {
                 alert(`${responses.length}개의 항목이 성공적으로 ${actionName} 처리되었습니다.`);
-                tableInstance.ajax.reload(null, false); // 페이징 유지하고 새로고침
+                tableInstance.ajax.reload(null, false);
             })
             .catch(error => {
                 console.error(`${actionName} 처리 중 오류 발생:`, error);
@@ -292,44 +253,31 @@ $(document).ready(function () {
             });
     }
 
-    // 피킹완료 버튼
     $(document).on('click', '.btn-picking', function () {
         handleBatchAction('피킹완료', 'picking', this);
     });
 
-    // 피킹취소 버튼 (New)
     $(document).on('click', '.btn-cancel-picking', function () {
         handleBatchAction('피킹취소', 'cancel-picking', this);
     });
 
-    // 출고준비완료 버튼
     $(document).on('click', '.btn-out-ready', function () {
         handleBatchAction('출고완료', 'out-ready', this);
     });
 
-    // 출고준비취소 버튼 (New)
     $(document).on('click', '.btn-cancel-out-ready', function () {
         handleBatchAction('출고완료취소', 'cancel-out-ready', this);
     });
 
-    // 탭 클릭 이벤트 핸들러
     $(document).on('click', '.tab-button', function () {
         const tabName = $(this).text();
-        // alert(tabName);
-
         $('.tab-button').removeClass('active');
         $(this).addClass('active');
-
         $('.tab-content').hide();
-
         const activeTabContentId = $(this).data('tab');
         const $activeTabContent = $('#' + activeTabContentId);
         $activeTabContent.css('display', 'flex');
-
-        // 탭이 표시된 후 DataTables의 컬럼 너비를 다시 계산하여 헤더 깨짐을 방지합니다.
         $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
-
-        // 해당 탭의 그리드 데이터를 다시 조회합니다.
         const tableInstance = $activeTabContent.find('table.display').DataTable();
         tableInstance.ajax.reload();
     });

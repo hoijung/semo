@@ -289,17 +289,25 @@
         <div class="content">
             <div class="search-area">
                 <form id="searchForm">
-                    <div class="search-filters">
-                        <div class="filter-group">
-                            <label for="orderDateStart">주문일자 (시작)</label>
-                            <input type="date" id="orderDateStart" name="orderDateStart">
+                    <div class="search-filters" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div style="display: flex; gap: 15px;">
+                            <div class="filter-group">
+                                <label for="orderDateStart">주문일자 (시작)</label>
+                                <input type="date" id="orderDateStart" name="orderDateStart">
+                            </div>
+                            <div class="filter-group">
+                                <label for="orderDateEnd">주문일자 (종료)</label>
+                                <input type="date" id="orderDateEnd" name="orderDateEnd">
+                            </div>
                         </div>
+
                         <div class="filter-group">
-                            <label for="orderDateEnd">주문일자 (종료)</label>
-                            <input type="date" id="orderDateEnd" name="orderDateEnd">
+                            <label for="customSearch">통합 검색</label>
+                            <input type="text" id="customSearch" placeholder="검색..." style="width: 300px;">
                         </div>
-                        <div class="search-actions" style="margin-left: auto; display: flex; gap: 10px;">
-                            <button id="btnExcel" class="btn btn-secondary">엑셀 다운로드</button> <!-- ✅ 이 버튼을 추가하세요 -->
+
+                        <div class="search-actions" style="display: flex; gap: 10px;">
+                            <button id="btnExcel" class="btn btn-secondary">엑셀 다운로드</button>
                             <button id="btnSearch">조회</button>
                         </div>
                     </div>

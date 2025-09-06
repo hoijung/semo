@@ -49,14 +49,12 @@ $(document).ready(function () {
 
     const table = $('#grid').DataTable({
         responsive: true,
-        dom: 'frtip', // 'B'를 제거하여 기본 버튼 컨테이너를 숨김
+        dom: 'rtip', // 'f'를 제거하여 기본 검색창을 숨김
         ajax: {
             url: '/api/prints/printList1?' + $('#searchForm').serialize(),
             dataSrc: 'data'
         },
         buttons: [
-            // { extend: "copy", className: "btn-sm" },
-            // { extend: "csv", className: "btn-sm" },
             {
                 extend: "excel",
                 className: "btn-sm",
@@ -102,17 +100,13 @@ $(document).ready(function () {
 
         ],
 
-        // 아래 'createdRow' 옵션을 추가합니다.
         createdRow: function (row, data, dataIndex) {
-            // 'data' 객체에서 'printMemo' (인쇄참고사항) 필드를 확인합니다.
-            // 필드명이 다를 경우 실제 사용하는 필드명으로 변경해주세요. (예: data.memo)
             if (eval(data.importantYn)) {
-                // printMemo에 내용이 있으면 'highlight-row' 클래스를 추가합니다.
                 $(row).addClass('highlight-row');
             }
         },
 
-        searching: false, // 기본 검색 기능 비활성화
+        searching: true, // 커스텀 검색을 위해 기능은 활성화
 		lengthChange: false, // 표시 건수 변경 기능 비활성화
 		paging: false, // 페이징 기능 비활성화
 		info: false, // '총 n개'와 같은 정보 표시 비활성화
@@ -124,34 +118,28 @@ $(document).ready(function () {
 		}
     });
 
+    // 커스텀 검색창 이벤트 리스너
+    $('#customSearch').on('keyup', function () {
+        table.search(this.value).draw();
+    });
+
     // 조회 버튼 클릭 이벤트
     $('#btnSearch').on('click', function (e) {
-        e.preventDefault();   // form submit 방지
-        e.stopPropagation();  // 이벤트 전파 방지 (선택사항)
-
-        // form 직렬화 (검색조건을 한 번에 쿼리스트링으로)
+        e.preventDefault();
+        e.stopPropagation();
         const query = $('#searchForm').serialize();
-        //debugger
-
-        // 새로운 url로 다시 로드
         table.ajax.url('/api/prints/search?' + query).load();
     });
 
     $('#printTeam').on('change', function (e) {
-        e.preventDefault();   // form submit 방지
-        e.stopPropagation();  // 이벤트 전파 방지 (선택사항)
-
-        // form 직렬화 (검색조건을 한 번에 쿼리스트링으로)
+        e.preventDefault();
+        e.stopPropagation();
         const query = $('#searchForm').serialize();
-        //debugger
-
-        // 새로운 url로 다시 로드
         table.ajax.url('/api/prints/search?' + query).load();
     });
 
     // 엑셀 다운로드 버튼 클릭 이벤트
     $('#btnExcel').on('click', function () {
-        // DataTables의 excel 버튼 기능을 프로그래밍 방식으로 실행
         table.buttons('.buttons-excel').trigger();
     });
 
@@ -167,16 +155,11 @@ $(document).ready(function () {
     $('#grid tbody').on('click', 'input.row-select', function (e) {
         const $table = $('#grid');
         const $row = $(this).closest('tr');
-
-        // 다른 행 체크박스 모두 해제
         $table.find('tbody tr.selected').removeClass('selected');
         $table.find('input.row-select').prop('checked', false);
-
-        // 클릭한 행 선택
         $row.addClass('selected');
         $(this).prop('checked', true);
-
-        e.stopPropagation(); // tr 클릭 이벤트 방지
+        e.stopPropagation();
     });
 
     // 선택된 행 가져오기
@@ -193,7 +176,6 @@ $(document).ready(function () {
             alert("행을 선택해주세요.");
             return;
         }
-        // 여러 행 선택 가능, 첫 번째 행 상세 보기
         const data = selected[0];
         window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1500,height=900');
     });
@@ -234,8 +216,6 @@ $(document).ready(function () {
             return;
         }
 
-
-
         if (!confirm(`선택한 ${selected.length}개의 항목을 ${actionName} 처리하시겠습니까?`)) {
             return;
         }
@@ -247,19 +227,18 @@ $(document).ready(function () {
         Promise.all(requests)
             .then(responses => {
                 alert(`${responses.length}개의 항목이 성공적으로 ${actionName} 처리되었습니다.`);
-                table.ajax.reload(null, false); // 페이징 유지하고 새로고침
+                table.ajax.reload(null, false);
             })
             .catch(error => {
                 console.error(`${actionName} 처리 중 오류 발생:`, error);
                 let errorMessage = "처리 중 오류가 발생했습니다. 콘솔을 확인해주세요.";
-                // Spring Boot에서 보내는 기본 오류 메시지 형식(JSON)을 파싱합니다.
                 if (error && error.responseJSON && error.responseJSON.message) {
                     errorMessage = error.responseJSON.message;
                 } else if (error && error.responseText) {
                     errorMessage = error.responseText;
                 }
                 alert(errorMessage);
-                table.ajax.reload(null, false); // 오류 발생 후에도 최신 상태를 반영하기 위해 새로고침
+                table.ajax.reload(null, false);
             });
     }
 
