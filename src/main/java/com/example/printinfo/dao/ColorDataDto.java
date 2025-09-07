@@ -1,10 +1,13 @@
 package com.example.printinfo.dao;
 
+import org.springframework.web.multipart.MultipartFile;
+
 public class ColorDataDto {
     private int printId;
     private String colorData1;
     private String colorData2;
     private String colorData3;
+    private MultipartFile photo;
 
     // Getters and setters
     public int getPrintId() {
@@ -37,5 +40,13 @@ public class ColorDataDto {
 
     public void setColorData3(String colorData3) {
         this.colorData3 = colorData3;
+    }
+
+    public MultipartFile getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(MultipartFile photo) {
+        this.photo = photo;
     }
 }

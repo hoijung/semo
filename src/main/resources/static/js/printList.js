@@ -98,6 +98,16 @@ $(document).ready(function () {
             { data: 'printMethod', title: '발송최종기한', className: 'dt-center' },
             { data: "pickingYn", title: "피킹완료", className: 'dt-center', render: renderCheckbox },
             { data: "printEndYn", title: "인쇄완료", className: 'dt-center', render: renderCheckbox },
+            {
+                data: 'printPhoto',
+                title: '인쇄팀사진',
+                render: function(data, type, row) {
+                    if (data) {
+                        return `<img src="/File/${data}" alt="인쇄팀사진" height="50">`;
+                    }
+                    return '';
+                }
+            }
         ],
         createdRow: function (row, data, dataIndex) {
             if (eval(data.importantYn)) {
@@ -111,8 +121,16 @@ $(document).ready(function () {
         columnDefs: [
             { targets: "_all", className: "dt-center" }
         ],
-        language: {
+                language: {
             emptyTable: "데이터가 없습니다."
+        },
+        drawCallback: function(settings) {
+            if (this.api().page.info().page === 0 && !this.api().state.loaded()) {
+                const firstRow = $('#grid tbody tr:first');
+                if (firstRow.length) {
+                    firstRow.find('input.row-select').trigger('click');
+                }
+            }
         }
     });
 
@@ -186,18 +204,33 @@ $(document).ready(function () {
         window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=900');
     });
 
-    $('#btnSave').on('click', function () {
+    $('#btnSave').on('click', async function () {
         if (!selectedPrintId) {
             alert("행을 선택해주세요.");
             return;
         }
 
-        const colorData = {
-            printId: selectedPrintId,
-            colorData1: $('#조색데이터1_edit').val(),
-            colorData2: $('#조색데이터2_edit').val(),
-            colorData3: $('#조색데이터3_edit').val()
-        };
+        const formData = new FormData();
+        formData.append('printId', selectedPrintId);
+        formData.append('colorData1', $('#조색데이터1_edit').val());
+        formData.append('colorData2', $('#조색데이터2_edit').val());
+        formData.append('colorData3', $('#조색데이터3_edit').val());
+
+        const imageFile = $('#인쇄팀사진_file')[0].files[0];
+        if (imageFile) {
+            const options = {
+                maxSizeMB: 1,
+                maxWidthOrHeight: 1920,
+                useWebWorker: true
+            };
+            try {
+                const compressedFile = await imageCompression(imageFile, options);
+                formData.append('photo', compressedFile, compressedFile.name);
+            } catch (error) {
+                console.error('Error during image compression:', error);
+                formData.append('photo', imageFile);
+            }
+        }
 
         if (!confirm("조색 데이터를 저장하시겠습니까?")) {
             return;
@@ -206,8 +239,9 @@ $(document).ready(function () {
         $.ajax({
             url: '/api/print-info/update-color-data',
             type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(colorData),
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
                 alert("저장되었습니다.");
                 table.ajax.reload(null, false);

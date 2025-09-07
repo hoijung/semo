@@ -1,12 +1,15 @@
 package com.example.printinfo.dao;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.printinfo.model.PrintInfo;
+import com.example.printinfo.service.FileStorageService;
 
 import ch.qos.logback.core.util.StringUtil;
 
@@ -16,6 +19,9 @@ public class PrintInfoService {
 
     @Autowired
     private PrintRepository repository;
+
+    @Autowired
+    private FileStorageService fileStorageService;
     
     public PrintInfo getPrintInfoById(int printId) {
         return repository.findById(printId);
@@ -70,8 +76,21 @@ public class PrintInfoService {
         repository.cancelUpdatePrintEnd(printId); // Repository 메소드 이름 오타 수정: cancle -> cancel
     }    
 
-	    @Transactional
-    public void updateColorData(ColorDataDto colorData) {
-        repository.updateColorData(colorData.getPrintId(), colorData.getColorData1(), colorData.getColorData2(), colorData.getColorData3());
+	@Transactional
+    public void cancelOutReadyStatus(int printId) {
+        PrintInfo printInfo = repository.findById(printId);
+        if (printInfo == null) {
+            throw new IllegalArgumentException("인쇄 정보를 찾을 수 없습니다. ID: " + printId);
+        }
+        repository.cancelOutReadyEnd(printId, false);
+    }
+
+    @Transactional
+    public void updateColorData(ColorDataDto colorData) throws IOException {
+        String fileName = null;
+        if (colorData.getPhoto() != null && !colorData.getPhoto().isEmpty()) {
+            fileName = fileStorageService.storeFile(colorData.getPhoto());
+        }
+        repository.updateColorData(colorData.getPrintId(), colorData.getColorData1(), colorData.getColorData2(), colorData.getColorData3(), fileName);
     }
 }

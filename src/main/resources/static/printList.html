@@ -291,10 +291,11 @@
                 </form>
             </div>
             <div class="main-content">
-                <div id="edit-area" style="display: ; margin-bottom: 10px;">
+                <div id="edit-area" style="display: none; margin-bottom: 10px;">
                     <input type="text" id="조색데이터1_edit" placeholder="조색데이터1" style="margin-right: 5px;">
                     <input type="text" id="조색데이터2_edit" placeholder="조색데이터2" style="margin-right: 5px;">
-                    <input type="text" id="조색데이터3_edit" placeholder="조색데이터3">
+                    <input type="text" id="조색데이터3_edit" placeholder="조색데이터3" style="margin-right: 5px;">
+                    <input type="file" id="인쇄팀사진_file" accept="image/*">
                 </div>
                 <div class="table-container" style="width:100%; overflow-x:auto;">
                     <table id="grid" class="display nowrap" style="width:100%">
@@ -322,8 +323,10 @@
                                 <th>로고위치</th>
                                 <th>박스수량</th>
                                 <th>발송최종기한</th>
-                                <th>피킹완료</th>
+                                                                <th>피킹완료</th>
                                 <th>인쇄완료</th>
+                                <th>인쇄팀사진</th>
+                            </tr>
                             </tr>
                         </thead>
                     </table>
