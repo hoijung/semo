@@ -70,12 +70,8 @@ public class PrintInfoService {
         repository.cancelUpdatePrintEnd(printId); // Repository 메소드 이름 오타 수정: cancle -> cancel
     }    
 
-	@Transactional
-    public void cancelOutReadyStatus(int printId) {
-        PrintInfo printInfo = repository.findById(printId);
-        if (printInfo == null) {
-            throw new IllegalArgumentException("인쇄 정보를 찾을 수 없습니다. ID: " + printId);
-        }
-        repository.cancelOutReadyEnd(printId, false);
+	    @Transactional
+    public void updateColorData(ColorDataDto colorData) {
+        repository.updateColorData(colorData.getPrintId(), colorData.getColorData1(), colorData.getColorData2(), colorData.getColorData3());
     }
 }

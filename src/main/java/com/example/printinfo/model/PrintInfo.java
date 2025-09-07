@@ -350,6 +350,17 @@ public class PrintInfo {
 	/** 요일 */
 	private String weekDay;
 
+	/** 인쇄팀사진 */
+	private String printPhoto;	
+
+	public String getPrintPhoto() {
+		return printPhoto;
+	}
+
+	public void setPrintPhoto(String printPhoto) {
+		this.printPhoto = printPhoto;
+	}
+
 	public String getWeekDay() {
 		return weekDay;
 	}

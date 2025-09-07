@@ -274,6 +274,15 @@ public class PrintDto {
 	private String 중요여부;
 	private String 업체메모;
 	private String 상태;
+	private String 인쇄사진;
+
+	public String get인쇄사진() {
+		return 인쇄사진;
+	}	
+	public void set인쇄사진(String 인쇄사진) {
+		this.인쇄사진 = 인쇄사진;
+	}	
+
 
 	public String get상태() {
 		return 상태;

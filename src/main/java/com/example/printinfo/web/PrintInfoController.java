@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.printinfo.dao.ColorDataDto;
 import com.example.printinfo.dao.PrintInfoService;
 import com.example.printinfo.model.PrintInfo;
 import com.example.printinfo.service.PrintService;
@@ -144,14 +146,14 @@ public class PrintInfoController {
     // 출고준비 완료 처리
     @PostMapping("/{printId}/out-ready")
     public void updateOutReady(@PathVariable int printId) {
-        service.updateOutReadyEnd(printId); 
+        service.updateOutReadyEnd(printId);
     }
 
     // 출고준비 취소 처리 (New)
     @PostMapping("/{printId}/cancel-out-ready")
     public void cancelOutReady(@PathVariable int printId) {
         
-            service.cancelOutReadyStatus(printId);
+            service.cancelOutReadyEnd(printId);
     }
 
  // 인쇄 완료 처리
@@ -165,4 +167,10 @@ public class PrintInfoController {
     public void cancelPrintEnd(@PathVariable int printId) {
          service.cancelPrintEnd(printId);
     }    
-}   
+
+    @PostMapping("/update-color-data")
+    public ResponseEntity<Void> updateColorData(@RequestBody ColorDataDto colorData) {
+        service.updateColorData(colorData);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+}

@@ -107,6 +107,11 @@ public class PrintRepository {
         return jdbcTemplate.update(sql, id);
     }
 
+    public int updateColorData(int printId, String colorData1, String colorData2, String colorData3) {
+        String sql = "UPDATE 인쇄정보 SET 조색데이터1 = ?, 조색데이터2 = ?, 조색데이터3 = ?, 수정일시 = NOW() WHERE 인쇄ID = ?";
+        return jdbcTemplate.update(sql, colorData1, colorData2, colorData3, printId);
+    }
+
     private PrintDto mapRow(ResultSet rs) throws SQLException {
         PrintDto dto = new PrintDto();
         dto.set인쇄ID(rs.getInt("인쇄ID"));
@@ -309,6 +314,7 @@ public class PrintRepository {
                 + ", 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, 등록일시, 수정일시, 등록팀, 수정팀"
                 + ", 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 배송타입, 박스규격, 박스수량, 기존주문여부, 인쇄방법" // 중복된 배송타입 제거
                 + ", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄완료, 중요여부, 업체메모, 인쇄참고사항 "
+                + ", 조색데이터1, 조색데이터2, 조색데이터3 "
                 + ", to_char(피킹완료일시,'yyyy-mm-dd hh:mm:ss') 피킹완료일시, to_char(인쇄완료일시,'yyyy-mm-dd hh:mm:ss') 인쇄완료일시 , to_char(출고완료일시,'yyyy-mm-dd hh:mm:ss') 출고완료일시 "
                 + ", CASE EXTRACT(DOW FROM  CASE  WHEN 주문일자 LIKE '%-%'  "                
                 + " THEN TO_DATE(주문일자, 'YYYY-MM-DD') ELSE TO_DATE(주문일자, 'YYYYMMDD') END  ) "
@@ -413,6 +419,9 @@ public class PrintRepository {
         dto.setPickingEndAt(rs.getString("피킹완료일시"));
         dto.setPrintEndAt(rs.getString("인쇄완료일시"));
         dto.setOutReadyAt(rs.getString("출고완료일시"));
+        dto.setColorData1(rs.getString("조색데이터1"));
+        dto.setColorData2(rs.getString("조색데이터2"));
+        dto.setColorData3(rs.getString("조색데이터3")); 
         return dto;
     }
 

@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    let selectedPrintId = null;
+
     // Fetch user authority and set up UI
     fetch('/api/auth/user')
         .then(response => {
@@ -49,7 +51,7 @@ $(document).ready(function () {
 
     const table = $('#grid').DataTable({
         responsive: true,
-        dom: 'rtip', // 'f'를 제거하여 기본 검색창을 숨김
+        dom: 'rtip',
         ajax: {
             url: '/api/prints/printList1?' + $('#searchForm').serialize(),
             dataSrc: 'data'
@@ -58,15 +60,15 @@ $(document).ready(function () {
             {
                 extend: "excel",
                 className: "btn-sm",
-                title: "인쇄 작업 목록", // 엑셀 파일의 제목
-                filename: `인쇄작업목록_${formattedToday}` // 오늘 날짜를 포함한 파일명
+                title: "인쇄 작업 목록",
+                filename: `인쇄작업목록_${formattedToday}`
             }
         ],
-        scrollY: getTableHeight("320"), // 동적으로 높이 지정
-        scrollX: true,   // ✅ 좌우 스크롤 허용
+        scrollY: getTableHeight("320"),
+        scrollX: true,
         columns: [
             {
-                title: '',  // 체크박스 컬럼
+                title: '',
                 orderable: false,
                 className: 'dt-body-center',
                 render: function (data, type, row, meta) {
@@ -89,7 +91,6 @@ $(document).ready(function () {
             { data: 'colorData1', title: '조색데이터1' },
             { data: 'colorData2', title: '조색데이터2' },
             { data: 'colorData3', title: '조색데이터3' },
-
             { data: 'logoColor', title: '로고인쇄색상' },
             { data: 'logoSize', title: '로고인쇄크기' },
             { data: 'logoPosition', title: '로고위치' },
@@ -97,33 +98,28 @@ $(document).ready(function () {
             { data: 'printMethod', title: '발송최종기한', className: 'dt-center' },
             { data: "pickingYn", title: "피킹완료", className: 'dt-center', render: renderCheckbox },
             { data: "printEndYn", title: "인쇄완료", className: 'dt-center', render: renderCheckbox },
-
         ],
-
         createdRow: function (row, data, dataIndex) {
             if (eval(data.importantYn)) {
                 $(row).addClass('highlight-row');
             }
         },
-
-        searching: true, // 커스텀 검색을 위해 기능은 활성화
-		lengthChange: false, // 표시 건수 변경 기능 비활성화
-		paging: false, // 페이징 기능 비활성화
-		info: false, // '총 n개'와 같은 정보 표시 비활성화
-		columnDefs: [
-			{ targets: "_all", className: "dt-center" } // 전체 컬럼 가운데 정렬
-		],
-		language: {
-			emptyTable: "데이터가 없습니다."
-		}
+        searching: true,
+        lengthChange: false,
+        paging: false,
+        info: false,
+        columnDefs: [
+            { targets: "_all", className: "dt-center" }
+        ],
+        language: {
+            emptyTable: "데이터가 없습니다."
+        }
     });
 
-    // 커스텀 검색창 이벤트 리스너
     $('#customSearch').on('keyup', function () {
         table.search(this.value).draw();
     });
 
-    // 조회 버튼 클릭 이벤트
     $('#btnSearch').on('click', function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -138,12 +134,10 @@ $(document).ready(function () {
         table.ajax.url('/api/prints/search?' + query).load();
     });
 
-    // 엑셀 다운로드 버튼 클릭 이벤트
     $('#btnExcel').on('click', function () {
         table.buttons('.buttons-excel').trigger();
     });
 
-    // 클릭 이벤트
     $('#grid tbody').on('click', 'tr', function () {
         const data = table.row(this).data();
         if (data) {
@@ -151,25 +145,37 @@ $(document).ready(function () {
         }
     });
 
-    // 체크박스 클릭 시 해당 행 선택/해제
     $('#grid tbody').on('click', 'input.row-select', function (e) {
         const $table = $('#grid');
         const $row = $(this).closest('tr');
-        $table.find('tbody tr.selected').removeClass('selected');
-        $table.find('input.row-select').prop('checked', false);
-        $row.addClass('selected');
-        $(this).prop('checked', true);
+        const data = table.row($row).data();
+
+        if ($(this).prop('checked')) {
+            $table.find('tbody tr.selected').removeClass('selected');
+            $table.find('input.row-select').prop('checked', false);
+            $row.addClass('selected');
+            $(this).prop('checked', true);
+
+            selectedPrintId = data.printId;
+            $('#조색데이터1_edit').val(data.colorData1);
+            $('#조색데이터2_edit').val(data.colorData2);
+            $('#조색데이터3_edit').val(data.colorData3);
+            $('#edit-area').show();
+        } else {
+            $row.removeClass('selected');
+            selectedPrintId = null;
+            $('#edit-area').hide();
+        }
+
         e.stopPropagation();
     });
 
-    // 선택된 행 가져오기
     function getSelectedRows() {
         return $('#grid tbody tr.selected').map(function () {
             return $('#grid').DataTable().row(this).data();
         }).get();
     }
 
-    // 상세보기 버튼
     $('#btnDetail').click(function () {
         const selected = getSelectedRows();
         if (selected.length === 0) {
@@ -180,7 +186,41 @@ $(document).ready(function () {
         window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=900');
     });
 
-    // 공통 액션 처리 함수 (인쇄완료, 취소 등)
+    $('#btnSave').on('click', function () {
+        if (!selectedPrintId) {
+            alert("행을 선택해주세요.");
+            return;
+        }
+
+        const colorData = {
+            printId: selectedPrintId,
+            colorData1: $('#조색데이터1_edit').val(),
+            colorData2: $('#조색데이터2_edit').val(),
+            colorData3: $('#조색데이터3_edit').val()
+        };
+
+        if (!confirm("조색 데이터를 저장하시겠습니까?")) {
+            return;
+        }
+
+        $.ajax({
+            url: '/api/print-info/update-color-data',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(colorData),
+            success: function (response) {
+                alert("저장되었습니다.");
+                table.ajax.reload(null, false);
+                $('#edit-area').hide();
+                selectedPrintId = null;
+            },
+            error: function (error) {
+                console.error("Error saving color data:", error);
+                alert("저장 중 오류가 발생했습니다.");
+            }
+        });
+    });
+
     function handleBatchAction(actionName, urlPath) {
         const selected = getSelectedRows();
         if (selected.length === 0) {
@@ -242,10 +282,8 @@ $(document).ready(function () {
             });
     }
 
-    // 인쇄완료 버튼
     $('#btnPrintEnd').click(() => handleBatchAction('인쇄완료', 'printEnd'));
 
-    // 인쇄완료 취소 버튼
     $('#btnPrintEndCnl').click(() => handleBatchAction('인쇄완료 취소', 'cancel-printEnd'));
 
 });

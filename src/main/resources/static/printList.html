@@ -279,7 +279,8 @@
                             <input type="text" id="customSearch" placeholder="검색..." style="width: 300px;">
                         </div>
 
-                        <div class="search-actions" style="display: flex; gap: 10px;">
+                                                <div class="search-actions" style="display: flex; gap: 10px;">
+                            <button type="button" id="btnSave">저장</button>
                             <button type="button" id="btnDetail">상세보기</button>
                             <button type="button" id="btnPrintEnd">인쇄완료</button>
                             <button type="button" id="btnPrintEndCnl">완료취소</button>
@@ -290,6 +291,11 @@
                 </form>
             </div>
             <div class="main-content">
+                <div id="edit-area" style="display: ; margin-bottom: 10px;">
+                    <input type="text" id="조색데이터1_edit" placeholder="조색데이터1" style="margin-right: 5px;">
+                    <input type="text" id="조색데이터2_edit" placeholder="조색데이터2" style="margin-right: 5px;">
+                    <input type="text" id="조색데이터3_edit" placeholder="조색데이터3">
+                </div>
                 <div class="table-container" style="width:100%; overflow-x:auto;">
                     <table id="grid" class="display nowrap" style="width:100%">
                         <thead>
