@@ -397,13 +397,32 @@ $(document).ready(function() {
 		isFormDirty = false; // 행 선택 시 폼 상태 초기화
 	}
 
-	function createMultipartFormData(data) {
+	async function createMultipartFormData(data) {
 		const formData = new FormData();
 		formData.append('dto', new Blob([JSON.stringify(data)], { type: 'application/json' }));
+
 		const fileInput = $('#인쇄로고예시_file')[0];
 		if (fileInput.files && fileInput.files[0]) {
-			formData.append('logoFile', fileInput.files[0]);
+			const imageFile = fileInput.files[0];
+			console.log('Original File:', imageFile);
+
+			const options = {
+				maxSizeMB: 1,
+				maxWidthOrHeight: 1920,
+				useWebWorker: true
+			};
+
+			try {
+				const compressedFile = await imageCompression(imageFile, options);
+				console.log('Compressed File:', compressedFile);
+				formData.append('logoFile', compressedFile, compressedFile.name);
+			} catch (error) {
+				console.error('Error during image compression:', error);
+				// If compression fails, append the original file
+				formData.append('logoFile', imageFile);
+			}
 		}
+
 		return formData;
 	}
 
@@ -524,12 +543,12 @@ $(document).ready(function() {
 			});
 	}
 
-	function addRecord() {
+	async function addRecord() {
 		const jsonData = getFormData();
 		if (!confirm("등록 하시겠습니까?")) return;
 
 		delete jsonData.인쇄ID;
-		const multipartFormData = createMultipartFormData(jsonData);
+		const multipartFormData = await createMultipartFormData(jsonData);
 
 		fetch('/api/prints', {
 			method: 'POST',
@@ -553,7 +572,7 @@ $(document).ready(function() {
 			});
 	}
 
-	function updateRecord() {
+	async function updateRecord() {
 		const id = $('#인쇄ID').val();
 		if (!id) { alert("수정할 레코드를 선택하세요."); return; }
 
@@ -574,7 +593,7 @@ $(document).ready(function() {
 		if (!confirm("수정 하시겠습니까?")) return;
 
 		const jsonData = getFormData();
-		const multipartFormData = createMultipartFormData(jsonData);
+		const multipartFormData = await createMultipartFormData(jsonData);
 
 		fetch('/api/prints/' + id, {
 			method: 'PUT',
