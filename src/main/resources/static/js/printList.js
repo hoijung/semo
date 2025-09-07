@@ -177,7 +177,7 @@ $(document).ready(function () {
             return;
         }
         const data = selected[0];
-        window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1500,height=900');
+        window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=900');
     });
 
     // 공통 액션 처리 함수 (인쇄완료, 취소 등)

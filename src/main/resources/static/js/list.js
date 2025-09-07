@@ -86,7 +86,6 @@ $(document).ready(function () {
 			{ data: 'taxAmount' },
 			{ data: 'supplyAmount' },
 			{ data: 'orderDate', title: '주문일자', className: 'dt-center' },
-			{ data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
 			{ data: 'pickingEndAt', title: '피킹완료', className: 'dt-center' },
 			{ data: 'printEndAt', title: '인쇄완료', className: 'dt-center' },
 			{ data: 'outReadyAt', title: '출고완료', className: 'dt-center' },

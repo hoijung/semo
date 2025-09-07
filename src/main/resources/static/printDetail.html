@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>자산관리 상세</title>
+    <title>인쇄정보 상세</title>
     <link rel="stylesheet" href="css/style.css"> <!-- 일반적인 css 경로로 수정 -->
     <style>
         body {
@@ -11,6 +11,7 @@
             margin: 20px;
             background-color: #fff; /* 간격 색상을 위한 배경색 지정 */
             color: #333;
+            font-size: 12px;
         }
 
         .header {
@@ -65,18 +66,19 @@
         .detail-table td:nth-child(2n-1) { /* 홀수번째 td (레이블) */
             background-color: #f9f9f9;
             font-weight: bold;
-            width: 15%;
+            width: 20%;
             text-align: center;
+            white-space: nowrap;
         }
 
         .detail-table td:nth-child(2n) { /* 짝수번째 td (값) */
-            width: 35%;
+            width: 30%;
         }
 
         .section-header th {
             background-color: #f2f2f2;
             text-align: center;
-            font-size: 1.1em;
+            font-size: 1em;
             color: #555;
         }
 
@@ -94,12 +96,12 @@
         }
 
         .table-wrapper {
-            flex-basis: 70%;
+            flex-basis: 60%;
             flex-grow: 1;
         }
 
         .attachment-section {
-            flex-basis: 30%;
+            flex-basis: 40%;
             border: 1px solid #ddd;
             padding: 12px 20px;
             box-sizing: border-box;
@@ -118,6 +120,12 @@
             margin: 0;
             overflow-y: auto; /* Add scroll for long attachment lists */
             flex-grow: 1;
+        }
+
+        @media print {
+            .header, .btn-print {
+                display: none;
+            }
         }
     </style>
 </head>
@@ -139,14 +147,14 @@
                         <td>주문일자</td>
                         <td id="orderDate"></td>
                         <td>발송최종기한</td>
-                        <td id="shippingDeadline"></td>
+                        <td id="deliveryDeadline"></td>
                     </tr>
                 </tbody>
             </table>
             <table class="detail-table">
                 <tbody class="section-body">
                     <tr class="section-header">
-                        <th colspan="4">쇼핑백정보</th>
+                        <th colspan="4">쇼핑백속성</th>
                     </tr>
                     <tr>
                         <td>인쇄팀</td>
@@ -162,7 +170,7 @@
                     </tr>
                     <tr>
                         <td>색상</td>
-                        <td id="color"></td>
+                        <td id="bagColor"></td>
                         <td>제작장수</td>
                         <td id="quantity"></td>
                     </tr>
@@ -177,23 +185,25 @@
                         <td>인쇄면</td>
                         <td id="printSide"></td>
                         <td>인쇄도수</td>
-                        <td id="printColors"></td>
+                        <td id="printCount"></td>
                     </tr>
                     <tr>
                         <td>조색데이터</td>
-                        <td id="colorMixingData"></td>
+                        <td colspan="3" id="colorData"></td>
+                        <!-- <td id="colorData2"></td>
+                        <td id="colorData3"></td> -->
+                    </tr>
+                    <tr>
                         <td>인쇄로고색상</td>
                         <td id="logoColor"></td>
+                        <td>인쇄위치</td>
+                        <td id="logoPosition" ></td>
                     </tr>
                     <tr>
-                        <td>인쇄위치</td>
-                        <td id="printPosition"></td>
                         <td>로고크기</td>
                         <td id="logoSize"></td>
-                    </tr>
-                    <tr>
-                        <td>인쇄특이사항</td>
-                        <td id="printNotes" colspan="3"></td>
+                        <td>인쇄참고사항</td>
+                        <td id="printMemo" style="color: red; font-weight: bold;"></td>
                     </tr>
                 </tbody>
             </table>

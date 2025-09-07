@@ -293,7 +293,8 @@ $(document).ready(function() {
 					return eval(data) ? 'Y' : 'N'; // Display 'Y' for true, 'N' for false
 				}
 			},
-			{ data: '업체명담당자', title: '업체명_담당자' }
+			{ data: '상태', title: '상태' },
+			{ data: '업체명담당자', title: '업체명' }
 		],
 		destroy: true, // 동적으로 로드되는 콘텐츠에서 재초기화를 허용하는 중요한 옵션입니다.
 		paging: false,
@@ -386,7 +387,7 @@ $(document).ready(function() {
 			const fileUrl = `/File/${logoFileName}`;
 			// 팝업을 띄우는 링크로 변경
 			const $link = $('<a>', { href: '#', text: logoFileName, 'data-image-url': fileUrl, 'class': 'image-popup-trigger' });
-			const $image = $('<img>', { src: fileUrl, alt: '로고 이미지', style: 'max-width: 100%; max-height: 100px; margin-top: 5px; display: block;' });
+			const $image = $('<img>', { src: fileUrl, alt: '로고 이미지', style: 'max-width: 100%; max-height: 400px; margin-top: 5px; display: block;' });
 			
 			$displayDiv.append($link).append($image);
 		}

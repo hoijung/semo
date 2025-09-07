@@ -177,7 +177,7 @@ $(document).ready(function () {
             return;
         }
         const data = selected[0];
-        window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1500,height=900');
+        window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=900');
     });
 
     $(document).on('click', '.btn-excel', function () {

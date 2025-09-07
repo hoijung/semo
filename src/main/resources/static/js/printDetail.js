@@ -33,7 +33,8 @@ function loadDetail(id) {
                 const element = document.getElementById(elementId);
                 if (element) {
                     // 값이 null이나 undefined일 경우 빈 문자열로 표시합니다.
-                    element.textContent = value ?? '';
+                    // element.textContent = value ?? '';
+                    element.innerHTML = value ?? '';
                 }
             };
 
@@ -41,20 +42,24 @@ function loadDetail(id) {
             // 아래 필드명은 예시이므로, 실제 API 응답에 맞게 수정해야 합니다.
             setText('companyContact', info.companyContact);
             setText('orderDate', info.orderDate);
-            setText('shippingDeadline', info.shippingDeadline);
+            setText('deliveryDeadline', info.deliveryDeadline);
             setText('printTeam', info.printTeam);
             setText('previousOrderCount', info.previousOrderCount);
             setText('itemName', info.itemName);
             setText('size', info.size);
-            setText('color', info.color);
+            setText('bagColor', info.bagColor);
             setText('quantity', info.quantity);
             setText('printSide', info.printSide);
-            setText('printColors', info.printColors);
+            setText('printCount', info.printCount);
             setText('colorMixingData', info.colorMixingData);
             setText('logoColor', info.logoColor);
-            setText('printPosition', info.printPosition);
+            setText('logoPosition', info.logoPosition);
             setText('logoSize', info.logoSize);
-            setText('printNotes', info.printNotes);
+            setText('printMemo', info.printMemo);
+            setText('colorData', info.colorData1 + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + info.colorData2 + "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" + info.colorData3);
+            // setText('colorData1', info.colorData1);
+            // setText('colorData2', info.colorData2);
+            // setText('colorData3', info.colorData3);
 
             // 첨부파일 처리
             const attachmentList = document.getElementById("attachmentList");

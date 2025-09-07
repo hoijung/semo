@@ -273,6 +273,16 @@ public class PrintDto {
 	private String 배송지주소상세;
 	private String 중요여부;
 	private String 업체메모;
+	private String 상태;
+
+	public String get상태() {
+		return 상태;
+	}
+
+	public void set상태(String 상태) {
+		this.상태 = 상태;
+	}
+
 
 	public String get업체메모() {
 		return 업체메모;

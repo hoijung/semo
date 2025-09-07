@@ -35,12 +35,19 @@ public class PrintRepository {
                 + " WHEN 5 THEN '금' "
                 + " WHEN 6 THEN '토' "
                 + " END AS 요일 "
+                + ", case when 출고준비 = 'true' then '출고' "
+                + "    else case when 인쇄완료 = 'true' then '인쇄' "
+            	+ "	  else case when 피킹완료 = 'true' then '피킹' "
+            	+ "				else case when 배분여부='true' then '배분' end "
+            	+ "		   end "
+                + "	end "
+                + "end as 상태 "
                 + " FROM 인쇄정보 ORDER BY 주문일자 DESC";
         return jdbcTemplate.query(sql, (rs, rowNum) -> mapRow(rs));
     }
 
     public PrintDto findById(Integer id) {
-        String sql = "SELECT * FROM 인쇄정보 WHERE 인쇄ID = ?";
+        String sql = "SELECT a.*, '' 상태 FROM 인쇄정보 a WHERE 인쇄ID = ?";
         return jdbcTemplate.queryForObject(sql, new Object[] { id }, (rs, rowNum) -> mapRow(rs));
     }
 
@@ -78,8 +85,8 @@ public class PrintRepository {
                 "대표자명=?, 이메일=?, 공급가액=?, 부가세액=?, 합계금액=?, " +
                 "수정팀=?, 피킹완료=?, 출고준비=?, 파일명=?, 인쇄로고예시=?, 피킹예정일=?, 배송타입=?, 박스규격=?, " +
                 "기존주문여부=?, 인쇄방법=?, 배송지주소상세=? , 로고인쇄색상=?, 조색데이터1 =?, 조색데이터2 = ?, 조색데이터3 =?, " +
-                "인쇄참고사항=?, 중요여부=?,  업체메모=? " +
-                // "수정일시=NOW() " +
+                "인쇄참고사항=?, 중요여부=?,  업체메모=?, " +
+                "수정일시=NOW() " +
                 "WHERE 인쇄ID=?";
         return jdbcTemplate.update(sql,
                 dto.get품목명(), dto.get쇼핑백색상(), dto.get사이즈(), dto.get제작장수(), dto.get인쇄담당팀(),
@@ -151,6 +158,7 @@ public class PrintRepository {
         dto.set인쇄참고사항(rs.getString("인쇄참고사항"));
         dto.set중요여부(rs.getString("중요여부"));
         dto.set업체메모(rs.getString("업체메모"));
+        dto.set상태(rs.getString("상태"));
         return dto;
     }
 
@@ -464,6 +472,9 @@ public class PrintRepository {
         dto.setPickingEndAt(rs.getString("피킹완료일시"));
         dto.setPrintEndAt(rs.getString("인쇄완료일시"));
         dto.setOutReadyAt(rs.getString("출고완료일시"));
+        dto.setColorData1(rs.getString("조색데이터1"));
+        dto.setColorData2(rs.getString("조색데이터2"));
+        dto.setColorData3(rs.getString("조색데이터3")); 
         return dto;
     }
 }
