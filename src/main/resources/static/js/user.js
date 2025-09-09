@@ -31,12 +31,19 @@ $(document).ready(function () {
 				columns: [
 					{data: 'userId'},
 					{data: 'userName'},
-					{data: 'id'}
 				],
 				destroy: true,
 				paging: false,
 				info: false,
-				searching: false
+				searching: false,
+                drawCallback: function(settings) {
+                    if (this.api().rows({page: 'current'}).data().length > 0) {
+                        const firstRow = $('#userTable tbody tr:first');
+                        if (!firstRow.hasClass('selected-row')) {
+                            firstRow.trigger('click');
+                        }
+                    }
+                }
 			});
 
 			// 3. 테이블 행 클릭 이벤트
@@ -71,10 +78,7 @@ $(document).ready(function () {
 					if (el.length) {
 						if (el.attr('type') === 'checkbox') {
 							el.prop('checked', data[key]);
-						} else if (el.attr('type') === 'password') {
-							el.val(''); // 비밀번호는 보안을 위해 다시 채우지 않음
-						}
-						else {
+						} else {
 							el.val(data[key]);
 						}
 					}

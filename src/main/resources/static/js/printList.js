@@ -103,7 +103,7 @@ $(document).ready(function () {
                 title: '인쇄팀사진',
                 render: function(data, type, row) {
                     if (data) {
-                        return `<img src="/File/${data}" alt="인쇄팀사진" height="50">`;
+                        return `<img src="/File/${data}" alt="인쇄팀사진" height="50" class="clickable-image" data-src="/File/${data}">`;
                     }
                     return '';
                 }
@@ -320,4 +320,19 @@ $(document).ready(function () {
 
     $('#btnPrintEndCnl').click(() => handleBatchAction('인쇄완료 취소', 'cancel-printEnd'));
 
+    // Image popup logic
+    $('#grid tbody').on('click', '.clickable-image', function (e) {
+        e.stopPropagation();
+        const src = $(this).data('src');
+        $('#popupImage').attr('src', src);
+        $('#imagePopup').css('display', 'flex');
+    });
+
+    $('.image-popup-close, .image-popup-overlay').on('click', function () {
+        $('#imagePopup').hide();
+    });
+
+    $('.image-popup-content').on('click', function (e) {
+        e.stopPropagation();
+    });
 });
