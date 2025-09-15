@@ -94,6 +94,12 @@
         <groupId>org.apache.tomcat.embed</groupId>
         <artifactId>tomcat-embed-jasper</artifactId>
     </dependency>
+
+    <dependency>
+        <groupId>kr.co.linkhub</groupId>
+        <artifactId>popbill-spring-boot-starter</artifactId>
+        <version>1.16.4</version>
+    </dependency>
     
   </dependencies>
 

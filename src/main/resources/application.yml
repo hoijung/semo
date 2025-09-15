@@ -21,6 +21,11 @@ spring:
   profiles:
     active: dev
 
+popbill:
+  link-id: "YOUR_LINK_ID" # Popbill API LinkID, please replace it.
+  secret-key: "YOUR_SECRET_KEY" # Popbill API SecretKey, please replace it.
+  test: true
+
 ---
 # ===============================================
 # =      개발 환경 프로필 (Development: dev)      =
@@ -36,7 +41,8 @@ spring:
         - file:C:\Users\love\git\semo\src\main\resources\static\ # 개발 시 소스 경로 직접 참조
         - classpath:/static/
   datasource:
-    url: jdbc:postgresql://sem.cxyu028u2mcy.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    url: jdbc:postgresql://semo.ch26amamu9to.ap-northeast-2.rds.amazonaws.com:5432/postgres
+    #url: jdbc:postgresql://sem.cxyu028u2mcy.ap-northeast-2.rds.amazonaws.com:5432/postgres
     username: postgres
     password: 12345678
     driver-class-name: org.postgresql.Driver

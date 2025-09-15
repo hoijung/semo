@@ -25,6 +25,12 @@ public class PrintService {
         return repository.findAllPrints(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
     }
 
+    // New search method for list.html
+    public List<PrintInfo> search(String orderDateStart, String orderDateEnd,
+            String printTeam, String companyContact, String itemName) {
+        return repository.search(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
+    }
+
     public PrintDto findById(Integer id) {
         return repository.findById(id);
     }

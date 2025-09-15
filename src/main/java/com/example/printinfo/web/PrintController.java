@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam; // Added import
 import org.springframework.web.bind.annotation.RequestPart;
@@ -23,6 +25,11 @@ import com.example.printinfo.dao.PrintDto;
 import com.example.printinfo.model.PrintInfo;
 import com.example.printinfo.service.FileStorageService;
 import com.example.printinfo.service.PrintService;
+import com.popbill.api.IssueResponse;
+import com.popbill.api.PopbillException;
+import com.popbill.api.Response;
+import com.popbill.api.TaxinvoiceService;
+import com.popbill.api.taxinvoice.Taxinvoice;
 
 @RestController
 @RequestMapping("/api/prints")
@@ -31,9 +38,18 @@ public class PrintController {
     @Autowired
     private PrintService service;
 
+    @Autowired
+    private TaxinvoiceService taxinvoiceService;
+
     // 파일 저장을 처리할 서비스 (아래에 추가 설명)
     @Autowired(required = false)
     private FileStorageService fileStorageService;
+
+    @Value("${popbill.link-id}")
+    private String linkId;
+
+    @Value("${popbill.secret-key}")
+    private String secretKey;
 
     @GetMapping
     public List<PrintDto> getAll() {
@@ -55,10 +71,10 @@ public class PrintController {
         System.out.println("companyContact: " + companyContact);
         System.out.println("itemName: " + itemName);
 
-        List<PrintInfo> list = service.searchPrints(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
+        List<PrintInfo> list = service.search(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("data", list); // DataTables 기본 expects {data: [...]}
+        response.put("data", list); // DataTables 기본 expects {data: [...]
         return response;
     }
 
@@ -79,7 +95,7 @@ public class PrintController {
 
         List<PrintInfo> list = service.searchPrints(orderDateStart, orderDateEnd, printTeam, companyContact, itemName);
         Map<String, Object> response = new HashMap<>();
-        response.put("data", list); // DataTables 기본 expects {data: [...]}
+        response.put("data", list); // DataTables 기본 expects {data: [...]
         return response;
     }
 
@@ -146,6 +162,21 @@ public class PrintController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/issue-tax-invoice")
+    public ResponseEntity<?> issueTaxInvoice(@RequestBody Taxinvoice taxinvoice) {
+        try {
+            // A unique key for managing the invoice, 24 characters max
+            String memo = "세금계산서 발행";
+            String corpNum = taxinvoice.getInvoicerCorpNum();
+            String mgtKey = taxinvoice.getInvoicerCorpNum() + "-" + taxinvoice.getWriteDate() + "-" + "unique_key"; // Define a unique key
+
+            Object response = taxinvoiceService.registIssue(corpNum, taxinvoice, memo, false);
+            return ResponseEntity.ok(response);
+        } catch (PopbillException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 }
