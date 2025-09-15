@@ -109,7 +109,7 @@
       </div>
       <div class="form-group">
         <label for="비밀번호">비밀번호</label>
-        <input type="text" id="비밀번호" name="비밀번호" placeholder="********" autocomplete="current-password" required  value="1234"/>
+        <input type="text" id="비밀번호" name="비밀번호" placeholder="********" autocomplete="current-password" required  value=""/>
       </div>
       <!--<div class="actions">
         <label><input type="checkbox" id="remember" /> 아이디 저장</label>
@@ -169,6 +169,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const userIdSelect = document.getElementById('userIdSelect');
         const userIdInput = document.getElementById('아이디');
+        const pw = document.getElementById("비밀번호").value;
 
         // Fetch users and populate the dropdown
         fetch('/api/users/list')
@@ -189,14 +190,14 @@
             userIdInput.value = selectedUserId;
 
             if (selectedUserId) {
-                const password = '1234'; // Using a default password
+                // const password = pw; // Using a default password
 
                 fetch('/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         id: selectedUserId,
-                        password: password
+                        password: pw
                     })
                 })
                 .then(res => res.json())

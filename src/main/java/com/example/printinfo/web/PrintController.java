@@ -151,7 +151,7 @@ public class PrintController {
     public ResponseEntity<?> issueTaxInvoice(@RequestBody Taxinvoice taxinvoice) {
         try {
             String mgtKey = taxinvoice.getInvoicerCorpNum() + "-" + taxinvoice.getWriteDate() + "-" + System.currentTimeMillis();
-            IssueResponse response = taxinvoiceService.registIssue(taxinvoice.getInvoicerCorpNum(), taxinvoice);
+            IssueResponse response = taxinvoiceService.registIssue(taxinvoice.getInvoicerCorpNum(), taxinvoice, false);
             return ResponseEntity.ok(response);
         } catch (PopbillException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
