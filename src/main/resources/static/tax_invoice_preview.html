@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>세금계산서 미리보기</title>
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            font-size: 14px;
+            background-color: #f4f7fc;
+            margin: 20px;
+        }
+
+        .tax-invoice-preview {
+            border: 1px solid #000;
+            padding: 20px;
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: white;
+        }
+
+        .tax-invoice-preview h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .info-container {
+            margin-bottom: 20px;
+        }
+
+        .info-container > div {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .tax-invoice-preview table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tax-invoice-preview th,
+        .tax-invoice-preview td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .tax-invoice-preview .info-table th {
+            background-color: #f2f2f2;
+            text-align: center;
+            width: 25%;
+        }
+
+        .tax-invoice-preview .items-table th {
+            background-color: #f2f2f2;
+            text-align: center;
+        }
+
+        .tax-invoice-preview .total-table td {
+            text-align: right;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="taxinvoicePreview" class="tax-invoice-preview">
+        <h2>세금계산서 (공급자용)</h2>
+        <div class="info-container">
+            <div>
+                <table class="info-table">
+                    <tr>
+                        <th colspan="4">공급자</th>
+                    </tr>
+                    <tr>
+                        <th>등록번호</th>
+                        <td colspan="3" id="previewInvoicerCorpNum"></td>
+                    </tr>
+                    <tr>
+                        <th>상호</th>
+                        <td id="previewInvoicerCorpName"></td>
+                        <th>성명</th>
+                        <td id="previewInvoicerCEOName"></td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td colspan="3" id="previewInvoicerAddr"></td>
+                    </tr>
+                </table>
+            </div>
+            <div>
+                <table class="info-table">
+                    <tr>
+                        <th colspan="4">공급받는자</th>
+                    </tr>
+                    <tr>
+                        <th>등록번호</th>
+                        <td colspan="3" id="previewInvoiceeCorpNum"></td>
+                    </tr>
+                    <tr>
+                        <th>상호</th>
+                        <td id="previewInvoiceeCorpName"></td>
+                        <th>성명</th>
+                        <td id="previewInvoiceeCEOName"></td>
+                    </tr>
+                    <tr>
+                        <th>주소</th>
+                        <td colspan="3" id="previewInvoiceeAddr"></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>월일</th>
+                    <th>품목</th>
+                    <th>수량</th>
+                    <th>공급가액</th>
+                    <th>세액</th>
+                    <th>합계금액</th>
+                </tr>
+            </thead>
+            <tbody id="previewItems">
+            </tbody>
+        </table>
+    </div>
+    <div class="button-container">
+        <button type="button" id="btnConfirmIssue">발행 확인</button>
+        <button type="button" id="btnClose">닫기</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="js/tax_invoice_preview.js"></script>
+</body>
+
+</html>

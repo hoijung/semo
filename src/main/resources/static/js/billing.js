@@ -1,63 +1,81 @@
-$(document).ready(function() {
-    var itemsTable = $('#itemsTable').DataTable({
-        "paging": false,
-        "searching": false,
-        "info": false,
-        "ordering": false,
-        "columns": [
-            { "data": "name" },
-            { "data": "quantity" },
-            { "data": "unitPrice" },
-            { "data": "amount" },
-            { "data": null, "defaultContent": "<button class='btn-delete'>삭제</button>" }
-        ]
-    });
+$(document).ready(function () {
+    loadMenu('billing.html');
 
-    $('#btnAddItem').on('click', function() {
-        itemsTable.row.add({
-            "name": "<input type='text' class='itemName'>",
-            "quantity": "<input type='number' class='itemQuantity' value='1'>",
-            "unitPrice": "<input type='number' class='itemUnitPrice' value='0'>",
-            "amount": "0",
-        }).draw(false);
-    });
+    const today = new Date();
+    const formattedToday = today.toISOString().split("T")[0];
+    $('#orderDateEnd').val(formattedToday);
 
-    $('#itemsTable tbody').on('click', '.btn-delete', function() {
-        itemsTable.row($(this).parents('tr')).remove().draw();
-        updateTotalAmount();
-    });
+    const startDay = new Date();
+    startDay.setDate(startDay.getDate() - 31);
+    const formattedStart = startDay.toISOString().split("T")[0];
+    $('#orderDateStart').val(formattedStart);
 
-    $('#itemsTable tbody').on('change', '.itemQuantity, .itemUnitPrice', function() {
-        var row = $(this).closest('tr');
-        var quantity = row.find('.itemQuantity').val();
-        var unitPrice = row.find('.itemUnitPrice').val();
-        var amount = quantity * unitPrice;
-        itemsTable.cell(row, 3).data(amount).draw();
-        updateTotalAmount();
-    });
-
-    function updateTotalAmount() {
-        var total = 0;
-        var supplyCostTotal = 0;
-        itemsTable.rows().every(function() {
-            var rowNode = this.node();
-            var quantity = $(rowNode).find('.itemQuantity').val();
-            var unitPrice = $(rowNode).find('.itemUnitPrice').val();
-            var amount = quantity * unitPrice;
-            if (!isNaN(amount)) {
-                supplyCostTotal += amount;
+    const table = $('#billingGrid').DataTable({
+        responsive: true,
+        dom: 'rtip',
+        ajax: {
+            url: '/api/prints/billing-list?' + $('#searchForm').serialize(),
+            dataSrc: 'data'
+        },
+        scrollY: getTableHeight("320"),
+        scrollX: true,
+        columns: [
+            { data: 'orderDate', title: '주문일자', className: 'dt-center' },
+            { data: 'companyContact', title: '업체명(고객명)' },
+            { data: 'itemName', title: '품목명' },
+            { data: 'quantity', title: '수량' },
+            {
+                data: 'supplyAmount',
+                title: '공급가액',
+            },
+            {
+                data: 'taxAmount',
+                title: '세액',
+            },
+            {
+                data: 'totalAmount',
+                title: '합계금액',
             }
-        });
+        ],
+        searching: true,
+        lengthChange: false,
+        paging: false,
+        info: false,
+        language: {
+            emptyTable: "데이터가 없습니다."
+        }
+    });
 
-        var taxTotal = supplyCostTotal * 0.1; // 10% tax
-        total = supplyCostTotal + taxTotal;
+    $('#customSearch').on('keyup', function () {
+        table.search(this.value).draw();
+    });
 
-        $('#totalAmount').val(total);
-    }
+    $('#btnSearch').on('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const query = $('#searchForm').serialize();
+        table.ajax.url('/api/prints/billing-list?' + query).load();
+    });
 
-    $('#btnSave').on('click', function() {
-        var taxinvoice = {
-            // 공급자 정보 (실제로는 서버에서 설정하거나, 로그인 정보 등을 활용해야 합니다)
+    $('#billingGrid tbody').on('click', 'tr', function () {
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+        } else {
+            table.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    });
+
+    $('#btnIssueTaxInvoice').on('click', function () {
+        const selectedRows = table.rows('.selected').data();
+        if (selectedRows.length !== 1) {
+            alert('발행할 항목을 하나만 선택해주세요.');
+            return;
+        }
+
+        const data = selectedRows[0];
+
+        const taxinvoiceToIssue = {
             invoicerCorpNum: "1234567890",
             invoicerCorpName: "공급자 상호",
             invoicerCEOName: "공급자 대표자명",
@@ -65,72 +83,55 @@ $(document).ready(function() {
             invoicerContactName: "공급자 담당자명",
             invoicerEmail: "invoicer@example.com",
 
-            // 공급받는자 정보 (폼에서 가져옵니다)
-            invoiceeCorpNum: "0987654321", // 예시 사업자번호
+            invoiceeCorpNum: "0987654321",
             invoiceeType: "사업자",
-            invoiceeCorpName: $('#customerName').val(),
+            invoiceeCorpName: data.companyContact,
             invoiceeCEOName: "구매자 대표자명",
             invoiceeAddr: "구매자 주소",
             invoiceeEmail: "invoicee@example.com",
 
-            // 세금계산서 정보
-            writeDate: new Date().toISOString().slice(0, 10).replace(/-/g, ""), // 오늘 날짜 (YYYYMMDD)
+            writeDate: new Date().toISOString().slice(0, 10).replace(/-/g, ""),
             issueType: "정발행",
             purposeType: "영수",
             taxType: "과세",
 
-            // 금액 정보
-            supplyCostTotal: "0",
-            taxTotal: "0",
-            totalAmount: "0",
+            supplyCostTotal: data.supplyAmount.toString(),
+            taxTotal: data.taxAmount.toString(),
+            totalAmount: data.totalAmount.toString(),
 
-            // 품목 정보
-            detailList: []
+            detailList: [{
+                serialNum: 1,
+                purchaseDT: new Date().toISOString().slice(0, 10).replace(/-/g, ""),
+                itemName: data.itemName,
+                qty: data.quantity.toString(),
+                unitCost: (data.supplyAmount / data.quantity).toString(),
+                supplyCost: data.supplyAmount.toString(),
+                tax: data.taxAmount.toString()
+            }]
         };
 
-        var supplyCostTotal = 0;
-        itemsTable.rows().every(function(index) {
-            var rowNode = this.node();
-            var itemName = $(rowNode).find('.itemName').val();
-            var quantity = $(rowNode).find('.itemQuantity').val();
-            var unitPrice = $(rowNode).find('.itemUnitPrice').val();
-            var amount = quantity * unitPrice;
-
-            supplyCostTotal += amount;
-
-            taxinvoice.detailList.push({
-                serialNum: index + 1,
-                purchaseDT: taxinvoice.writeDate,
-                itemName: itemName,
-                qty: quantity,
-                unitCost: unitPrice,
-                supplyCost: amount.toString(),
-                tax: (amount * 0.1).toString()
-            });
-        });
-
-        var taxTotal = supplyCostTotal * 0.1;
-        taxinvoice.supplyCostTotal = supplyCostTotal.toString();
-        taxinvoice.taxTotal = taxTotal.toString();
-        taxinvoice.totalAmount = (supplyCostTotal + taxTotal).toString();
-
-        $.ajax({
-            url: '/api/prints/issue-tax-invoice',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(taxinvoice),
-            success: function(response) {
-                alert('세금계산서가 발행되었습니다.');
-                console.log(response);
-            },
-            error: function(xhr, status, error) {
-                alert('세금계산서 발행에 실패했습니다.');
-                console.error(xhr.responseText);
-            }
-        });
+        const previewUrl = `tax_invoice_preview.html?data=${encodeURIComponent(JSON.stringify(taxinvoiceToIssue))}`;
+        window.open(previewUrl, 'taxInvoicePreview', 'width=800,height=600');
     });
 
-    $('#btnPrint').on('click', function() {
-        window.print();
+    window.addEventListener('message', function (event) {
+        if (event.data.type === 'issue-tax-invoice') {
+            const taxinvoice = event.data.data;
+            $.ajax({
+                url: '/api/prints/issue-tax-invoice',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(taxinvoice),
+                success: function (response) {
+                    alert('세금계산서가 발행되었습니다.');
+                    console.log(response);
+                    table.ajax.reload(null, false);
+                },
+                error: function (xhr, status, error) {
+                    alert('세금계산서 발행에 실패했습니다.');
+                    console.error(xhr.responseText);
+                }
+            });
+        }
     });
 });

@@ -3,64 +3,236 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>계산서 발행</title>
+    <title>세금계산서 발행</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.2/css/buttons.dataTables.min.css">
+    <style>
+        body {
+            font-family: 'Malgun Gothic', sans-serif;
+            background-color: #f4f7fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .menu-container {
+            flex-shrink: 0;
+        }
+
+        .content {
+            flex-grow: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .search-area {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .search-area h2 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .search-filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 13px;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .search-actions button {
+            padding: 8px 16px;
+            font-size: 14px;
+            border: 1px solid #888;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .search-actions button:hover {
+            background-color: #e0e0e0;
+        }
+
+        .search-actions button#btnSearch {
+            background-color: #3498db;
+            color: white;
+            border: none;
+        }
+
+        .search-actions button#btnSearch:hover {
+            background-color: #2980b9;
+        }
+
+        .main-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table-container {
+            flex-grow: 1;
+        }
+
+        table.dataTable {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table.dataTable th,
+        table.dataTable td {
+            text-align: center;
+            padding: 12px;
+            font-size: 0.8em;
+        }
+
+        table.dataTable thead th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+
+        /* Menu Bar Styles */
+        .menu-bar {
+            display: flex;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            justify-content: flex-start;
+        }
+
+        .menu-item {
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            border-right: 1px solid #eee;
+            color: #333;
+            background-color: white;
+        }
+
+        .menu-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .menu-item.active {
+            font-weight: bold;
+            color: #000;
+            border-bottom: 3px solid #0056b3;
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <h1>계산서 발행</h1>
+            <h1 id="greeting"></h1>
             <div class="menu-container">
             </div>
         </div>
         <div class="content">
-            <div class="invoice-form">
-                <h2>계산서 정보</h2>
-                <form id="invoiceForm">
-                    <div class="form-group">
-                        <label for="customerName">업체명</label>
-                        <input type="text" id="customerName" name="customerName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="invoiceDate">발행일</label>
-                        <input type="date" id="invoiceDate" name="invoiceDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="totalAmount">총액</label>
-                        <input type="number" id="totalAmount" name="totalAmount" readonly>
-                    </div>
-                    <div class="form-actions">
-                        <button type="button" id="btnSave">저장</button>
-                        <button type="button" id="btnPrint">인쇄</button>
+            <div class="search-area">
+                <form id="searchForm">
+                    <div class="search-filters" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                        <div style="display: flex; gap: 15px;">
+                            <div class="filter-group">
+                                <label for="orderDateStart">주문일자 (시작)</label>
+                                <input type="date" id="orderDateStart" name="orderDateStart">
+                            </div>
+                            <div class="filter-group">
+                                <label for="orderDateEnd">주문일자 (종료)</label>
+                                <input type="date" id="orderDateEnd" name="orderDateEnd">
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="customSearch">통합 검색</label>
+                            <input type="text" id="customSearch" placeholder="검색..." style="width: 300px;">
+                        </div>
+
+                        <div class="search-actions" style="display: flex; gap: 10px;">
+                            <button type="button" id="btnIssueTaxInvoice">선택건 발행</button>
+                            <button type="button" id="btnSearch">조회</button>
+                        </div>
                     </div>
                 </form>
             </div>
-            <div class="invoice-items">
-                <h2>품목</h2>
-                <table id="itemsTable" class="display" style="width:100%">
-                    <thead>
-                        <tr>
-                            <th>품목명</th>
-                            <th>수량</th>
-                            <th>단가</th>
-                            <th>금액</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-                <button type="button" id="btnAddItem">품목 추가</button>
+            <div class="main-content">
+                <div class="table-container" style="width:100%; overflow-x:auto;">
+                    <table id="billingGrid" class="display nowrap" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>주문일자</th>
+                                <th>업체명(고객명)</th>
+                                <th>품목명</th>
+                                <th>수량</th>
+                                <th>공급가액</th>
+                                <th>세액</th>
+                                <th>합계금액</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
     <script src="js/common.js"></script>
     <script src="js/billing.js"></script>
+
 </body>
 
 </html>
