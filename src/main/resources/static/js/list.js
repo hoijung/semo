@@ -43,7 +43,10 @@ $(document).ready(function () {
 				extend: "excel",
 				className: "btn-sm",
 				title: "인쇄 작업 목록",
-				filename: `인쇄작업목록_${formattedToday}`
+				filename: `인쇄작업목록_${formattedToday}`,
+                exportOptions: {
+                    rows: '.selected'
+                }
 			}
 		],
 		scrollY: getTableHeight("350"),
