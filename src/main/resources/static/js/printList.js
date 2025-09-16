@@ -94,7 +94,7 @@ $(document).ready(function () {
             { data: 'logoColor', title: '로고인쇄색상' },
             { data: 'logoSize', title: '로고인쇄크기' },
             { data: 'logoPosition', title: '로고위치' },
-            { data: 'quantity', title: '박스수량' },
+            { data: 'boxCount', title: '박스수량' },
             { data: 'printMethod', title: '발송최종기한', className: 'dt-center' },
             { data: "pickingYn", title: "피킹완료", className: 'dt-center', render: renderCheckbox },
             { data: "printEndYn", title: "인쇄완료", className: 'dt-center', render: renderCheckbox },

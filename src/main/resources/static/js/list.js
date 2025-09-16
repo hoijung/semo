@@ -49,7 +49,12 @@ $(document).ready(function () {
 		scrollY: getTableHeight("350"),
 		scrollX: true,
 		columns: [
-			{ data: null, render: () => `<input type="checkbox" class="row-select">` },
+			{ 
+                data: null,
+                render: () => `<input type="checkbox" class="row-select">`,
+                orderable: false,
+                className: 'dt-body-center'
+            },
 			{ data: 'printId' },
 			{ data: 'companyContact' },
 			{ data: 'customerId' },
@@ -126,37 +131,28 @@ $(document).ready(function () {
 		table.buttons('.buttons-excel').trigger();
 	});
 
-	// 클릭 이벤트
-	$('#grid tbody').on('click', 'tr', function () {
-		const data = table.row(this).data();
-		if (data) {
-			// window.open(`assetDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=700');
-		}
-	});
-
 	// 체크박스 클릭 시 해당 행 선택/해제
 	$('#grid tbody').on('click', 'input.row-select', function (e) {
-		const $table = $('#grid');
-		const $row = $(this).closest('tr');
-		$table.find('tbody tr.selected').removeClass('selected');
-		$table.find('input.row-select').prop('checked', false);
-		$row.addClass('selected');
-		$(this).prop('checked', true);
+		$(this).closest('tr').toggleClass('selected');
 		e.stopPropagation();
 	});
 
+    $('#selectAll').on('click', function(){
+        const rows = table.rows({ 'search': 'applied' }).nodes();
+        $('input[type="checkbox"]', rows).prop('checked', this.checked);
+        $(rows).toggleClass('selected', this.checked);
+    });
+
 	// 선택된 행 가져오기
 	function getSelectedRows() {
-		return $('#grid tbody tr.selected').map(function () {
-			return $('#grid').DataTable().row(this).data();
-		}).get();
+		return table.rows('.selected').data();
 	}
 
 	// 상세보기 버튼
 	$('#btnDetail').click(function () {
 		const selected = getSelectedRows();
-		if (selected.length === 0) {
-			alert("행을 선택해주세요.");
+		if (selected.length !== 1) {
+			alert("하나의 행만 선택해주세요.");
 			return;
 		}
 		const data = selected[0];
@@ -170,7 +166,7 @@ $(document).ready(function () {
 			alert("행을 선택해주세요.");
 			return;
 		}
-		selected.forEach(row => {
+		selected.each(function (row) {
 			$.post(`/api/print-info/${row.printId}/picking`, { status: 'Y' });
 		});
 		alert("선택한 행 피킹완료 처리되었습니다.");
@@ -184,7 +180,7 @@ $(document).ready(function () {
 			alert("행을 선택해주세요.");
 			return;
 		}
-		selected.forEach(row => {
+		selected.each(function (row) {
 			$.post(`/api/print-info/${row.printId}/out-ready`, { status: 'Y' });
 		});
 		alert("선택한 행 출고완료 완료 처리되었습니다.");

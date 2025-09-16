@@ -133,9 +133,9 @@
 
     document.getElementById("loginForm").addEventListener("submit", function(e) {
       e.preventDefault();
-      const id = document.getElementById("아이디").value.trim();
+      const id = document.getElementById("userIdSelect").value.trim();
       const pw = document.getElementById("비밀번호").value;
-
+      // debugger
       if (!id || !pw) {
         alert("아이디와 비밀번호를 입력하세요.");
         return;
@@ -186,6 +186,7 @@
 
         // Update hidden input and auto-login when dropdown selection changes
         userIdSelect.addEventListener('change', function() {
+            return;
             const selectedUserId = this.value;
             userIdInput.value = selectedUserId;
 

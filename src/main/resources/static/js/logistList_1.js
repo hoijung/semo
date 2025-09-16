@@ -116,7 +116,7 @@ $(document).ready(function () {
         { data: 'deliveryZip', title: '우편번호', className: 'dt-center' },
         { data: 'deliveryAddress', title: '주소' },
         { data: 'boxCount', title: '박스수량' },
-        { data: 'printMethod', title: '발송마감일', className: 'dt-center' },
+        { data: 'deliveryDeadline', title: '발송마감일', className: 'dt-center' },
         { data: "outReadyYn", title: "출고완료", className: 'dt-center', render: renderCheckbox },
     ];
 
@@ -133,7 +133,7 @@ $(document).ready(function () {
     ];
 
     const columnsForGrid2 = [...baseColumns, { data: 'itemName', title: '품목명' }, { data: 'bagColor', title: '컬러' }, { data: 'size', title: '사이즈' }, { data: 'quantity', title: '장수' }, { data: "pickingYn", title: "피킹완료", className: 'dt-center', render: renderCheckbox }];
-    const columnsForGrid3 = [...baseColumns, { data: 'phoneNumber', title: '전화번호' }, { data: 'deliveryZip', title: '우편번호', className: 'dt-center' }, { data: 'deliveryAddress', title: '주소' }, { data: 'sizeText', title: '박스규격' }, { data: 'printMethod', title: '발송마감일', className: 'dt-center' }, { data: "outReadyYn", title: "출고완료", className: 'dt-center', render: renderCheckbox }];
+    const columnsForGrid3 = [...baseColumns, { data: 'phoneNumber', title: '전화번호' }, { data: 'deliveryZip', title: '우편번호', className: 'dt-center' }, { data: 'deliveryAddress', title: '주소' }, { data: 'sizeText', title: '박스규격' }, { data: 'deliveryDeadline', title: '발송마감일', className: 'dt-center' }, { data: "outReadyYn", title: "출고완료", className: 'dt-center', render: renderCheckbox }];
 
     const table = initializeDataTable('#grid1', '/api/print-info/logistic-list1', columnsForGrid1);
     const table2 = initializeDataTable('#grid2', '/api/print-info/logistic-list2', columnsForGrid2);

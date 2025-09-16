@@ -281,6 +281,7 @@ table.dataTable thead th {
 					<div id="detail-header-buttons">
 						<button type="button" id="btnAdd" class="enabled">등록</button>
 						<button type="button" id="btnUpdate">수정</button>
+                        <button type="button" id="btnSaveAuth">권한 저장</button>
 						<button type="button" id="btnDelete">삭제</button>
 					</div>
 				</h2>
@@ -298,6 +299,24 @@ table.dataTable thead th {
 						<div class="field-item checkbox-item"><span>사용여부:</span><input type="checkbox" id="isUsed"></div>
 					</div>
 				</div>
+                <div class="field-group">
+                    <label>화면 권한</label>
+                    <div id="auth-grid-buttons" style="margin-bottom: 10px;">
+                        <button type="button" id="btnAddAuthRow">행 추가</button>
+                        <button type="button" id="btnDeleteAuthRow">행 삭제</button>
+                    </div>
+                    <table id="authGrid" class="display" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>화면 ID</th>
+                                <th>등록</th>
+                                <th>수정</th>
+                                <th>삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
 			</div>
 			</div>
 		</div>
