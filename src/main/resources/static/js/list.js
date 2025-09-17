@@ -97,7 +97,7 @@ $(document).ready(function () {
 			{ data: 'pickingEndAt', title: '피킹완료', className: 'dt-center' },
 			{ data: 'printEndAt', title: '인쇄완료', className: 'dt-center' },
 			{ data: 'outReadyAt', title: '출고완료', className: 'dt-center' },
-			{ data: 'pickingDate', title: '발송마감일', className: 'dt-center' },
+			{ data: 'deliveryDeadline', title: '발송마감일', className: 'dt-center' },
 		],
 		createdRow: function (row, data, dataIndex) {
 			if (eval(data.importantYn)) {

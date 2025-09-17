@@ -85,7 +85,6 @@ $(document).ready(function () {
             { data: 'bagColor', title: '컬러' },
             { data: 'size', title: '사이즈' },
             { data: 'quantity', title: '장수' },
-            { data: 'quantity', title: '기존주문횟수' },
             { data: 'printSide', title: '인쇄면' },
             { data: 'printCount', title: '인쇄도수', className: 'dt-center' },
             { data: 'colorData1', title: '조색데이터1' },
@@ -95,7 +94,7 @@ $(document).ready(function () {
             { data: 'logoSize', title: '로고인쇄크기' },
             { data: 'logoPosition', title: '로고위치' },
             { data: 'boxCount', title: '박스수량' },
-            { data: 'printMethod', title: '발송최종기한', className: 'dt-center' },
+            { data: 'deliveryDeadline', title: '발송최종기한', className: 'dt-center' },
             { data: "pickingYn", title: "피킹완료", className: 'dt-center', render: renderCheckbox },
             { data: "printEndYn", title: "인쇄완료", className: 'dt-center', render: renderCheckbox },
             {
