@@ -36,11 +36,11 @@ public class PrintRepository {
                 + " WHEN 6 THEN '토' "
                 + " END AS 요일 "
                 + ", case when 출고준비 = 'true' then '출고' "
-                + "    else case when 인쇄완료 = 'true' then '인쇄' "
-            	+ "	  else case when 피킹완료 = 'true' then '피킹' "
-            	+ "				else case when 배분여부='true' then '배분' end "
-            	+ "		   end "
-                + "	end "
+                + "       else case when 인쇄완료 = 'true' then '인쇄' "
+            	+ "	                else case when 피킹완료 = 'true' then '피킹' "
+            	+ "				              else case when 배분여부='true' then '배분' else '임시'  end "
+            	+ "		        end "
+                + "	 end "
                 + "end as 상태 "
                 + " FROM 인쇄정보 ORDER BY 주문일자 DESC";
         return jdbcTemplate.query(sql, (rs, rowNum) -> mapRow(rs));

@@ -287,12 +287,12 @@ $(document).ready(function() {
 					return '';
 				}
 			},
-			{
-				data: '배분여부', title: '배분', // Assuming this field exists in the API response
-				render: function(data, type, row) {
-					return eval(data) ? 'Y' : 'N'; // Display 'Y' for true, 'N' for false
-				}
-			},
+			// {
+			// 	data: '배분여부', title: '배분', // Assuming this field exists in the API response
+			// 	render: function(data, type, row) {
+			// 		return eval(data) ? 'Y' : 'N'; // Display 'Y' for true, 'N' for false
+			// 	}
+			// },
 			{ data: '상태', title: '상태' },
 			{ data: '업체명담당자', title: '업체명' }
 		],
