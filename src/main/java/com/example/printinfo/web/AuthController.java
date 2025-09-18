@@ -58,7 +58,7 @@ public class AuthController {
 			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
 
-		List<UserScreenAuthDto> authList = scrnAuthservice.findById(loginUser.getUserId());
+		List<UserScreenAuthDto> authList = scrnAuthservice.findById(loginUser.getId());
 
 		return ResponseEntity.ok(Map.of("user", loginUser, "authList", authList));
 	}
