@@ -20,7 +20,7 @@ public class UserScreenAuthRepository {
 
     private final RowMapper<UserScreenAuthDto> rowMapper = (rs, rowNum) -> {
         UserScreenAuthDto auth = new UserScreenAuthDto();
-        auth.setUserId(rs.getString("아이디"));
+        auth.setId(rs.getString("아이디"));
         auth.setScreenId(rs.getString("화면id"));
         auth.setCanCreate(rs.getString("등록"));
         auth.setCanUpdate(rs.getString("수정"));
@@ -28,9 +28,9 @@ public class UserScreenAuthRepository {
         return auth;
     };
 
-    public List<UserScreenAuthDto> findByUserId(String userId) {
+    public List<UserScreenAuthDto> findByUserId(String id) {
         String sql = "SELECT * FROM 사용자화면권한 WHERE 아이디 = ?";
-        return jdbcTemplate.query(sql, rowMapper, userId);
+        return jdbcTemplate.query(sql, rowMapper, id);
     }
 
     public void saveAll(List<UserScreenAuthDto> auths) {
@@ -38,7 +38,7 @@ public class UserScreenAuthRepository {
             return;
         }
 
-        String userId = auths.get(0).getUserId();
+        String userId = auths.get(0).getId();
         jdbcTemplate.update("DELETE FROM 사용자화면권한 WHERE 아이디 = ?", userId);
 
         jdbcTemplate.batchUpdate(
@@ -47,7 +47,7 @@ public class UserScreenAuthRepository {
                 @Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException {
                     UserScreenAuthDto auth = auths.get(i);
-                    ps.setString(1, auth.getUserId());
+                    ps.setString(1, auth.getId());
                     ps.setString(2, auth.getScreenId());
                 }
 
@@ -62,10 +62,10 @@ public class UserScreenAuthRepository {
     public void insert(UserScreenAuthDto auth) {
         jdbcTemplate.update(
             "INSERT INTO 사용자화면권한 (아이디, 화면id, 등록, 수정, 삭제) VALUES (?, ?, 'Y', 'Y', 'Y')",
-            auth.getUserId(), auth.getScreenId());
+            auth.getId(), auth.getScreenId());
     }
 
     public void delete(UserScreenAuthDto auth) {
-        jdbcTemplate.update("DELETE FROM 사용자화면권한 WHERE 아이디 = ? AND 화면id = ?", auth.getUserId(), auth.getScreenId());
+        jdbcTemplate.update("DELETE FROM 사용자화면권한 WHERE 아이디 = ? AND 화면id = ?", auth.getId(), auth.getScreenId());
     }
 }

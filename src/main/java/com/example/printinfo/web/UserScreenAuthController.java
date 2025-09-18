@@ -21,9 +21,9 @@ public class UserScreenAuthController {
     @Autowired
     private UserScreenAuthService service;
 
-    @GetMapping("/{userId}")
-    public List<UserScreenAuthDto> getByUserId(@PathVariable String userId) {
-        return service.findByUserId(userId);
+    @GetMapping("/{id}")
+    public List<UserScreenAuthDto> getByUserId(@PathVariable String id) {
+        return service.findById(id);
     }
 
         @PostMapping

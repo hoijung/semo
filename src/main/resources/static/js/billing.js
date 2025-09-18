@@ -1,4 +1,30 @@
 $(document).ready(function () {
+    $('#btnIssueTaxInvoice').hide();
+
+    // Fetch user authority and set up UI
+    fetch('/api/auth/user')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Not authenticated');
+            }
+            return response.json();
+        })
+        .then(user => {
+            //  debugger
+            for (let key in user.authList) {
+                // console.log(user.authList[key]);
+                if ('세금계산서 발행' == user.authList[key].screenId) {
+                    $('#btnIssueTaxInvoice').show();
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+            window.location.href = '/login.html';
+        });
+
+
+
     loadMenu('billing.html');
 
     const today = new Date();

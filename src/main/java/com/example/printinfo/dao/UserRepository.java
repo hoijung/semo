@@ -29,13 +29,13 @@ public class UserRepository {
 	private final RowMapper<UserDto> userRowMapper = (rs, rowNum) -> {
 		UserDto info = new UserDto();
 		// DB의 int 타입을 DTO의 String 타입으로 변환합니다.
-		info.setUserSeq(String.valueOf(rs.getInt("사용자ID")));
+		info.setUserId(String.valueOf(rs.getInt("사용자ID")));
 		info.setUserName(rs.getString("사용자명"));
-		info.setUserId(rs.getString("아이디"));
+		info.setId(rs.getString("아이디"));
 		// 중요: 비밀번호를 평문으로 다루는 것은 보안상 매우 위험합니다. 실제 운영 환경에서는 반드시 해싱하여 저장하고 비교해야 합니다.
 		info.setPassword(rs.getString("비밀번호"));
 		// DB의 bit 타입을 DTO의 String 타입으로 변환합니다.
-		info.setUseYn(String.valueOf(rs.getBoolean("사용여부")));
+		info.setUseYn(rs.getString("사용여부"));
 		info.setAuthority(rs.getString("권한"));
 		return info;
 	};
@@ -72,14 +72,14 @@ public class UserRepository {
 		jdbcTemplate.update(connection -> {
 			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, user.getUserName());
-			ps.setString(2, user.getUserId());
+			ps.setString(2, user.getId());
 			ps.setString(3, user.getPassword()); // 보안 경고: 비밀번호는 해싱해야 합니다.
-			ps.setBoolean(4, "1".equals(user.getUseYn()) || "true".equalsIgnoreCase(user.getUseYn()));
+			ps.setString(4, user.getUseYn());
 			return ps;
 		}, keyHolder);
 
 		if (keyHolder.getKey() != null) {
-			user.setUserSeq(String.valueOf(keyHolder.getKey().intValue()));
+			user.setUserId(String.valueOf(keyHolder.getKey().intValue()));
 		}
 		return user;
 	}
@@ -91,10 +91,10 @@ public class UserRepository {
 	public int update(UserDto user) {
 		if (user.getPassword() != null && !user.getPassword().isEmpty()) {
 			String sql = "UPDATE 사용자 SET 사용자명 = ?, 아이디 = ?, 비밀번호 = ?, 사용여부 = ? WHERE 사용자ID = ?";
-			return jdbcTemplate.update(sql, user.getUserName(), user.getUserId(), user.getPassword(), "1".equals(user.getUseYn()) || "true".equalsIgnoreCase(user.getUseYn()), Integer.parseInt(user.getUserSeq()));
+			return jdbcTemplate.update(sql, user.getUserName(), user.getId(), user.getPassword(), user.getUseYn(), Integer.parseInt(user.getUserId()));
 		} else {
 			String sql = "UPDATE 사용자 SET 사용자명 = ?, 아이디 = ?, 사용여부 = ? WHERE 사용자ID = ?";
-			return jdbcTemplate.update(sql, user.getUserName(), user.getUserId(), "1".equals(user.getUseYn()) || "true".equalsIgnoreCase(user.getUseYn()), Integer.parseInt(user.getUserSeq()));
+			return jdbcTemplate.update(sql, user.getUserName(), user.getId(), user.getUseYn(), Integer.parseInt(user.getUserId()));
 		}
 	}
 
@@ -114,10 +114,10 @@ public class UserRepository {
 			return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> {
 				UserDto info = new UserDto();
 				info.setUserName(rs.getString("사용자명"));
-				info.setUserId(rs.getString("아이디"));
+				info.setId(rs.getString("아이디"));
 				info.setPassword(rs.getString("비밀번호"));
 				info.setUseYn(rs.getString("사용여부"));
-				info.setUserSeq(rs.getString("사용자ID"));
+				info.setUserId(rs.getString("사용자ID"));
 				info.setAuthority(rs.getString("권한"));
 				return info;
 			}, userId, password);

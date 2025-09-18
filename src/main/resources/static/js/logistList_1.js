@@ -1,4 +1,9 @@
 $(document).ready(function () {
+    $('#btnPicking2').hide();
+    $('#btnCancelPicking2').hide();
+    $('#btnOutReady3').hide();
+    $('#btnCancelOutReady3').hide();
+
     // Fetch user authority and set up UI
     fetch('/api/auth/user')
         .then(response => {
@@ -8,16 +13,15 @@ $(document).ready(function () {
             return response.json();
         })
         .then(user => {
-            document.getElementById('greeting').textContent = `${user.userName} 님`;
-            const authority = user.authority;
-            if (authority !== '관리자' && authority !== '물류팀') {
-                $('#btnPicking').hide();
-                $('#btnOutReady').hide();
-                $('#btnCancelPicking').hide();
-                $('#btnCancelOutReady').hide();
-            }
-            if (authority === '모든 데이터 조회') {
-                $('#btnDetail').hide();
+            //  debugger
+            for (let key in user.authList) {
+                // console.log(user.authList[key]);
+                if ('물류팀' == user.authList[key].screenId) {
+                    $('#btnPicking2').show();
+                    $('#btnCancelPicking2').show();
+                    $('#btnOutReady3').show();
+                    $('#btnCancelOutReady3').show();
+                }
             }
         })
         .catch(error => {

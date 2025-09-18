@@ -28,12 +28,6 @@ public class UserDto {
 	public void setUseYn(String useYn) {
 		this.useYn = useYn;
 	}
-	public String getUserSeq() {
-		return userSeq;
-	}
-	public void setUserSeq(String userSeq) {
-		this.userSeq = userSeq;
-	}
 	public String getId() {
 		return id;
 	}
@@ -50,7 +44,6 @@ public class UserDto {
     private String password;
     private String userName;
     private String useYn;
-    private String userSeq;
     private String id;
     private String authority;
 }

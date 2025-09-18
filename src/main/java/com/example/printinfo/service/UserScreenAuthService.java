@@ -14,8 +14,8 @@ public class UserScreenAuthService {
     @Autowired
     private UserScreenAuthRepository repository;
 
-    public List<UserScreenAuthDto> findByUserId(String userId) {
-        return repository.findByUserId(userId);
+    public List<UserScreenAuthDto> findById(String id) {
+        return repository.findByUserId(id);
     }
 
     public void saveAll(List<UserScreenAuthDto> auths) {

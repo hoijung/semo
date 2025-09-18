@@ -101,8 +101,8 @@
 
     <form id="loginForm">
       <div class="form-group">
-        <label for="userIdSelect">아이디</label>
-        <select id="userIdSelect" name="userIdSelect" required>
+        <label for="idSelect">아이디</label>
+        <select id="idSelect" name="idSelect" required>
           <option value="">아이디 선택</option>
         </select>
         <input type="hidden" id="아이디" name="아이디" />
@@ -133,7 +133,7 @@
 
     document.getElementById("loginForm").addEventListener("submit", function(e) {
       e.preventDefault();
-      const id = document.getElementById("userIdSelect").value.trim();
+      const id = document.getElementById("idSelect").value.trim();
       const pw = document.getElementById("비밀번호").value;
       // debugger
       if (!id || !pw) {
@@ -167,8 +167,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        const userIdSelect = document.getElementById('userIdSelect');
-        const userIdInput = document.getElementById('아이디');
+        const idSelect = document.getElementById('idSelect');
+        const idInput = document.getElementById('아이디');
         const pw = document.getElementById("비밀번호").value;
 
         // Fetch users and populate the dropdown
@@ -177,27 +177,27 @@
             .then(users => {
                 users.forEach(user => {
                     const option = document.createElement('option');
-                    option.value = user.userId;
-                    option.textContent = user.userName;
-                    userIdSelect.appendChild(option);
+                    option.value = user.id;
+                    option.textContent = user.userName + ' (' + user.id + ')';
+                    idSelect.appendChild(option);
                 });
             })
             .catch(error => console.error('Error fetching users:', error));
 
         // Update hidden input and auto-login when dropdown selection changes
-        userIdSelect.addEventListener('change', function() {
+        idSelect.addEventListener('change', function() {
             return;
-            const selectedUserId = this.value;
-            userIdInput.value = selectedUserId;
+            const selectedId = this.value;
+            idInput.value = selectedId;
 
-            if (selectedUserId) {
+            if (selectedId) {
                 // const password = pw; // Using a default password
 
                 fetch('/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        id: selectedUserId,
+                        id: selectedId,
                         password: pw
                     })
                 })

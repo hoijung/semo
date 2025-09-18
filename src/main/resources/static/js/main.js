@@ -13,7 +13,7 @@ function calculateVat() {
 	if (!isNaN(totalPrice)) {
 		// 합계금액에서 공급가액과 부가세액 분리 (부가세율 10%)
 		const supply = Math.round(totalPrice / 1.1);  // 공급가액
-		const vat = totalPrice - supply;  
+		const vat = totalPrice - supply;
 
 		// 결과 표시
 		vatInput.value = vat.toFixed(0); // 소수점 없이 표시
@@ -44,198 +44,211 @@ function onlyNumberWithComma(obj) {
 }
 
 
-	// Function to load item names into the 품목명 combobox
-	function loadItemNames() {
-		fetch('/api/commoncodes/group/품목명')
-			.then(response => response.json())
-			.then(data => {
-				const 품목명Select = $('#품목명');
-				품목명Select.empty(); // Clear existing options
-				품목명Select.append('<option value="">선택하세요</option>'); // Add a default option
-				data.forEach(code => {
-					품목명Select.append(`<option value="${code.codeName}">${code.codeName}</option>`);
-				});
-			})
-			.catch(error => console.error('Error loading item names:', error));
-	}
+// Function to load item names into the 품목명 combobox
+function loadItemNames() {
+	fetch('/api/commoncodes/group/품목명')
+		.then(response => response.json())
+		.then(data => {
+			const 품목명Select = $('#품목명');
+			품목명Select.empty(); // Clear existing options
+			품목명Select.append('<option value="">선택하세요</option>'); // Add a default option
+			data.forEach(code => {
+				품목명Select.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+			});
+		})
+		.catch(error => console.error('Error loading item names:', error));
+}
 
-	// Call loadItemNames when the document is ready
-	loadItemNames();
+// Call loadItemNames when the document is ready
+loadItemNames();
 
-	// Function to toggle the tax info section based on sales channel
-	function toggleTaxInfoSection() {
-		const salesChannel = $('#판매채널').val();
-		const isDirectDeposit = salesChannel === '직접입금';
+// Function to toggle the tax info section based on sales channel
+function toggleTaxInfoSection() {
+	const salesChannel = $('#판매채널').val();
+	const isDirectDeposit = salesChannel === '직접입금';
 
-		// Enable/disable all inputs, selects, and buttons within the tax info group
-		$('#tax-info-group').find('input, select, button').prop('disabled', !isDirectDeposit);
-	}
+	// Enable/disable all inputs, selects, and buttons within the tax info group
+	$('#tax-info-group').find('input, select, button').prop('disabled', !isDirectDeposit);
+}
 
-	// Function to load sales channels into the 판매채널 combobox
-	function loadSalesChannels() {
-		fetch('/api/commoncodes/group/판매채널')
-			.then(response => response.json())
-			.then(data => {
-				const salesChannelSelect = $('#판매채널');
-				salesChannelSelect.empty(); // Clear existing options
-				salesChannelSelect.append('<option value="">선택하세요</option>'); // Add a default option
-				data.forEach(code => {
-					salesChannelSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
-				});
-				// After loading, set the initial state for the tax section
-				toggleTaxInfoSection();
-			})
-			.catch(error => console.error('Error loading sales channels:', error));
-	}
+// Function to load sales channels into the 판매채널 combobox
+function loadSalesChannels() {
+	fetch('/api/commoncodes/group/판매채널')
+		.then(response => response.json())
+		.then(data => {
+			const salesChannelSelect = $('#판매채널');
+			salesChannelSelect.empty(); // Clear existing options
+			salesChannelSelect.append('<option value="">선택하세요</option>'); // Add a default option
+			data.forEach(code => {
+				salesChannelSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+			});
+			// After loading, set the initial state for the tax section
+			toggleTaxInfoSection();
+		})
+		.catch(error => console.error('Error loading sales channels:', error));
+}
 
-	// Call loadSalesChannels when the document is ready
-	loadSalesChannels();
+// Call loadSalesChannels when the document is ready
+loadSalesChannels();
 
-	// Add change event listener to the sales channel dropdown
-	$('#판매채널').on('change', toggleTaxInfoSection);
+// Add change event listener to the sales channel dropdown
+$('#판매채널').on('change', toggleTaxInfoSection);
 
 
-	// Function to load print types into the 인쇄방식 combobox
-	function loadPrintTypes() {
-		fetch('/api/commoncodes/group/인쇄방식')
-			.then(response => response.json())
-			.then(data => {
-				const printTypeSelect = $('#인쇄방식');
-				printTypeSelect.empty(); // Clear existing options
-				printTypeSelect.append('<option value="">선택하세요</option>'); // Add a default option
-				data.forEach(code => {
-					printTypeSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
-				});
-			})
-			.catch(error => console.error('Error loading print types:', error));
-	}
+// Function to load print types into the 인쇄방식 combobox
+function loadPrintTypes() {
+	fetch('/api/commoncodes/group/인쇄방식')
+		.then(response => response.json())
+		.then(data => {
+			const printTypeSelect = $('#인쇄방식');
+			printTypeSelect.empty(); // Clear existing options
+			printTypeSelect.append('<option value="">선택하세요</option>'); // Add a default option
+			data.forEach(code => {
+				printTypeSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+			});
+		})
+		.catch(error => console.error('Error loading print types:', error));
+}
 
-	// Call loadPrintTypes when the document is ready
-	loadPrintTypes();
+// Call loadPrintTypes when the document is ready
+loadPrintTypes();
 
-	// Function to load item names into the 인쇄도수 combobox
-	function loadPrintCounts() {
-		fetch('/api/commoncodes/group/인쇄도수')
-			.then(response => response.json())
-			.then(data => {
-				const pSelect = $('#인쇄도수');
-				pSelect.empty(); // Clear existing options
-				pSelect.append('<option value="">선택하세요</option>'); // Add a default option
-				data.forEach(code => {
-					pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
-				});
-			})
-			.catch(error => console.error('Error loading item names:', error));
-	}
+// Function to load item names into the 인쇄도수 combobox
+function loadPrintCounts() {
+	fetch('/api/commoncodes/group/인쇄도수')
+		.then(response => response.json())
+		.then(data => {
+			const pSelect = $('#인쇄도수');
+			pSelect.empty(); // Clear existing options
+			pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+			data.forEach(code => {
+				pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+			});
+		})
+		.catch(error => console.error('Error loading item names:', error));
+}
 
-	// Call loadItemNames when the document is ready
-	loadPrintCounts();
+// Call loadItemNames when the document is ready
+loadPrintCounts();
 
-	// Function to load item names into the 인쇄면 combobox
-	function loadPrintSides() {
-		fetch('/api/commoncodes/group/인쇄면')
-			.then(response => response.json())
-			.then(data => {
-				const pSelect = $('#인쇄면');
-				pSelect.empty(); // Clear existing options
-				pSelect.append('<option value="">선택하세요</option>'); // Add a default option
-				data.forEach(code => {
-					pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
-				});
-			})
-			.catch(error => console.error('Error loading item names:', error));
-	}
+// Function to load item names into the 인쇄면 combobox
+function loadPrintSides() {
+	fetch('/api/commoncodes/group/인쇄면')
+		.then(response => response.json())
+		.then(data => {
+			const pSelect = $('#인쇄면');
+			pSelect.empty(); // Clear existing options
+			pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+			data.forEach(code => {
+				pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+			});
+		})
+		.catch(error => console.error('Error loading item names:', error));
+}
 
-	// Call loadItemNames when the document is ready
-	loadPrintSides();
+// Call loadItemNames when the document is ready
+loadPrintSides();
 
-	// Function to load item names into the 인쇄팀 combobox
-	function loadPrintTeams() {
-		fetch('/api/commoncodes/group/인쇄담당팀')
-			.then(response => response.json())
-			.then(data => {
-				const pSelect = $('#인쇄담당팀');
-				pSelect.empty(); // Clear existing options
-				pSelect.append('<option value="">선택하세요</option>'); // Add a default option
-				data.forEach(code => {
-					pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
-				});
-			})
-			.catch(error => console.error('Error loading item names:', error));
-	}
+// Function to load item names into the 인쇄팀 combobox
+function loadPrintTeams() {
+	fetch('/api/commoncodes/group/인쇄담당팀')
+		.then(response => response.json())
+		.then(data => {
+			const pSelect = $('#인쇄담당팀');
+			pSelect.empty(); // Clear existing options
+			pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+			data.forEach(code => {
+				pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+			});
+		})
+		.catch(error => console.error('Error loading item names:', error));
+}
 
-	// Call loadItemNames when the document is ready
-	loadPrintTeams();
+// Call loadItemNames when the document is ready
+loadPrintTeams();
 
-	// Function to load item names into the 배송타입 combobox
-	function loadDeliveryTypes() {
-		fetch('/api/commoncodes/group/배송타입')
-			.then(response => response.json())
-			.then(data => {
-				const pSelect = $('#배송타입');
-				pSelect.empty(); // Clear existing options
-				pSelect.append('<option value="">선택하세요</option>'); // Add a default option
-				data.forEach(code => {
-					pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
-				});
-			})
-			.catch(error => console.error('Error loading item names:', error));
-	}
+// Function to load item names into the 배송타입 combobox
+function loadDeliveryTypes() {
+	fetch('/api/commoncodes/group/배송타입')
+		.then(response => response.json())
+		.then(data => {
+			const pSelect = $('#배송타입');
+			pSelect.empty(); // Clear existing options
+			pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+			data.forEach(code => {
+				pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+			});
+		})
+		.catch(error => console.error('Error loading item names:', error));
+}
 
-	// Call loadItemNames when the document is ready
-	loadDeliveryTypes();
+// Call loadItemNames when the document is ready
+loadDeliveryTypes();
 
-	// Function to load item names into the 계산서발행타입 combobox
-	function loadTaxTypes() {
-		fetch('/api/commoncodes/group/계산서발행타입')
-			.then(response => response.json())
-			.then(data => {
-				const pSelect = $('#계산서발행타입');
-				pSelect.empty(); // Clear existing options
-				pSelect.append('<option value="">선택하세요</option>'); // Add a default option
-				data.forEach(code => {
-					pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
-				});
-			})
-			.catch(error => console.error('Error loading item names:', error));
-	}
+// Function to load item names into the 계산서발행타입 combobox
+function loadTaxTypes() {
+	fetch('/api/commoncodes/group/계산서발행타입')
+		.then(response => response.json())
+		.then(data => {
+			const pSelect = $('#계산서발행타입');
+			pSelect.empty(); // Clear existing options
+			pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+			data.forEach(code => {
+				pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+			});
+		})
+		.catch(error => console.error('Error loading item names:', error));
+}
 
-	// Call loadItemNames when the document is ready
-	loadTaxTypes();
+// Call loadItemNames when the document is ready
+loadTaxTypes();
 
-	// Function to load item names into the 계산서발행타입 combobox
-	function loadPrintMethods() {
-		fetch('/api/commoncodes/group/인쇄방법')
-			.then(response => response.json())
-			.then(data => {
-				const pSelect = $('#인쇄방법');
-				pSelect.empty(); // Clear existing options
-				pSelect.append('<option value="">선택하세요</option>'); // Add a default option
-				data.forEach(code => {
-					pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
-				});
-			})
-			.catch(error => console.error('Error loading item names:', error));
-	}
+// Function to load item names into the 계산서발행타입 combobox
+function loadPrintMethods() {
+	fetch('/api/commoncodes/group/인쇄방법')
+		.then(response => response.json())
+		.then(data => {
+			const pSelect = $('#인쇄방법');
+			pSelect.empty(); // Clear existing options
+			pSelect.append('<option value="">선택하세요</option>'); // Add a default option
+			data.forEach(code => {
+				pSelect.append(`<option value="${code.codeName}">${code.codeName}</option>`);
+			});
+		})
+		.catch(error => console.error('Error loading item names:', error));
+}
 
-	// Call loadItemNames when the document is ready
-	loadPrintMethods();
+// Call loadItemNames when the document is ready
+loadPrintMethods();
 
 // jQuery의 document.ready()를 사용하여 DOM이 완전히 로드된 후 스크립트를 실행합니다.
 // 이는 페이지별 JavaScript를 초기화하는 표준적이고 안정적인 방법입니다.
-$(document).ready(function() {
+$(document).ready(function () {
+	$('#btnDistribute').hide();
+	$('#btnCancelDistribute').hide();
+	$('#btnAdd').hide();
+	$('#btnUpdate').hide();
+	$('#btnDelete').hide();
+
 	fetch('/api/auth/user')
 		.then(response => response.json())
 		.then(user => {
-			document.getElementById('greeting').textContent = `${user.userName} 님`;
+			//  debugger
+
+			for (let key in user.authList) {
+				// console.log(user.authList[key]);
+				if ('고객지원팀' == user.authList[key].screenId) {
+					$('#btnDistribute').show();
+					$('#btnCancelDistribute').show();
+					$('#btnAdd').show();
+					$('#btnUpdate').show();
+					$('#btnDelete').show();
+				}
+			}
 
 			const authority = user.authority;
-			if (authority !== '관리자' ) {
-				$('#btnDistribute').hide();
-				$('#btnCancelDistribute').hide();
-				$('#btnAdd').hide();
-				$('#btnUpdate').hide();
-				$('#btnDelete').hide();
+			if (authority !== '관리자') {
+
 			}
 		})
 		.catch(error => console.error('Error fetching user data:', error));
@@ -265,7 +278,7 @@ $(document).ready(function() {
 
 	function getTableHeight() {
 		// 예: 화면 높이에서 200px 여유 공간 빼기
-		return $(window).height() - 200 + "px"; 
+		return $(window).height() - 200 + "px";
 	}
 
 	table = $('#printTable').DataTable({
@@ -274,9 +287,9 @@ $(document).ready(function() {
 		scrollY: getTableHeight(), // 동적으로 높이 지정
 		columns: [
 			{ data: '인쇄ID', title: 'No', visible: false },
-						{
+			{
 				data: '주문일자',
-				render: function(data, type, row) {
+				render: function (data, type, row) {
 					if (data) {
 						const date = new Date(data);
 						const year = date.getFullYear().toString().slice(-2);
@@ -300,7 +313,7 @@ $(document).ready(function() {
 		paging: false,
 		info: false,
 		searching: false,
-		drawCallback: function(settings) {
+		drawCallback: function (settings) {
 			// This is to ensure that the selection happens only on the initial draw.
 			if (this.api().page.info().page === 0 && !this.api().state.loaded()) {
 				// Select the first row
@@ -313,7 +326,7 @@ $(document).ready(function() {
 	});
 
 	// 테이블 행 클릭 이벤트
-	$('#printTable tbody').on('click', 'tr', function() {
+	$('#printTable tbody').on('click', 'tr', function () {
 		// 폼에 저장되지 않은 변경사항이 있는지 확인
 		if (isFormDirty) {
 			if (!confirm('변경사항이 저장되지 않았습니다. 다른 항목을 선택하시겠습니까?')) {
@@ -347,7 +360,7 @@ $(document).ready(function() {
 	$('#btnDelete').on('click', deleteRecord);
 
 	// 폼 내의 모든 입력 요소에 대한 변경 감지
-	$('#detail-container').on('change', 'input, select, textarea', function() {
+	$('#detail-container').on('change', 'input, select, textarea', function () {
 		isFormDirty = true;
 		console.log("Form is now dirty.");
 	});
@@ -388,7 +401,7 @@ $(document).ready(function() {
 			// 팝업을 띄우는 링크로 변경
 			const $link = $('<a>', { href: '#', text: logoFileName, 'data-image-url': fileUrl, 'class': 'image-popup-trigger' });
 			const $image = $('<img>', { src: fileUrl, alt: '로고 이미지', style: 'max-width: 100%; max-height: 400px; margin-top: 5px; display: block;' });
-			
+
 			$displayDiv.append($link).append($image);
 		}
 
@@ -428,7 +441,7 @@ $(document).ready(function() {
 
 	function getFormData() {
 		const formData = {};
-		$('.detail-card').find('input, textarea, select').each(function() {
+		$('.detail-card').find('input, textarea, select').each(function () {
 			const id = $(this).attr('id');
 			if (!id || this.type === 'file') return;
 
@@ -449,10 +462,10 @@ $(document).ready(function() {
 	}
 
 	function reloadTableAndRestoreSelection() {
-		table.ajax.reload(function() {
+		table.ajax.reload(function () {
 			if (currentSelectedId !== null) {
 				let foundRow = null;
-				table.rows().every(function() {
+				table.rows().every(function () {
 					const rowData = this.data();
 					if (rowData && rowData.인쇄ID === currentSelectedId) {
 						foundRow = this.node();

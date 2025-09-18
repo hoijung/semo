@@ -31,7 +31,7 @@ $(document).ready(function () {
     table = $('#userTable').DataTable({
         ajax: {url: '/api/users/list', dataSrc: ''},
         columns: [
-            {data: 'userId'},
+            {data: 'id'},
             {data: 'userName'},
         ],
         destroy: true,
@@ -92,10 +92,10 @@ $(document).ready(function () {
 
         $(this).addClass('selected-row');
         selectedRow = this;
-        currentSelectedId = data.userId;
+        currentSelectedId = data.id;
 
         fillDetailForm(data);
-        loadAuthGrid(data.userId);
+        loadAuthGrid(data.id);
         updateButtonState(true);
     });
 
@@ -112,8 +112,8 @@ $(document).ready(function () {
         $('input[type="checkbox"]', rows).prop('checked', this.checked);
     });
 
-    function loadAuthGrid(userId) {
-        $.get('/api/user-screen-auth/' + userId, function (data) {
+    function loadAuthGrid(id) {
+        $.get('/api/user-screen-auth/' + id, function (data) {
             authTable.clear().rows.add(data).draw();
         });
     }
@@ -136,7 +136,7 @@ $(document).ready(function () {
     function deleteAuthRow() {
         const rowsToDelete = [];
         const dataToDelete = [];
-        const userId = $('#userId').val();
+        const userId = $('#id').val();
 
         authTable.rows().every(function(){
             const rowNode = this.node();
@@ -144,7 +144,7 @@ $(document).ready(function () {
                 rowsToDelete.push(this.node());
                 const rowData = this.data();
                 if (!rowData.isNew) {
-                    dataToDelete.push({ userId: userId, screenId: rowData.screenId });
+                    dataToDelete.push({ id: id, screenId: rowData.screenId });
                 }
             }
         });
@@ -183,6 +183,7 @@ $(document).ready(function () {
         resetDetailFormValues();
         for (let key in data) {
             const el = $('#' + key);
+            // debugger
             if (el.length) {
                 if (el.attr('type') === 'checkbox') {
                     el.prop('checked', data[key]);

@@ -311,17 +311,17 @@
                     </div>
                 </h2>
                 <div class="detail-card">
-                    <input type="hidden" id="userID">
+                    <input type="hidden" id="userId">
 
                     <div class="field-group">
                         <label>사용자 정보</label>
                         <div class="field-row">
                             <div class="field-item"><span>사용자명:</span><input type="text" id="userName"></div>
-                            <div class="field-item"><span>아이디:</span><input type="text" id="userId" readOnly></div>
+                            <div class="field-item"><span>아이디:</span><input type="text" id="id" readOnly></div>
                         </div>
                         <div class="field-row">
                             <div class="field-item"><span>비밀번호:</span><input type="text" id="password"></div>
-                            <div class="field-item checkbox-item"><span>사용여부:</span><input type="checkbox" id="isUsed">
+                            <div class="field-item checkbox-item"><span>사용여부:</span><input type="checkbox" id="useYn">
                             </div>
                         </div>
                     </div>
@@ -334,7 +334,7 @@
                         <table id="authGrid" class="display" style="width:100%">
                             <thead>
                                 <tr>
-                                    <th><input type="checkbox" id="authCheckAll"></th>
+                                    <th style="width: 25px;"><input type="checkbox" id="authCheckAll"></th>
                                     <th>화면 ID</th>
                                 </tr>
                             </thead>

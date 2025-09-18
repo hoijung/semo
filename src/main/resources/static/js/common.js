@@ -11,8 +11,8 @@ function loadMenu(currentPage) {
             })
             .then(user => {
                 if (user) {
-                    $('#greeting').text(`${user.userName}님`);
-                    const authority = user.authority;
+                    $('#greeting').text(`${user.user.userName}님`);
+                    const authority = user.user.authority;
                     if (authority !== '관리자') {
                         $('[data-page="user.html"]').hide();
                         $('[data-page="buseo.html"]').hide();

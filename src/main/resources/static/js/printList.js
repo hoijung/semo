@@ -1,6 +1,9 @@
 $(document).ready(function () {
     let selectedPrintId = null;
 
+    $('#btnPrintEnd').hide();
+    $('#btnPrintEndCnl').hide();
+    $('#btnSave').hide();
     // Fetch user authority and set up UI
     fetch('/api/auth/user')
         .then(response => {
@@ -10,14 +13,14 @@ $(document).ready(function () {
             return response.json();
         })
         .then(user => {
-            document.getElementById('greeting').textContent = `${user.userName} 님`;
-            const authority = user.authority;
-            if (authority !== '관리자' && authority !== '인쇄팀') {
-                $('#btnPrintEnd').hide();
-                $('#btnPrintEndCnl').hide();
-            }
-            if (authority === '모든 데이터 조회') {
-                $('#btnDetail').hide();
+            //  debugger
+            for (let key in user.authList) {
+                // console.log(user.authList[key]);
+                if ('인쇄 서비스팀' == user.authList[key].screenId) {
+                    $('#btnPrintEnd').show();
+                    $('#btnPrintEndCnl').show();
+                    $('#btnSave').show();
+                }
             }
         })
         .catch(error => {
@@ -81,7 +84,7 @@ $(document).ready(function () {
             { data: 'companyContact' },
             { data: "importantYn", title: "중요", render: renderCheckbox },
 
-            { data: 'deliveryDeadline', title: '발송최종기한', className: 'dt-center' }, 
+            { data: 'deliveryDeadline', title: '발송최종기한', className: 'dt-center' },
             { data: 'itemName', title: '품목명' },
             { data: 'bagColor', title: '컬러' },
             { data: 'size', title: '사이즈' },
@@ -94,7 +97,7 @@ $(document).ready(function () {
             {
                 data: 'printPhoto',
                 title: '인쇄팀사진',
-                render: function(data, type, row) {
+                render: function (data, type, row) {
                     if (data) {
                         return `<img src="/File/${data}" alt="인쇄팀사진" height="50" class="clickable-image" data-src="/File/${data}">`;
                     }
@@ -108,10 +111,10 @@ $(document).ready(function () {
             { data: 'colorData1', title: '조색데이터1' },
             { data: 'colorData2', title: '조색데이터2' },
             { data: 'colorData3', title: '조색데이터3' },
-            
+
             { data: "pickingYn", title: "피킹완료", className: 'dt-center', render: renderCheckbox },
             { data: "printEndYn", title: "인쇄완료", className: 'dt-center', render: renderCheckbox },
-            
+
         ],
         createdRow: function (row, data, dataIndex) {
             if (eval(data.importantYn)) {
@@ -125,10 +128,10 @@ $(document).ready(function () {
         columnDefs: [
             { targets: "_all", className: "dt-center" }
         ],
-                language: {
+        language: {
             emptyTable: "데이터가 없습니다."
         },
-        drawCallback: function(settings) {
+        drawCallback: function (settings) {
             if (this.api().page.info().page === 0 && !this.api().state.loaded()) {
                 const firstRow = $('#grid tbody tr:first');
                 if (firstRow.length) {
