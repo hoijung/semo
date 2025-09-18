@@ -25,7 +25,7 @@ $(document).ready(function () {
 	inputEnd.value = formattedToday;
 
 	const startDay = new Date();
-	startDay.setDate(startDay.getDate() - 31);
+	startDay.setDate(startDay.getDate() - 10);
 	const formattedStart = startDay.toISOString().split("T")[0];
 	inputStart.value = formattedStart;
 

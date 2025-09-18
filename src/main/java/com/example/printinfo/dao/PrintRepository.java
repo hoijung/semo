@@ -264,7 +264,7 @@ public class PrintRepository {
      */
     public List<PrintInfo> findAllocatedPrints(String pickingDateStart, String pickingDateEnd) {
         String baseWhereClause = " WHERE 배분여부 = 'true' ";
-        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
+        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "", " ORDER BY 발송마감기한 ");
     }
 
     /**
@@ -274,7 +274,7 @@ public class PrintRepository {
      */
     public List<PrintInfo> findPickedPrints(String pickingDateStart, String pickingDateEnd) {
         String baseWhereClause = " WHERE 피킹완료 = 'true' ";
-        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
+        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "", " ORDER BY 발송마감기한 ");
     }
 
     /**
@@ -284,7 +284,7 @@ public class PrintRepository {
      */
     public List<PrintInfo> findReadyForDispatchPrints(String pickingDateStart, String pickingDateEnd) {
         String baseWhereClause = " WHERE 출고준비 = 'true' ";
-        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "");
+        return findPrints(baseWhereClause, pickingDateStart, pickingDateEnd, "", "", "", " ORDER BY 발송마감기한 ");
     }
 
     /**
@@ -308,14 +308,27 @@ public class PrintRepository {
      */
     public List<PrintInfo> findAllPrints(String pickingDateStart, String pickingDateEnd, String printTeam,
             String companyContact, String itemName) {
+        return findPrints(" WHERE 1=1 AND 배분여부 = 'true' AND COALESCE(출고준비,'false') != 'true' ", pickingDateStart, pickingDateEnd, printTeam, "", "",  " ORDER BY 발송마감기한 ");
+    }
+
+        /**
+     * [참고] 모든 인쇄 정보를 검색해야 할 경우 사용 (기존 findPrintsByCriteria 대체)
+     */
+    public List<PrintInfo> getList(String pickingDateStart, String pickingDateEnd, String printTeam,
+            String companyContact, String itemName) {
         return findPrints(" WHERE 1=1 AND 배분여부 = 'true' ", pickingDateStart, pickingDateEnd, printTeam, "", "");
     }
 
+    private List<PrintInfo> findPrints(String baseWhereClause, String pickingDateStart, String pickingDateEnd,
+            String printTeam, String companyContact, String itemName) {
+
+            return  this.findPrints(pickingDateStart, pickingDateEnd, printTeam, companyContact, itemName, "");
+    }
     /**
      * [리팩토링] 동적 쿼리 생성을 위한 공통 메소드
      */
     private List<PrintInfo> findPrints(String baseWhereClause, String pickingDateStart, String pickingDateEnd,
-            String printTeam, String companyContact, String itemName) {
+            String printTeam, String companyContact, String itemName, String order) {
         String selectClause = "SELECT 인쇄ID, 품목명, 쇼핑백색상, 사이즈, 제작장수, 인쇄담당팀, 인쇄면, 인쇄도수"
                 + ", 인쇄방식, 로고인쇄크기, 로고인쇄위치, 특이사항, 주문일자"
                 + ", 업체명_담당자, 고객ID, 전화번호"
@@ -363,7 +376,11 @@ public class PrintRepository {
             params.add("%" + itemName + "%");
         }
 
-        sqlBuilder.append(" ORDER BY 주문일자 DESC");
+        if (order != null && !order.isEmpty()) {
+            sqlBuilder.append(order);
+        } else {
+            sqlBuilder.append(" ORDER BY 주문일자 DESC");
+        }
 
         System.out.println(sqlBuilder.toString());
         System.out.println(params.toString());

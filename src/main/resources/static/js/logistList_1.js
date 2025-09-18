@@ -35,7 +35,7 @@ $(document).ready(function () {
         const formattedToday = today.toISOString().split("T")[0];
         if (inputEnd.length) inputEnd.val(formattedToday);
         const startDay = new Date();
-        startDay.setDate(startDay.getDate() - 31);
+        startDay.setDate(startDay.getDate() - 10);
         const formattedStart = startDay.toISOString().split("T")[0];
         if (inputStart.length) inputStart.val(formattedStart);
     });
@@ -123,12 +123,12 @@ $(document).ready(function () {
     const columnsForGrid1 = [
         ...baseColumns,
         { data: "importantYn", title: "중요", className: 'dt-center', render: renderCheckbox },
-        {
-            data: 'printMemo', title: '인쇄참고사항',
-            createdCell: function (td, cellData, rowData, row, col) {
-                $(td).css('color', 'red');
-            }
-        },
+        // {
+        //     data: 'printMemo', title: '인쇄참고사항',
+        //     createdCell: function (td, cellData, rowData, row, col) {
+        //         $(td).css('color', 'red');
+        //     }
+        // },
         ...extendedColumns
     ];
 

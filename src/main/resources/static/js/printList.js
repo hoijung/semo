@@ -40,7 +40,7 @@ $(document).ready(function () {
 
     const startDay = new Date();
     // 14일(=2주) 전 날짜 구하기
-    startDay.setDate(startDay.getDate() - 31);
+    startDay.setDate(startDay.getDate() - 10);
     // yyyy-MM-dd 형식으로 변환
     const formattedStart = startDay.toISOString().split("T")[0];
     // input 기본값 설정
