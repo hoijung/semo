@@ -102,7 +102,7 @@ $(document).ready(function () {
     };
 
     const baseColumns = [
-        { title: '', orderable: false, className: 'dt-body-center', render: (data, type, row) => `<input type="checkbox" class="row-select" value="${row.printId || ''}">` },
+        { title: '<input type="checkbox" class="select-all">', orderable: false, className: 'dt-body-center', render: (data, type, row) => `<input type="checkbox" class="row-select" value="${row.printId || ''}">` },
         { data: 'orderDate', title: '주문일자', className: 'dt-center' },
         { data: 'weekDay', title: '요일', className: 'dt-center' },
         // { data: 'pickingDate', title: '피킹예정일', className: 'dt-center' },
@@ -178,15 +178,53 @@ $(document).ready(function () {
         e.stopPropagation();
     });
 
+    // 각 테이블 인스턴스에 대해 '전체 선택' 이벤트를 개별적으로 바인딩합니다.
+    [table, table2, table3].forEach(t => {
+        $(t.table().header()).on('click', '.select-all', function() {
+            const rows = t.rows({ 'search': 'applied' }).nodes();
+            const isChecked = $(this).is(':checked');
+            $('input.row-select', rows).prop('checked', isChecked).trigger('change');
+        });
+    });
+
+
+    // 개별 체크박스 변경 시 '전체선택' 체크박스 상태 업데이트
+    $(document).on('change', '.row-select', function () {
+        const tableInstance = $(this).closest('table').DataTable();
+        updateSelectAllCheckbox(tableInstance);
+    });
+
+    // 테이블 draw 이벤트 발생 시 '전체선택' 체크박스 상태 업데이트
+    [table, table2, table3].forEach(t => {
+        t.on('draw', () => updateSelectAllCheckbox(t));
+    });
+
+    function updateSelectAllCheckbox(tableInstance) {
+        const allRows = tableInstance.rows({ 'search': 'applied' }).nodes();
+        const checkedRows = $(allRows).find('input.row-select:checked').length;
+        $(tableInstance.table().header()).find('.select-all').prop('checked', allRows.length > 0 && allRows.length === checkedRows);
+    }
+
     function getSelectedRows(tableInstance) {
-        return tableInstance.rows('.selected').data().toArray();
+        // 일괄 작업의 기준을 '.selected'가 아닌 체크된 체크박스로 변경
+        const checkedIds = tableInstance.rows({ 'search': 'applied' }).nodes().to$().find('input.row-select:checked').map(function () {
+            return $(this).val();
+        }).get();
+
+        return tableInstance.rows((idx, data, node) => {
+            return checkedIds.includes(String(data.printId));
+        }).data().toArray();
     }
 
     $(document).on('click', '.btn-detail', function () {
         const tableInstance = $(this).closest('.tab-content').find('table.display').DataTable();
         const selected = getSelectedRows(tableInstance);
         if (selected.length === 0) {
-            alert("행을 선택해주세요.");
+            alert("상세보기할 행을 체크해주세요.");
+            return;
+        }
+        if (selected.length > 10) {
+            alert("상세보기는 최대 10건까지만 가능합니다.");
             return;
         }
         // 선택된 모든 항목의 printId를 쉼표로 구분된 문자열로 만듭니다.
@@ -197,19 +235,29 @@ $(document).ready(function () {
 
     $(document).on('click', '.btn-excel', function () {
         const tableInstance = $(this).closest('.tab-content').find('table.display').DataTable();
-        const selectedRows = tableInstance.rows('.selected').count();
-        if (selectedRows === 0) {
-            alert('엑셀로 다운로드할 행을 선택해주세요.');
+        // Find all checked rows within the current search results
+        const checkedRows = tableInstance.rows({ 'search': 'applied' }).nodes().to$().find('input.row-select:checked').closest('tr');
+
+        if (checkedRows.length === 0) {
+            alert('엑셀로 다운로드할 행을 체크해주세요.');
             return;
         }
+
+        // Temporarily add the '.selected' class to checked rows for the export
+        checkedRows.addClass('selected');
+
+        // Trigger the Excel export
         tableInstance.buttons('.buttons-excel').trigger();
+
+        // Remove the temporary class after the export is triggered
+        checkedRows.removeClass('selected');
     });
 
     function handleBatchAction(actionName, urlPath, button) {
         const tableInstance = $(button).closest('.tab-content').find('table.display').DataTable();
         const selected = getSelectedRows(tableInstance);
         if (selected.length === 0) {
-            alert("행을 선택해주세요.");
+            alert("처리할 행을 체크해주세요.");
             return;
         }
 
