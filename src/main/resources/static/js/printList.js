@@ -64,14 +64,17 @@ $(document).ready(function () {
                 extend: "excel",
                 className: "btn-sm",
                 title: "인쇄 작업 목록",
-                filename: `인쇄작업목록_${formattedToday}`
+                filename: `인쇄작업목록_${formattedToday}`,
+                exportOptions: {
+                    rows: '.selected'
+                }
             }
         ],
         scrollY: getTableHeight("320"),
         scrollX: true,
         columns: [
             {
-                title: '',
+                title: '<input type="checkbox" id="selectAll" title="전체 선택/해제">',
                 orderable: false,
                 className: 'dt-body-center',
                 render: function (data, type, row, meta) {
@@ -164,51 +167,81 @@ $(document).ready(function () {
     });
 
     $('#grid tbody').on('click', 'tr', function () {
+        // 행 클릭 시 단일 선택 로직
+        const $row = $(this);
         const data = table.row(this).data();
-        if (data) {
-            // window.open(`assetDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=700');
-        }
-    });
 
-    $('#grid tbody').on('click', 'input.row-select', function (e) {
-        const $table = $('#grid');
-        const $row = $(this).closest('tr');
-        const data = table.row($row).data();
-
-        if ($(this).prop('checked')) {
-            $table.find('tbody tr.selected').removeClass('selected');
-            $table.find('input.row-select').prop('checked', false);
+        if ($row.hasClass('selected')) {
+            // 이미 선택된 행을 다시 클릭하면 선택 해제
+            $row.removeClass('selected');
+            selectedPrintId = null;
+            $('#edit-area').hide();
+        } else {
+            // 다른 행을 클릭하면 기존 선택을 해제하고 새로 선택
+            table.rows('.selected').nodes().to$().removeClass('selected');
             $row.addClass('selected');
-            $(this).prop('checked', true);
-
             selectedPrintId = data.printId;
             $('#조색데이터1_edit').val(data.colorData1);
             $('#조색데이터2_edit').val(data.colorData2);
             $('#조색데이터3_edit').val(data.colorData3);
             $('#edit-area').show();
-        } else {
-            $row.removeClass('selected');
-            selectedPrintId = null;
-            $('#edit-area').hide();
         }
+    });
 
+    $('#grid tbody').on('click', 'input.row-select', function (e) {
+        const $row = $(this).closest('tr');
+        // 체크박스 클릭은 행의 'selected' 상태에 영향을 주지 않고,
+        // 행 클릭 이벤트가 중복 실행되지 않도록 이벤트 전파를 막습니다.
         e.stopPropagation();
     });
 
+    // '전체 선택' 체크박스 클릭 이벤트 (안정성을 위해 document에 위임)
+    $(document).on('click', '#selectAll', function () {
+        const rows = table.rows({ page: 'current' }).nodes();
+        const isChecked = this.checked;
+        $('input.row-select', rows).prop('checked', isChecked).trigger('change');
+    });
+
+    // 개별 체크박스 변경 시 '전체 선택' 체크박스 상태 업데이트
+    $('#grid tbody').on('change', 'input.row-select', function () {
+        updateSelectAllCheckbox();
+    });
+
+    // 테이블이 다시 그려질 때(페이지 이동, 검색 등) '전체 선택' 체크박스 상태 업데이트
+    table.on('draw', function () {
+        updateSelectAllCheckbox();
+    });
+
+    function updateSelectAllCheckbox() {
+        const currentPageRows = table.rows({ page: 'current' });
+        const numRows = currentPageRows.count();
+        const numSelectedRows = currentPageRows.nodes().to$().find('input.row-select:checked').length;
+
+        $('#selectAll').prop('checked', numRows > 0 && numRows === numSelectedRows);
+    }
+
     function getSelectedRows() {
-        return $('#grid tbody tr.selected').map(function () {
+        // '상세보기', '인쇄완료' 등 일괄 작업은 체크된 항목을 기준으로 동작하도록 변경합니다.
+        return table.rows().nodes().to$().find('input.row-select:checked').closest('tr').map(function () {
             return $('#grid').DataTable().row(this).data();
         }).get();
     }
 
     $('#btnDetail').click(function () {
         const selected = getSelectedRows();
-        if (selected.length === 0) {
+        const selectedCount = selected.length;
+
+        if (selectedCount === 0) {
             alert("행을 선택해주세요.");
             return;
         }
-        const data = selected[0];
-        window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=900');
+        if (selectedCount > 10) {
+            alert("상세보기는 최대 10건까지만 선택할 수 있습니다.");
+            return;
+        }
+
+        const printIds = selected.map(row => row.printId).join(',');
+        window.open(`printDetail.html?printId=${printIds}`, 'detailPopup', 'width=1000,height=900,scrollbars=yes');
     });
 
     $('#btnSave').on('click', async function () {

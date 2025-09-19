@@ -195,7 +195,7 @@
             border-bottom: 3px solid #0056b3;
         }
 
-        /* 행 하이라이트를 위한 스타일 */ 
+        /* 행 하이라이트를 위한 스타일 */
         .highlight-row {
             background-color: #ffffe0 !important;
             /* 밝은 노란색 */
@@ -240,6 +240,11 @@
             font-size: 30px;
             cursor: pointer;
         }
+
+        /* 헤더 체크박스 스타일 */
+        #selectAll {
+            cursor: pointer;
+        }
     </style>
 </head>
 
@@ -253,7 +258,8 @@
         <div class="content">
             <div class="search-area">
                 <form id="searchForm">
-                    <div class="search-filters" style="display: flex; justify-content: space-between; align-items: flex-end;">
+                    <div class="search-filters"
+                        style="display: flex; justify-content: space-between; align-items: flex-end;">
                         <div style="display: flex; gap: 15px;">
                             <div class="filter-group">
                                 <label for="orderDateStart">주문일자 (시작)</label>
@@ -279,12 +285,12 @@
                             <input type="text" id="customSearch" placeholder="검색..." style="width: 300px;">
                         </div>
 
-                                                <div class="search-actions" style="display: flex; gap: 10px;">
+                        <div class="search-actions" style="display: flex; gap: 10px;">
                             <button type="button" id="btnSave">저장</button>
                             <button type="button" id="btnDetail">상세보기</button>
                             <button type="button" id="btnPrintEnd">인쇄완료</button>
                             <button type="button" id="btnPrintEndCnl">완료취소</button>
-                            <button id="btnExcel" class="btn btn-secondary">엑셀 다운로드</button>
+                            <button type="button" id="btnExcel" class="btn btn-secondary">엑셀 다운로드</button>
                             <button type="button" id="btnSearch">조회</button>
                         </div>
                     </div>
@@ -292,23 +298,26 @@
             </div>
             <div class="main-content">
                 <div id="edit-area" style="display: none; margin-bottom: 10px; font-size: 13px;">
-                    조색데이터1 : <input type="text" id="조색데이터1_edit" style="margin-right: 5px;width: 80px;"> &nbsp;&nbsp;&nbsp;
-                    조색데이터2 : <input type="text" id="조색데이터2_edit" style="margin-right: 5px;width: 80px;"> &nbsp;&nbsp;&nbsp;
-                    조색데이터3 : <input type="text" id="조색데이터3_edit" style="margin-right: 5px;width: 80px;"> &nbsp;&nbsp;&nbsp;
+                    조색데이터1 : <input type="text" id="조색데이터1_edit" style="margin-right: 5px;width: 80px;">
+                    &nbsp;&nbsp;&nbsp;
+                    조색데이터2 : <input type="text" id="조색데이터2_edit" style="margin-right: 5px;width: 80px;">
+                    &nbsp;&nbsp;&nbsp;
+                    조색데이터3 : <input type="text" id="조색데이터3_edit" style="margin-right: 5px;width: 80px;">
+                    &nbsp;&nbsp;&nbsp;
                     <input type="file" id="인쇄팀사진_file" accept="image/*">
                 </div>
                 <div class="table-container" style="width:100%; overflow-x:auto;">
                     <table id="grid" class="display nowrap" style="width:100%">
                         <thead>
                             <tr>
-                                <th>번호</th>
+                                <th><input type="checkbox" id="selectAll" title="전체 선택/해제"></th>
                                 <th>주문일자</th>
                                 <th>요일</th>
                                 <th>담당팀</th>
                                 <th>업체명(고객명)</th>
 
-                                <th>중요</th>                                
-                                <th>발송최종기한</th>                                
+                                <th>중요</th>
+                                <th>발송최종기한</th>
                                 <th>품목명</th>
                                 <th>컬러</th>
                                 <th>사이즈</th>
@@ -326,7 +335,7 @@
                                 <th>조색데이터1</th>
 
                                 <th>조색데이터2</th>
-                                <th>조색데이터3</th>   
+                                <th>조색데이터3</th>
                                 <th>피킹완료</th>
                                 <th>인쇄완료</th>
                             </tr>
@@ -360,7 +369,7 @@
     <script src="/static/plugins/datatables/js/pdfmake.min.js"></script>
     <script src="js/common.js"></script>
     <script src="js/printList.js"></script>
-    
+
 </body>
 
 </html>

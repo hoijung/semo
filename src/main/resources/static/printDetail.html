@@ -13,6 +13,15 @@
             color: #333;
             font-size: 12px;
         }
+        
+        .detail-card {
+            display: flex;
+            flex-direction: column;
+            border: 2px solid #eee;
+            padding: 20px;
+            margin-bottom: 20px;
+            min-height: 950px; /* A4 비율과 유사하게 최소 높이 지정 */
+        }
 
         .header {
             display: flex;
@@ -21,14 +30,11 @@
             border-bottom: 2px solid #333;
             padding-bottom: 10px;
             margin-bottom: 20px;
-            position: relative; /* 제목의 absolute 포지셔닝을 위한 기준점 */
         }
 
-        #companyContact {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            margin: 0; /* h2의 기본 마진 제거 */
+        .header h2 {
+            flex-grow: 1; /* h2가 남은 공간을 모두 차지하도록 설정 */
+            margin: 0; /* 기본 마진 제거 */
         }
 
         .btn-print {
@@ -91,11 +97,14 @@
         /* 2-column layout for main content */
         .content-wrapper {
             display: flex;
+            flex-grow: 1; /* 카드의 남은 공간을 모두 채우도록 설정 */
             align-items: stretch; /* Key for making columns same height */
             gap: 20px; /* Space between table and attachment box */
         }
 
         .table-wrapper {
+            display: flex;
+            flex-direction: column;
             flex-basis: 60%;
             flex-grow: 1;
         }
@@ -123,98 +132,117 @@
         }
 
         @media print {
-            .header, .btn-print {
-                display: none;
+            .btn-print {
+                display: none !important;
+            }
+            body {
+                margin: 0;
+                background-color: #fff;
+            }
+            .detail-card {
+                page-break-after: always; /* 각 카드 다음에 페이지를 나눕니다. */
+                border: none;
+                margin: 0;
+                padding: 0;
+                box-shadow: none;
+            }
+            .header h2 {
+                text-align: center; /* 인쇄 시에만 h2를 가운데 정렬 */
             }
         }
     </style>
 </head>
 
 <body>
-    <div class="header">
-        <h2 id="companyContact"></h2>
-        <button class="btn-print" onclick="window.print()">프린트</button>
+    <div id="details-container">
+        <!-- 상세 정보가 여기에 동적으로 추가됩니다. -->
     </div>
 
-    <div class="content-wrapper">
-        <div class="table-wrapper">
-            <table class="detail-table">
-                <tbody class="section-body">
-                    <tr class="section-header" style="text-align: center;">
-                        <th colspan="4">발송정보</th>
-                    </tr>
-                    <tr>
-                        <td>주문일자</td>
-                        <td id="orderDate"></td>
-                        <td>발송최종기한</td>
-                        <td id="deliveryDeadline"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="detail-table">
-                <tbody class="section-body">
-                    <tr class="section-header">
-                        <th colspan="4">쇼핑백속성</th>
-                    </tr>
-                    <tr>
-                        <td>인쇄팀</td>
-                        <td id="printTeam"></td>
-                        <td>기존주문횟수</td>
-                        <td id="previousOrderCount"></td>
-                    </tr>
-                    <tr>
-                        <td>상품명</td>
-                        <td id="itemName"></td>
-                        <td>사이즈</td>
-                        <td id="size"></td>
-                    </tr>
-                    <tr>
-                        <td>색상</td>
-                        <td id="bagColor"></td>
-                        <td>제작장수</td>
-                        <td id="quantity"></td>
-                    </tr>
-                </tbody>
-            </table>
-            <table class="detail-table">
-                <tbody class="section-body">
-                    <tr class="section-header">
-                        <th colspan="4">인쇄사양</th>
-                    </tr>
-                    <tr>
-                        <td>인쇄면</td>
-                        <td id="printSide"></td>
-                        <td>인쇄도수</td>
-                        <td id="printCount"></td>
-                    </tr>
-                    <tr>
-                        <td>조색데이터</td>
-                        <td colspan="3" id="colorData"></td>
-                        <!-- <td id="colorData2"></td>
-                        <td id="colorData3"></td> -->
-                    </tr>
-                    <tr>
-                        <td>인쇄로고색상</td>
-                        <td id="logoColor"></td>
-                        <td>인쇄위치</td>
-                        <td id="logoPosition" ></td>
-                    </tr>
-                    <tr>
-                        <td>로고크기</td>
-                        <td id="logoSize"></td>
-                        <td>인쇄참고사항</td>
-                        <td id="printMemo" style="color: red; font-weight: bold;"></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <template id="detail-card-template">
+        <div class="detail-card">
+            <div class="header">
+                <h2 data-field="companyContact"></h2>
+                <button class="btn-print" onclick="window.print()">프린트</button>
+            </div>
 
-        <div class="attachment-section">
-            <h3>첨부파일</h3>
-            <ul id="attachmentList"></ul>
-        </div>
-    </div>
+            <div class="content-wrapper">
+                <div class="table-wrapper">
+                    <table class="detail-table">
+                        <tbody class="section-body">
+                            <tr class="section-header" style="text-align: center;">
+                                <th colspan="4">발송정보</th>
+                            </tr>
+                            <tr>
+                                <td>주문일자</td>
+                                <td data-field="orderDate"></td>
+                                <td>발송최종기한</td>
+                                <td data-field="deliveryDeadline"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="detail-table">
+                        <tbody class="section-body">
+                            <tr class="section-header">
+                                <th colspan="4">쇼핑백속성</th>
+                            </tr>
+                            <tr>
+                                <td>인쇄팀</td>
+                                <td data-field="printTeam"></td>
+                                <td>기존주문횟수</td>
+                                <td data-field="previousOrderCount"></td>
+                            </tr>
+                            <tr>
+                                <td>상품명</td>
+                                <td data-field="itemName"></td>
+                                <td>사이즈</td>
+                                <td data-field="size"></td>
+                            </tr>
+                            <tr>
+                                <td>색상</td>
+                                <td data-field="bagColor"></td>
+                                <td>제작장수</td>
+                                <td data-field="quantity"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="detail-table">
+                        <tbody class="section-body">
+                            <tr class="section-header">
+                                <th colspan="4">인쇄사양</th>
+                            </tr>
+                            <tr>
+                                <td>인쇄면</td>
+                                <td data-field="printSide"></td>
+                                <td>인쇄도수</td>
+                                <td data-field="printCount"></td>
+                            </tr>
+                            <tr>
+                                <td>조색데이터</td>
+                                <td colspan="3" data-field="colorData"></td>
+                            </tr>
+                            <tr>
+                                <td>인쇄로고색상</td>
+                                <td data-field="logoColor"></td>
+                                <td>인쇄위치</td>
+                                <td data-field="logoPosition"></td>
+                            </tr>
+                            <tr>
+                                <td>로고크기</td>
+                                <td data-field="logoSize"></td>
+                                <td>인쇄참고사항</td>
+                                <td data-field="printMemo" style="color: red; font-weight: bold;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
+                <div class="attachment-section">
+                    <h3>첨부파일</h3>
+                    <ul data-field="attachmentList"></ul>
+                </div>
+            </div>
+        </div>
+    </template>
 
     <script src="js/printDetail.js"></script>
 </body>
