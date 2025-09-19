@@ -112,6 +112,16 @@ public class PrintRepository {
         return jdbcTemplate.update(sql, colorData1, colorData2, colorData3, printTeamPhoto, printId);
     }
 
+    /**
+     * 박스 수량을 업데이트합니다.
+     * @param printId 업데이트할 인쇄 정보 ID
+     * @param boxCount 새로운 박스 수량
+     * @return 업데이트된 행의 수
+     */
+    public int updateBoxCount(PrintInfo dto) {
+        String sql = "UPDATE 인쇄정보 SET 박스수량 = ?, 수정일시 = NOW() WHERE 인쇄ID = ?";
+        return jdbcTemplate.update(sql, dto.getBoxCount(), dto.getPrintId());
+    }
     private PrintDto mapRow(ResultSet rs) throws SQLException {
         PrintDto dto = new PrintDto();
         dto.set인쇄ID(rs.getInt("인쇄ID"));

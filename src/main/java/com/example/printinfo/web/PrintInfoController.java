@@ -176,4 +176,24 @@ public class PrintInfoController {
         service.updateColorData(colorData);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * 박스 수량을 업데이트합니다.
+     * @param printId 업데이트할 인쇄 정보 ID
+     * @param payload 요청 본문 ({"boxCount": 새로운 값})
+     * @return 성공 또는 실패 응답
+     */
+    @PostMapping("/{printId}/box-count")
+    public ResponseEntity<?> updateBoxCount(@PathVariable int printId, @RequestBody Map<String, String> payload) {
+        try {
+            String boxCount = payload.get("boxCount");
+            if (boxCount == null) {
+                return ResponseEntity.badRequest().body("박스 수량이 필요합니다.");
+            }
+            service2.updateBoxCount(printId, boxCount);
+            return ResponseEntity.ok().body("박스 수량이 성공적으로 업데이트되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("업데이트 중 오류 발생: " + e.getMessage());
+        }
+    }
 }

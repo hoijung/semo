@@ -106,4 +106,18 @@ public class PrintService {
         return repository.findPickedPrints(pickingDateStart, pickingDateEnd);
     }
 
+    /**
+     * 박스 수량을 업데이트합니다.
+     * @param printId 업데이트할 인쇄 정보 ID
+     * @param boxCount 새로운 박스 수량
+     */
+    public void updateBoxCount(int printId, String boxCount) {
+        PrintInfo dto = repository.findById(printId);
+        if (dto == null) {
+            throw new IllegalArgumentException("Print record not found with ID: " + printId);
+        }
+        dto.setBoxCount(boxCount);
+        repository.updateBoxCount(dto);
+    }
+
 }
