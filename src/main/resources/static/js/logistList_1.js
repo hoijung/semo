@@ -155,18 +155,27 @@ $(document).ready(function () {
         tableInstance.ajax.reload();
     });
 
+    // 행 클릭 시 단일 선택(하이라이트) 처리
     $(document).on('click', '.main-content table.display tbody tr', function (e) {
-        if ($(e.target).is('input, a')) return;
-        const tableInstance = $(this).closest('table.display').DataTable();
-        const data = tableInstance.row(this).data();
-        if (data) {
-            //  window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1500,height=900');
+        // 체크박스 클릭 시에는 이 이벤트가 동작하지 않도록 함
+        if ($(e.target).is('input.row-select')) {
+            return;
+        }
+        const $row = $(this);
+        const $table = $row.closest('table');
+
+        if ($row.hasClass('selected')) {
+            $row.removeClass('selected');
+        } else {
+            $table.find('tr.selected').removeClass('selected');
+            $row.addClass('selected');
         }
     });
 
+    // 체크박스 클릭 시 다중 선택 처리
     $(document).on('click', '.main-content table.display tbody input.row-select', function (e) {
+        // 행 클릭 이벤트가 중복으로 실행되지 않도록 이벤트 전파를 막습니다.
         e.stopPropagation();
-        $(this).closest('tr').toggleClass('selected', this.checked);
     });
 
     function getSelectedRows(tableInstance) {
@@ -180,8 +189,10 @@ $(document).ready(function () {
             alert("행을 선택해주세요.");
             return;
         }
-        const data = selected[0];
-        window.open(`printDetail.html?printId=${data.printId}`, 'detailPopup', 'width=1000,height=900');
+        // 선택된 모든 항목의 printId를 쉼표로 구분된 문자열로 만듭니다.
+        const printIds = selected.map(row => row.printId).join(',');
+        // URL 파라미터로 모든 ID를 전달하여 팝업을 엽니다.
+        window.open(`printDetail.html?printId=${printIds}`, 'detailPopup', 'width=1500,height=900,scrollbars=yes');
     });
 
     $(document).on('click', '.btn-excel', function () {

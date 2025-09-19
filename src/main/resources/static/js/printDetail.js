@@ -94,10 +94,10 @@ function loadMultipleDetails(ids) {
             setText('colorData', colorData);
 
             const attachmentList = cardElement.querySelector('[data-field="attachmentList"]');
-            if (info.printPhoto) {
+            if (info.logoSamplePath) {
                 const li = document.createElement("li");
                 const img = document.createElement("img");
-                img.src = "/File/" + info.printPhoto;
+                img.src = "/File/" + info.logoSamplePath;
                 img.alt = "인쇄팀 사진";
                 img.style.cssText = "max-width: 100%; height: auto; cursor: pointer;";
                 img.onclick = () => window.open(img.src);
