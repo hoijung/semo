@@ -89,7 +89,16 @@ $(document).ready(function () {
             ],
             language: {
                 emptyTable: "데이터가 없습니다."
-            }
+            },
+            initComplete: function(settings, json) {
+                // '전체목록' 탭의 테이블('#grid1')이 처음 로드될 때만 첫 행을 선택합니다.
+                if (this.api().table().node().id === 'grid1') {
+                    const firstRow = this.api().row(0).node();
+                    if (firstRow) {
+                        $(firstRow).trigger('click');
+                    }
+                }
+            },
         });
     }
 
@@ -224,8 +233,8 @@ $(document).ready(function () {
             return;
         }
         if (selected.length > 10) {
-            alert("상세보기는 최대 10건까지만 가능합니다.");
-            return;
+            // alert("상세보기는 최대 10건까지만 가능합니다.");
+            // return;
         }
         // 선택된 모든 항목의 printId를 쉼표로 구분된 문자열로 만듭니다.
         const printIds = selected.map(row => row.printId).join(',');
@@ -342,6 +351,13 @@ $(document).ready(function () {
         $activeTabContent.css('display', 'flex');
         $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
         const tableInstance = $activeTabContent.find('table.display').DataTable();
-        tableInstance.ajax.reload();
+        
+        // ajax.reload 후 데이터 로드가 완료되면 첫 행을 선택합니다.
+        tableInstance.ajax.reload(() => {
+            const firstRow = tableInstance.row(0).node();
+            if (firstRow) {
+                $(firstRow).trigger('click');
+            }
+        });
     });
 });

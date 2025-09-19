@@ -256,8 +256,8 @@ $(document).ready(function () {
             return;
         }
         if (selectedCount > 10) {
-            alert("상세보기는 최대 10건까지만 선택할 수 있습니다.");
-            return;
+            // alert("상세보기는 최대 10건까지만 선택할 수 있습니다.");
+            // return;
         }
 
         const printIds = selected.map(row => row.printId).join(',');
