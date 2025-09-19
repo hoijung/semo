@@ -1,10 +1,10 @@
 $(document).ready(function () {
 	loadMenu('list.html');
 
-	// 이미지 팝업 열기
-	$('#grid').on('click', '.image-popup-trigger', function (e) {
+	// 이미지 팝업 열기 (clickable-image 클래스를 가진 이미지 클릭 시)
+	$('#grid').on('click', '.clickable-image', function (e) {
 		e.preventDefault();
-		const imageUrl = $(this).data('image-url');
+		const imageUrl = $(this).data('src');
 		if (imageUrl) {
 			$('#popupImage').attr('src', imageUrl);
 			$('#imagePopup').css('display', 'flex');
@@ -73,15 +73,25 @@ $(document).ready(function () {
 			{ data: 'printSide' },
 			{ data: 'printCount' },
 			{
-				data: 'logoSamplePath',
-				title: '예시파일명',
-				render: function (data, type, row) {
-					if (data) {
-						return `<a href="#" class="image-popup-trigger" data-image-url="/File/${data}">${data}</a>`;
-					}
-					return '';
-				}
-			},
+                data: 'logoSamplePath',
+                title: '예시파일',
+                render: function (data, type, row) {
+                    if (data) {
+                        return `<img src="/File/${data}" alt="예시파일" height="50" class="clickable-image" data-src="/File/${data}" style="cursor: pointer;">`;
+                    }
+                    return '';
+                }
+            },
+			// {
+			// 	data: 'logoSamplePath',
+			// 	title: '예시파일명',
+			// 	render: function (data, type, row) {
+			// 		if (data) {
+			// 			return `<a href="#" class="image-popup-trigger" data-image-url="/File/${data}">${data}</a>`;
+			// 		}
+			// 		return '';
+			// 	}
+			// },
 			{ data: 'boxSize' },
 			{ data: 'boxCount' },
 			{ data: 'deliveryType' },

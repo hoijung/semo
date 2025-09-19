@@ -472,8 +472,24 @@ $(document).ready(function () {
         });
     });
 
-        // Image popup logic
+    // Image popup logic
     $('#grid1 tbody').on('click', '.clickable-image', function (e) {
+        e.stopPropagation();
+        const src = $(this).data('src');
+        $('#popupImage').attr('src', src);
+        $('#imagePopup').css('display', 'flex');
+    });
+
+    // Image popup logic
+    $('#grid2 tbody').on('click', '.clickable-image', function (e) {
+        e.stopPropagation();
+        const src = $(this).data('src');
+        $('#popupImage').attr('src', src);
+        $('#imagePopup').css('display', 'flex');
+    });
+
+    // Image popup logic
+    $('#grid3 tbody').on('click', '.clickable-image', function (e) {
         e.stopPropagation();
         const src = $(this).data('src');
         $('#popupImage').attr('src', src);
