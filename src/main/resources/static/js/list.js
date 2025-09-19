@@ -130,20 +130,47 @@ $(document).ready(function () {
 	});
 
 	// 엑셀 다운로드 버튼 클릭 이벤트
-	$('#btnExcel').on('click', function () {
+	$('#btnExcel').on('click', function (e) {
+		e.preventDefault();
+
+		// 체크된 행들을 찾습니다.
+		const checkedRows = table.rows().nodes().to$().find('input.row-select:checked').closest('tr');
+
+		if (checkedRows.length === 0) {
+			alert('다운로드할 행을 체크해주세요.');
+			return;
+		}
+
+		// 엑셀 내보내기를 위해 체크된 행에 '.selected' 클래스를 임시로 추가합니다.
+		checkedRows.addClass('selected');
+
+		// 엑셀 버튼 트리거
 		table.buttons('.buttons-excel').trigger();
+
+		// 내보내기 후 임시 클래스를 다시 제거합니다.
+		checkedRows.removeClass('selected');
 	});
 
-	// 체크박스 클릭 시 해당 행 선택/해제
+	// 행 클릭 시 단일 선택 (상세보기용)
+	$('#grid tbody').on('click', 'tr', function() {
+		if ($(this).hasClass('selected')) {
+			$(this).removeClass('selected');
+		} else {
+			table.$('tr.selected').removeClass('selected');
+			$(this).addClass('selected');
+		}
+	});
+
+	// 체크박스 클릭 시 다중 체크 (엑셀 다운로드 등 일괄 작업용)
 	$('#grid tbody').on('click', 'input.row-select', function (e) {
-		$(this).closest('tr').toggleClass('selected');
+		// 행 클릭 이벤트가 중복 실행되지 않도록 이벤트 전파를 막습니다.
 		e.stopPropagation();
 	});
 
     $('#selectAll').on('click', function(){
         const rows = table.rows({ 'search': 'applied' }).nodes();
-        $('input[type="checkbox"]', rows).prop('checked', this.checked);
-        $(rows).toggleClass('selected', this.checked);
+		const $checkboxes = $('input.row-select', rows);
+        $checkboxes.prop('checked', this.checked);
     });
 
 	// 선택된 행 가져오기
