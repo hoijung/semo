@@ -3,6 +3,7 @@ package com.example.printinfo.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +26,18 @@ public class UserScreenAuthController {
         return service.findByUserId(userId);
     }
 
-    @PostMapping
+        @PostMapping
     public void saveAll(@RequestBody List<UserScreenAuthDto> auths) {
         service.saveAll(auths);
+    }
+
+    @PostMapping("/single")
+    public void insert(@RequestBody UserScreenAuthDto auth) {
+        service.insert(auth);
+    }
+
+    @DeleteMapping
+    public void delete(@RequestBody UserScreenAuthDto auth) {
+        service.delete(auth);
     }
 }

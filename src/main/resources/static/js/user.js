@@ -73,7 +73,7 @@ $(document).ready(function () {
                 render: function (data, type, row) {
                     if (row.isNew) {
                         let options = menuItems.map(item => `<option value="${item.text}">${item.text}</option>`).join('');
-                        return `<select class="screenId-select">${options}</select>`;
+                        return `<select class="screenId-select"><option value="">선택</option>${options}</select>`;
                     }
                     return data;
                 }
@@ -135,15 +135,47 @@ $(document).ready(function () {
 
     function deleteAuthRow() {
         const rowsToDelete = [];
+        const dataToDelete = [];
+        const userId = $('#userId').val();
+
         authTable.rows().every(function(){
             const rowNode = this.node();
             if($(rowNode).find('.auth-row-check').prop('checked')){
                 rowsToDelete.push(this.node());
+                const rowData = this.data();
+                if (!rowData.isNew) {
+                    dataToDelete.push({ userId: userId, screenId: rowData.screenId });
+                }
             }
         });
 
-        if(rowsToDelete.length > 0 && confirm(rowsToDelete.length + '개의 항목을 삭제하시겠습니까?')){
-            authTable.rows(rowsToDelete).remove().draw();
+        if(rowsToDelete.length === 0) {
+            alert("삭제할 항목을 선택하세요.");
+            return;
+        }
+
+        if (rowsToDelete.length > 1) {
+            alert("하나의 항목만 삭제할 수 있습니다.");
+            return;
+        }
+
+        if(confirm('선택한 항목을 삭제하시겠습니까?')){
+            const rowToDelete = rowsToDelete[0];
+            
+            if (dataToDelete.length > 0) { // Existing row
+                const data = dataToDelete[0];
+                sendRequest('/api/user-screen-auth', 'DELETE', data)
+                    .then(() => {
+                        authTable.row(rowToDelete).remove().draw();
+                        alert("삭제되었습니다.");
+                    })
+                    .catch(error => {
+                        console.error("Delete Auth Error:", error);
+                        alert("권한 삭제 실패: " + error.message);
+                    });
+            } else { // New row
+                authTable.row(rowToDelete).remove().draw();
+            }
         }
     }
 
@@ -292,23 +324,31 @@ $(document).ready(function () {
             return;
         }
 
-        const authData = [];
-        authTable.rows().every(function () {
-            const rowNode = this.node();
-            const rowData = this.data();
-            let screenId = rowData.screenId;
-            if(rowData.isNew) {
-                screenId = $(rowNode).find('.screenId-select').val();
-            }
+        if (!authSelectedRow) {
+            alert("저장할 권한을 선택해주세요.");
+            return;
+        }
 
-            const auth = {
-                userId: userId,
-                screenId: screenId
-            };
-            authData.push(auth);
-        });
+        const rowData = authTable.row(authSelectedRow).data();
+        if (!rowData || !rowData.isNew) {
+           // alert("새로 추가된 행만 저장할 수 있습니다.");
+            //return;
+        }
 
-        sendRequest('/api/user-screen-auth', 'POST', authData)
+        const rowNode = authTable.row(authSelectedRow).node();
+        const screenId = $(rowNode).find('.screenId-select').val();
+
+        if (!screenId) {
+            alert("화면 ID를 선택해주세요.");
+            return;
+        }
+
+        const auth = {
+            userId: userId,
+            screenId: screenId
+        };
+
+        sendRequest('/api/user-screen-auth/single', 'POST', auth)
             .then(() => {
                 alert("권한이 저장되었습니다.");
                 loadAuthGrid(userId);

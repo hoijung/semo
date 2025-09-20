@@ -39,19 +39,16 @@ public class UserScreenAuthRepository {
         }
 
         String userId = auths.get(0).getUserId();
-        // jdbcTemplate.update("DELETE FROM 사용자화면권한 WHERE 아이디 = ?", userId);
+        jdbcTemplate.update("DELETE FROM 사용자화면권한 WHERE 아이디 = ?", userId);
 
         jdbcTemplate.batchUpdate(
-            "INSERT INTO 사용자화면권한 (아이디, 화면id, 등록, 수정, 삭제) VALUES (?, ?, ?, ?, ?)",
+            "INSERT INTO 사용자화면권한 (아이디, 화면id, 등록, 수정, 삭제) VALUES (?, ?, 'Y', 'Y', 'Y')",
             new BatchPreparedStatementSetter() {
                 @Override
                 public void setValues(PreparedStatement ps, int i) throws SQLException {
                     UserScreenAuthDto auth = auths.get(i);
                     ps.setString(1, auth.getUserId());
                     ps.setString(2, auth.getScreenId());
-                    ps.setString(3, auth.getCanCreate());
-                    ps.setString(4, auth.getCanUpdate());
-                    ps.setString(5, auth.getCanDelete());
                 }
 
                 @Override
@@ -60,5 +57,15 @@ public class UserScreenAuthRepository {
                 }
             }
         );
+    }
+
+    public void insert(UserScreenAuthDto auth) {
+        jdbcTemplate.update(
+            "INSERT INTO 사용자화면권한 (아이디, 화면id, 등록, 수정, 삭제) VALUES (?, ?, 'Y', 'Y', 'Y')",
+            auth.getUserId(), auth.getScreenId());
+    }
+
+    public void delete(UserScreenAuthDto auth) {
+        jdbcTemplate.update("DELETE FROM 사용자화면권한 WHERE 아이디 = ? AND 화면id = ?", auth.getUserId(), auth.getScreenId());
     }
 }

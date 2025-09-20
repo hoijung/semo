@@ -21,4 +21,12 @@ public class UserScreenAuthService {
     public void saveAll(List<UserScreenAuthDto> auths) {
         repository.saveAll(auths);
     }
+
+    public void insert(UserScreenAuthDto auth) {
+        repository.insert(auth);
+    }
+
+    public void delete(UserScreenAuthDto auth) {
+        repository.delete(auth);
+    }
 }
