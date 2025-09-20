@@ -39,7 +39,7 @@ public class UserScreenAuthRepository {
         }
 
         String userId = auths.get(0).getUserId();
-        jdbcTemplate.update("DELETE FROM 사용자화면권한 WHERE 아이디 = ?", userId);
+        // jdbcTemplate.update("DELETE FROM 사용자화면권한 WHERE 아이디 = ?", userId);
 
         jdbcTemplate.batchUpdate(
             "INSERT INTO 사용자화면권한 (아이디, 화면id, 등록, 수정, 삭제) VALUES (?, ?, ?, ?, ?)",

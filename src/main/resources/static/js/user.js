@@ -48,38 +48,36 @@ $(document).ready(function () {
         }
     });
 
+    const menuItems = [
+        { value: 'main.html', text: '고객지원팀' },
+        { value: 'list.html', text: '로고 인쇄 목록' },
+        { value: 'billing.html', text: '세금계산서 발행' },
+        { value: 'printList.html', text: '인쇄 서비스팀' },
+        { value: 'logistList_1.html', text: '물류팀' },
+        { value: 'user.html', text: '사용자관리' },
+        { value: 'buseo.html', text: '부서관리' }
+    ];
+
     authTable = $('#authGrid').DataTable({
         paging: false,
         info: false,
         searching: false,
         columns: [
-            { 
+            {
+                data: null,
+                defaultContent: '<input type="checkbox" class="auth-row-check">',
+                orderable: false
+            },
+            {
                 data: 'screenId',
-                render: function(data, type, row, meta) {
+                render: function (data, type, row) {
                     if (row.isNew) {
-                        return '<input type="text" class="screenId-input" value="'>''
+                        let options = menuItems.map(item => `<option value="${item.text}">${item.text}</option>`).join('');
+                        return `<select class="screenId-select">${options}</select>`;
                     }
                     return data;
                 }
             },
-            {
-                data: 'canCreate',
-                render: function (data, type, row) {
-                    return '<input type="checkbox" class="auth-check" data-auth-type="canCreate" ' + (data === 'Y' ? 'checked' : '') + '>';
-                }
-            },
-            {
-                data: 'canUpdate',
-                render: function (data, type, row) {
-                    return '<input type="checkbox" class="auth-check" data-auth-type="canUpdate" ' + (data === 'Y' ? 'checked' : '') + '>';
-                }
-            },
-            {
-                data: 'canDelete',
-                render: function (data, type, row) {
-                    return '<input type="checkbox" class="auth-check" data-auth-type="canDelete" ' + (data === 'Y' ? 'checked' : '') + '>';
-                }
-            }
         ]
     });
 
@@ -109,6 +107,11 @@ $(document).ready(function () {
         authSelectedRow = this;
     });
 
+    $('#authCheckAll').on('click', function(){
+        const rows = authTable.rows({ 'search': 'applied' }).nodes();
+        $('input[type="checkbox"]', rows).prop('checked', this.checked);
+    });
+
     function loadAuthGrid(userId) {
         $.get('/api/user-screen-auth/' + userId, function (data) {
             authTable.clear().rows.add(data).draw();
@@ -127,13 +130,20 @@ $(document).ready(function () {
     updateButtonState(false);
 
     function addAuthRow() {
-        authTable.row.add({ isNew: true, screenId: '', canCreate: 'N', canUpdate: 'N', canDelete: 'N' }).draw();
+        authTable.row.add({ isNew: true, screenId: '' }).draw();
     }
 
     function deleteAuthRow() {
-        if (authSelectedRow) {
-            authTable.row(authSelectedRow).remove().draw();
-            authSelectedRow = null;
+        const rowsToDelete = [];
+        authTable.rows().every(function(){
+            const rowNode = this.node();
+            if($(rowNode).find('.auth-row-check').prop('checked')){
+                rowsToDelete.push(this.node());
+            }
+        });
+
+        if(rowsToDelete.length > 0 && confirm(rowsToDelete.length + '개의 항목을 삭제하시겠습니까?')){
+            authTable.rows(rowsToDelete).remove().draw();
         }
     }
 
@@ -210,7 +220,10 @@ $(document).ready(function () {
                 return response.text().then(text => { throw new Error('Network response was not ok: ' + text) });
             }
             if (response.status === 204) return; // No Content
-            return response.json();
+            
+            return response.text().then(text => {
+                return text ? JSON.parse(text) : null;
+            });
         });
     }
 
@@ -285,15 +298,12 @@ $(document).ready(function () {
             const rowData = this.data();
             let screenId = rowData.screenId;
             if(rowData.isNew) {
-                screenId = $(rowNode).find('.screenId-input').val();
+                screenId = $(rowNode).find('.screenId-select').val();
             }
 
             const auth = {
                 userId: userId,
-                screenId: screenId,
-                canCreate: $(rowNode).find('.auth-check[data-auth-type="canCreate"]').prop('checked') ? 'Y' : 'N',
-                canUpdate: $(rowNode).find('.auth-check[data-auth-type="canUpdate"]').prop('checked') ? 'Y' : 'N',
-                canDelete: $(rowNode).find('.auth-check[data-auth-type="canDelete"]').prop('checked') ? 'Y' : 'N',
+                screenId: screenId
             };
             authData.push(auth);
         });
