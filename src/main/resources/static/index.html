@@ -125,10 +125,6 @@
 					<i class="fas fa-print"></i>
 					<span>로고 인쇄 목록</span>
 				</a>
-				<a href="logistList_3.html" class="quick-link-card">
-					<i class="fas fa-file-invoice"></i>
-					<span>세금계산서 발행</span>
-				</a>
 				<a href="printList.html" class="quick-link-card">
 					<i class="fas fa-cogs"></i>
 					<span>인쇄 서비스팀</span>
@@ -144,44 +140,6 @@
 
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 	<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-	<script>
-		document.addEventListener('DOMContentLoaded', () => {
-			const menuBar = document.getElementById('menuBar');
-			const contentContainer = document.getElementById('contentContainer');
-			const initialContent = contentContainer.innerHTML;
-
-			// Function to handle menu item clicks and page loading
-			menuBar.addEventListener('click', (event) => {
-				const target = event.target.closest('.menu-item');
-				if (target) {
-					// Remove 'active' class from all menu items
-					document.querySelectorAll('.menu-item').forEach(item => {
-						item.classList.remove('active');
-					});
-					// Add 'active' class to the clicked menu item
-					target.classList.add('active');
-
-					const pageToLoad = target.getAttribute('data-page');
-					// For the home page, we don't load content dynamically, just navigate
-					if (pageToLoad === 'initial') {
-						location.href = 'index.html'; // Navigate to the home page
-					} else {
-						location.href = pageToLoad; // Navigate to other pages
-					}
-				}
-			});
-
-			// Set initial active menu item based on current page
-			const currentPage = window.location.pathname.split('/').pop();
-			const currentMenuItem = menuBar.querySelector(`[data-page="${currentPage}"]`);
-			if (currentMenuItem) {
-				currentMenuItem.classList.add('active');
-			} else if (currentPage === '' || currentPage === 'index.html') {
-				// If it's the root or index.html, activate the 'Home' menu item
-				menuBar.querySelector('[data-page="initial"]').classList.add('active');
-			}
-		});
-	</script>
 
 	<!-- Font Awesome for icons (optional, but used in quick links) -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">

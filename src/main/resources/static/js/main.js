@@ -594,6 +594,12 @@ $(document).ready(function () {
 			return;
 		}
 
+		const ntsConfirmNum = $('#국세청승인번호').val();
+		if (ntsConfirmNum && ntsConfirmNum.trim() !== '') {
+			alert('이미 발급된 계산서입니다.');
+			return;
+		}
+
 		if ('false' == $('#배분여부').val()) {
 			alert("배분된 건만 가능합니다.");
 			return;
