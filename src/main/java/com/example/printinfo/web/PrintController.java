@@ -317,6 +317,12 @@ public class PrintController {
             System.out.println(taxinvoice.getInvoicerMgtKey());
             IssueResponse response = taxinvoiceService.registIssue(CorpNum, taxinvoice, null, Memo,
                     null, null, EmailSubject, "verynine_info");
+
+            // 발행 성공 시 국세청 승인번호를 DB에 업데이트합니다.
+            if (response.getCode() == 1) {
+                service.updateNtsConfirmNum(Integer.parseInt(printId), response.getNtsConfirmNum());
+            }
+
             return ResponseEntity.ok(response);
         } catch (PopbillException e) {
             System.out.println(e.getLocalizedMessage());

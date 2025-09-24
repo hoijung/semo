@@ -380,6 +380,28 @@ public class PrintDto {
         this.인쇄참고사항 = 인쇄참고사항;
     }
 
+	private String 국세청승인번호;
+	private String 문서번호;
+	private String 요일;
+
+	public String get국세청승인번호() {
+		return 국세청승인번호;
+	}	
+	public void set국세청승인번호(String 국세청승인번호) {
+		this.국세청승인번호 = 국세청승인번호;
+	}
+	public String get문서번호() {
+		return 문서번호;
+	}
+	public void set문서번호(String 문서번호) {
+		this.문서번호 = 문서번호;
+	}
+	public String get요일() {
+		return 요일;
+	}
+	public void set요일(String 요일) {
+		this.요일 = 요일;
+	}	
     // Getter/Setter 생략 (Lombok 사용 가능)
 }
 

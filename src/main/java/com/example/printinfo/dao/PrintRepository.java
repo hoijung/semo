@@ -24,7 +24,7 @@ public class PrintRepository {
                 + ", 이메일, 공급가액, 부가세액, 합계금액, 배분여부, 완료여부, 등록일시, 수정일시, 등록팀, 수정팀"
                 + ", 피킹완료, 출고준비, 파일명, 인쇄로고예시, 피킹예정일, 배송타입, 박스규격, 기존주문여부, 인쇄방법"
                 + ", 배송지주소상세, 로고인쇄색상, 조색데이터1, 조색데이터2, 조색데이터3, 인쇄참고사항 "
-                + ", 중요여부, 업체메모, 사업자등록번호 "
+                + ", 중요여부, 업체메모, 사업자등록번호, 국세청승인번호, 문서번호  "
                 + ", CASE EXTRACT(DOW FROM  CASE  WHEN 주문일자 LIKE '%-%'  "
                 + " THEN TO_DATE(주문일자, 'YYYY-MM-DD') ELSE TO_DATE(주문일자, 'YYYYMMDD') END  ) "
                 + " WHEN 0 THEN '일' "
@@ -122,6 +122,11 @@ public class PrintRepository {
         String sql = "UPDATE 인쇄정보 SET 박스수량 = ?, 수정일시 = NOW() WHERE 인쇄ID = ?";
         return jdbcTemplate.update(sql, dto.getBoxCount(), dto.getPrintId());
     }
+
+    public int updateNtsConfirmNum(int printId, String ntsConfirmNum) {
+        String sql = "UPDATE 인쇄정보 SET 국세청승인번호 = ? WHERE 인쇄ID = ?";
+        return jdbcTemplate.update(sql, ntsConfirmNum, printId);
+    }
     private PrintDto mapRow(ResultSet rs) throws SQLException {
         PrintDto dto = new PrintDto();
         dto.set인쇄ID(rs.getInt("인쇄ID"));
@@ -175,6 +180,8 @@ public class PrintRepository {
         dto.set업체메모(rs.getString("업체메모"));
         dto.set상태(rs.getString("상태"));
         dto.set사업자등록번호(rs.getString("사업자등록번호"));
+        dto.set국세청승인번호(rs.getString("국세청승인번호"));
+        dto.set문서번호(rs.getString("문서번호"));
         return dto;
     }
 

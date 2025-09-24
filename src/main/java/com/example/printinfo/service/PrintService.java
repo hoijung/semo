@@ -120,4 +120,8 @@ public class PrintService {
         repository.updateBoxCount(dto);
     }
 
+    public void updateNtsConfirmNum(int printId, String ntsConfirmNum) {
+        repository.updateNtsConfirmNum(printId, ntsConfirmNum);
+    }
+
 }

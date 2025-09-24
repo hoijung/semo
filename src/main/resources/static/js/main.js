@@ -49,6 +49,27 @@ function isValidEmail(email) {
     return emailRegex.test(email);
 }
 
+// 사업자등록번호 유효성 검사 함수
+function isValidBizRegNo(bizRegNo) {
+    const number = bizRegNo.replace(/-/g, '').trim();
+    if (number.length !== 10) {
+        return false;
+    }
+
+    const checkValues = [1, 3, 7, 1, 3, 7, 1, 3, 5];
+    let sum = 0;
+
+    for (let i = 0; i < 9; i++) {
+        sum += parseInt(number.charAt(i), 10) * checkValues[i];
+    }
+
+    sum += Math.floor((parseInt(number.charAt(8), 10) * 5) / 10);
+
+    const checkDigit = (10 - (sum % 10)) % 10;
+
+    return checkDigit === parseInt(number.charAt(9), 10);
+}
+
 
 // Function to load item names into the 품목명 combobox
 function loadItemNames() {
@@ -75,6 +96,9 @@ function toggleTaxInfoSection() {
 
 	// Enable/disable all inputs, selects, and buttons within the tax info group
 	$('#tax-info-group').find('input, select, button').prop('disabled', !isDirectDeposit);
+	$('#국세청승인번호').prop('disabled', true);
+
+
 }
 
 // Function to load sales channels into the 판매채널 combobox
@@ -565,6 +589,11 @@ $(document).ready(function () {
 
 	//계산서발행
 	function sendTaxInvoice() {
+		if (isFormDirty) {
+			alert('변경내역 저장 후 발행가능합니다');
+			return;
+		}
+
 		if ('false' == $('#배분여부').val()) {
 			alert("배분된 건만 가능합니다.");
 			return;
@@ -604,6 +633,14 @@ $(document).ready(function () {
 		if (email !== '' && !isValidEmail(email)) {
 			alert('유효하지 않은 이메일 주소 형식입니다.');
 			$('#이메일').focus();
+			return;
+		}
+
+		// 사업자등록번호 유효성 검사
+		const bizRegNo = $('#사업자등록번호').val();
+		if (bizRegNo && bizRegNo.trim() !== '' && !isValidBizRegNo(bizRegNo)) {
+			alert('유효하지 않은 사업자등록번호 형식입니다.');
+			$('#사업자등록번호').focus();
 			return;
 		}
 
@@ -662,7 +699,7 @@ $(document).ready(function () {
 				contentType: 'application/json',
 				data: JSON.stringify({
 					taxinvoice: taxinvoice,
-					otherData: { message: "추가 데이터" } // 예시: 다른 JSON 객체
+					printId: taxinvoice.printId // 예시: 다른 JSON 객체
 				}),
 				success: function (response) {
 					alert('세금계산서가 발행되었습니다.');
@@ -670,8 +707,8 @@ $(document).ready(function () {
 					table.ajax.reload(null, false);
 				},
 				error: function (xhr, status, error) {
-					alert('세금계산서 발행에 실패했습니다.');
-					console.error(xhr.responseText);
+					// 서버에서 전달된 오류 메시지를 표시합니다.
+					alert('세금계산서 발행에 실패했습니다: ' + xhr.responseText);
 				}
 			});
 		}

@@ -161,8 +161,8 @@ $(document).ready(function () {
                     table.ajax.reload(null, false);
                 },
                 error: function (xhr, status, error) {
-                    alert('세금계산서 발행에 실패했습니다.');
-                    console.error(xhr.responseText);
+                    // 서버에서 전달된 오류 메시지를 표시합니다.
+                    alert('세금계산서 발행에 실패했습니다: ' + xhr.responseText);
                 }
             });
         }
