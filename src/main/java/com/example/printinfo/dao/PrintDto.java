@@ -325,6 +325,7 @@ public class PrintDto {
     private String 상호명;
     private String 대표자명;
     private String 이메일;
+	private String 사업자등록번호;
     private BigDecimal 공급가액;
     private BigDecimal 부가세액;
     private BigDecimal 합계금액;
@@ -343,6 +344,13 @@ public class PrintDto {
     private String 인쇄방법;
     private String 로고인쇄색상;
     private String 조색데이터1;
+
+	public	String get사업자등록번호() {
+		return 사업자등록번호;
+	}
+	public void set사업자등록번호(String 사업자등록번호) {
+		this.사업자등록번호 = 사업자등록번호;
+	}
     public String get조색데이터1() {
 		return 조색데이터1;
 	}

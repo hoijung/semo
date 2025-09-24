@@ -128,12 +128,16 @@
         table.dataTable {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed; /* 컬럼 너비 고정을 위해 추가 */
         }
 
         table.dataTable th,
         table.dataTable td {
+            border: 1px solid #ccc; /* 세로줄, 가로줄 모두 표시 */
             text-align: center;
-            padding: 12px;
+            vertical-align: middle; /* 세로 가운데 정렬 */
+            padding: 6px; /* list.html과 동일하게 조정 */
+
             font-size: 0.8em;
         }
 

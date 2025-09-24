@@ -43,6 +43,12 @@ function onlyNumberWithComma(obj) {
 	obj.value = Number(obj.value.replace(/[^0-9]/g, '')).toLocaleString();
 }
 
+// Function to validate email format
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
 
 // Function to load item names into the 품목명 combobox
 function loadItemNames() {
@@ -358,6 +364,7 @@ $(document).ready(function () {
 	$('#btnAdd').on('click', addRecord);
 	$('#btnUpdate').on('click', updateRecord);
 	$('#btnDelete').on('click', deleteRecord);
+	$('#btnIssueTaxInvoice').on('click', sendTaxInvoice);
 
 	// 폼 내의 모든 입력 요소에 대한 변경 감지
 	$('#detail-container').on('change', 'input, select, textarea', function () {
@@ -556,6 +563,120 @@ $(document).ready(function () {
 			});
 	}
 
+	//계산서발행
+	function sendTaxInvoice() {
+		if ('false' == $('#배분여부').val()) {
+			alert("배분된 건만 가능합니다.");
+			return;
+		}
+
+		const id = $('#인쇄ID').val();
+		if (!id) {
+			alert("계산서 발급할 레코드를 선택하세요.");
+			return;
+		}
+
+		if ('세금계산서' != $('#계산서발행타입').val()) {
+			alert("계산서발행타입 이 세금계산서 만 가능합니다.");
+			return;
+		}
+
+		// 필수 입력값 유효성 검사
+		const requiredFields = {
+			'상호명': $('#상호명').val(),
+			'대표자명': $('#대표자명').val(),
+			'사업자등록번호': $('#사업자등록번호').val(),
+			'공급가액': $('#공급가액').val(),
+			'부가세액': $('#부가세액').val(),
+			'합계금액': $('#합계금액').val()
+		};
+
+		for (const fieldName in requiredFields) {
+			if (!requiredFields[fieldName] || requiredFields[fieldName].trim() === '') {
+				alert(`'${fieldName}'은(는) 필수 입력 항목입니다.`);
+				$(`#${fieldName.replace(/\s/g, '_')}`).focus(); // 해당 필드로 포커스 이동 (ID 규칙에 맞게 조정 필요 시)
+				return;
+			}
+		}
+
+		// 이메일 유효성 검사 (입력된 경우에만)
+		const email = $('#이메일').val().trim();
+		if (email !== '' && !isValidEmail(email)) {
+			alert('유효하지 않은 이메일 주소 형식입니다.');
+			$('#이메일').focus();
+			return;
+		}
+
+
+		const taxinvoiceToIssue = {
+			printId: $('#인쇄ID').val(),
+			invoicerCorpNum: "8500501563",
+			invoicerCorpName: "베리나인",
+			invoicerCEOName: "염신웅",
+			invoicerAddr: "경기도 안양시 동안구 흥안대로427번길 76-1 2층 (우 : 14059)",
+			invoicerContactName: "염신웅",
+			invoicerEmail: "swyum@verynine.co.kr",
+
+			invoiceeCorpNum: $('#사업자등록번호').val(),
+			invoiceeType: "사업자",
+			invoiceeType: "",
+			invoiceeCorpName: $('#상호명').val(),
+			invoiceeCEOName: $('#대표자명').val(),
+			invoiceeAddr: "",
+			invoiceeEmail: $('#이메일').val(),
+
+			writeDate: new Date().toISOString().slice(0, 10).replace(/-/g, ""),
+			issueType: "정발행",
+			purposeType: "청구",
+			taxType: "과세",
+
+			supplyCostTotal: removeCommas($('#공급가액').val()),
+			taxTotal: removeCommas($('#부가세액').val()),
+			totalAmount: removeCommas($('#합계금액').val()),
+			qty: $('#제작장수').val(),
+
+			detailList: [{
+
+				purchaseDT: new Date().toISOString().slice(0, 10).replace(/-/g, ""),
+				itemName: $('#품목명').val(),
+				qty: '',
+				unitCost: '',
+				supplyCost: $('#공급가액').val(),
+				tax: $('#부가세액').val()
+			}]
+		};
+		// debugger
+		const previewUrl = `tax_invoice_preview.html?data=${encodeURIComponent(JSON.stringify(taxinvoiceToIssue))}`;
+		window.open(previewUrl, 'taxInvoicePreview', 'width=800,height=600');
+	}
+
+	//발행
+	window.addEventListener('message', function (event) {
+		// debugger
+		if (event.data.type === 'issue-tax-invoice') {
+			const taxinvoice = event.data.data;
+			// debugger
+			$.ajax({
+				url: '/api/prints/issue-tax-invoice',
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify({
+					taxinvoice: taxinvoice,
+					otherData: { message: "추가 데이터" } // 예시: 다른 JSON 객체
+				}),
+				success: function (response) {
+					alert('세금계산서가 발행되었습니다.');
+					console.log(response);
+					table.ajax.reload(null, false);
+				},
+				error: function (xhr, status, error) {
+					alert('세금계산서 발행에 실패했습니다.');
+					console.error(xhr.responseText);
+				}
+			});
+		}
+	});
+
 	async function addRecord() {
 		const jsonData = getFormData();
 		if (!confirm("등록 하시겠습니까?")) return;
@@ -672,5 +793,8 @@ $(document).ready(function () {
 		$('#btnUpdate, #btnDelete').prop('disabled', !enable)
 			.toggleClass('enabled', enable);
 	}
+
+
+
 
 });

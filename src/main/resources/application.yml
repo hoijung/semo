@@ -7,6 +7,8 @@ server:
     encoding:
       force-response: true
       charset: UTF-8
+    session:
+      timeout: 4h # 세션 타임아웃 4시간으로 설정
 
 spring:
   mvc:
@@ -21,10 +23,26 @@ spring:
   profiles:
     active: dev
 
+
 popbill:
-  link-id: "YOUR_LINK_ID" # Popbill API LinkID, please replace it.
-  secret-key: "YOUR_SECRET_KEY" # Popbill API SecretKey, please replace it.
-  test: true
+  # 링크아이디
+  linkId: VERYNINE
+  # 비밀키
+  secretKey: lN8oaDKkbFbkx5pykDSeU90IUdHA8K5u+saMGK7PNa8=
+  # 연동환경 설정, true-테스트, false-운영(Production), (기본값:false)
+  isTest: true
+  # 인증토큰 IP 검증 설정, true-사용, false-미사용, (기본값:true)
+  isIpRestrictOnOff: true
+  # 통신 IP 고정, true-사용, false-미사용, (기본값:false)
+  useStaticIp: false
+  # 로컬시스템 시간 사용여부, true-사용, false-미사용, (기본값:true)
+  useLocalTimeYn: true
+  # MLE PublicKey
+  mlePublicKey: ''
+  # MLE Key ID
+  mleKeyID: ''
+  # MLE Key Name
+  mleKeyName: ''
 
 ---
 # ===============================================
@@ -68,3 +86,23 @@ spring:
 file:
   # JAR 배포 시 서버의 실제 파일 저장 경로
   upload-dir: /home/ubuntu/semo/www/uploads/File
+
+# 업데이트 일자 : 2025-08-27
+# 연동 기술지원 연락처 : 1600-9854
+# 연동 기술지원 이메일 : code@linkhubcorp.com
+#
+# <테스트 연동개발 준비사항>
+# 1) API Key 변경 (연동신청 시 메일로 전달된 정보)
+#    - LinkID : 링크허브에서 발급한 링크아이디
+#    - SecretKey : 링크허브에서 발급한 비밀키
+# 2) SDK 환경설정 필수 옵션 설정
+#    - IsTest : 연동환경 설정, true-테스트, false-운영(Production), (기본값:false)
+#    - IPRestrictOnOff : 인증토큰 IP 검증 설정, true-사용, false-미사용, (기본값:true)
+#    - UseStaticIP : 통신 IP 고정, true-사용, false-미사용, (기본값:false)
+#    - UseLocalTimeYN : 로컬시스템 시간 사용여부, true-사용, false-미사용, (기본값:true)
+# 3) SDK 환경설정 선택 옵션 설정
+#    RegistTaxCert, RegistTaxCertPFX API를 사용하는 경우, 통신구간 보안을 위한 암호화 정보
+#    암호화 키 발급은 팝빌 파트너센터(1600-8536)로 문의하여 발급
+#    - mlePublicKey : MLE PublicKey
+#    - mleKeyID : MLE Key ID
+#    - mleKeyName : MLE Key Name

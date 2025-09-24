@@ -100,6 +100,7 @@ $(document).ready(function () {
                     if (firstRow) {
                         $(firstRow).trigger('click');
                     }
+
                 }
             },
         });
@@ -151,7 +152,7 @@ $(document).ready(function () {
             title: '인쇄팀사진',
             render: function (data, type, row) {
                 if (data) {
-                    return `<img src="/File/${data}" alt="인쇄팀사진" height="50" class="clickable-image" data-src="/File/${data}">`;
+                    return `<img src="/File/${data}" alt="인쇄팀사진"  width="70px" class="clickable-image" data-src="/File/${data}">`;
                 }
                 return '';
             }
@@ -164,7 +165,7 @@ $(document).ready(function () {
         title: '인쇄팀사진',
         render: function (data, type, row) {
             if (data) {
-                return `<img src="/File/${data}" alt="인쇄팀사진" height="50" class="clickable-image" data-src="/File/${data}">`;
+                return `<img src="/File/${data}" alt="인쇄팀사진"  width="70px" class="clickable-image" data-src="/File/${data}">`;
             }
             return '';
         }
@@ -176,7 +177,7 @@ $(document).ready(function () {
         title: '인쇄팀사진',
         render: function (data, type, row) {
             if (data) {
-                return `<img src="/File/${data}" alt="인쇄팀사진" height="50" class="clickable-image" data-src="/File/${data}">`;
+                return `<img src="/File/${data}" alt="인쇄팀사진"  width="70px" class="clickable-image" data-src="/File/${data}">`;
             }
             return '';
         }
@@ -184,6 +185,7 @@ $(document).ready(function () {
     ];
 
     const table = initializeDataTable('#grid1', '/api/print-info/logistic-list1', columnsForGrid1);
+    $('#grid1').addClass('nowrap'); // 전체목록 그리드에만 nowrap 클래스 추가
     const table2 = initializeDataTable('#grid2', '/api/print-info/logistic-list2', columnsForGrid2);
     const table3 = initializeDataTable('#grid3', '/api/print-info/logistic-list3', columnsForGrid3);
 
@@ -455,7 +457,10 @@ $(document).ready(function () {
         const activeTabContentId = $(this).data('tab');
         const $activeTabContent = $('#' + activeTabContentId);
         $activeTabContent.css('display', 'flex');
-        $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        
+        const tableToAdjust = $activeTabContent.find('table.display').DataTable(); // 활성화된 탭의 테이블 찾기
+        tableToAdjust.columns.adjust();
+
 
         // Hide edit area when switching tabs
         $('#editArea1').hide();

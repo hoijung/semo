@@ -14,15 +14,17 @@ $(document).ready(function () {
         $('#previewInvoiceeCEOName').text(taxinvoiceData.invoiceeCEOName);
         $('#previewInvoiceeAddr').text(taxinvoiceData.invoiceeAddr);
 
+        // debugger
+
         const item = taxinvoiceData.detailList[0];
         $('#previewItems').html(`
             <tr>
                 <td>${item.purchaseDT}</td>
                 <td>${item.itemName}</td>
-                <td>${item.qty}</td>
-                <td>${parseInt(item.unitCost).toLocaleString()}</td>
-                <td>${parseInt(item.supplyCost).toLocaleString()}</td>
-                <td>${parseInt(item.tax).toLocaleString()}</td>
+                <td>${taxinvoiceData.qty}</td>
+                <td>${parseInt(taxinvoiceData.supplyCostTotal).toLocaleString()}</td>
+                <td>${parseInt(taxinvoiceData.taxTotal).toLocaleString()}</td>
+                <td>${parseInt(taxinvoiceData.totalAmount).toLocaleString()}</td>.toLocaleString()
             </tr>
         `);
 

@@ -46,6 +46,7 @@ $(document).ready(function () {
         scrollY: getTableHeight("320"),
         scrollX: true,
         columns: [
+            { data: 'printId', title: '인쇄Id', className: 'dt-center' },
             { data: 'orderDate', title: '주문일자', className: 'dt-center' },
             { data: 'companyContact', title: '업체명(고객명)' },
             { data: 'itemName', title: '품목명' },
@@ -102,6 +103,7 @@ $(document).ready(function () {
         const data = selectedRows[0];
 
         const taxinvoiceToIssue = {
+            printId: data.printId,
             invoicerCorpNum: "1234567890",
             invoicerCorpName: "공급자 상호",
             invoicerCEOName: "공급자 대표자명",
@@ -126,7 +128,7 @@ $(document).ready(function () {
             totalAmount: data.totalAmount.toString(),
 
             detailList: [{
-                serialNum: 1,
+                
                 purchaseDT: new Date().toISOString().slice(0, 10).replace(/-/g, ""),
                 itemName: data.itemName,
                 qty: data.quantity.toString(),
@@ -141,13 +143,18 @@ $(document).ready(function () {
     });
 
     window.addEventListener('message', function (event) {
+        // debugger
         if (event.data.type === 'issue-tax-invoice') {
             const taxinvoice = event.data.data;
+            // debugger
             $.ajax({
                 url: '/api/prints/issue-tax-invoice',
                 type: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify(taxinvoice),
+                data: JSON.stringify({
+                    taxinvoice: taxinvoice,
+                    printId: data.printId // printId를 함께 전송
+                }),
                 success: function (response) {
                     alert('세금계산서가 발행되었습니다.');
                     console.log(response);

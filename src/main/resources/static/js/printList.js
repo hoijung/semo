@@ -102,7 +102,7 @@ $(document).ready(function () {
                 title: '인쇄팀사진',
                 render: function (data, type, row) {
                     if (data) {
-                        return `<img src="/File/${data}" alt="인쇄팀사진" height="50" class="clickable-image" data-src="/File/${data}">`;
+                        return `<img src="/File/${data}" alt="인쇄팀사진" width="70px" class="clickable-image" data-src="/File/${data}">`;
                     }
                     return '';
                 }
@@ -129,7 +129,8 @@ $(document).ready(function () {
         paging: false,
         info: false,
         columnDefs: [
-            { targets: "_all", className: "dt-center" }
+            { targets: "_all", className: "dt-center" },
+            { targets: 15, width: "120px !important" } // '인쇄팀사진' 컬럼 너비 120px로 강제 설정
         ],
         language: {
             emptyTable: "데이터가 없습니다."
@@ -143,6 +144,7 @@ $(document).ready(function () {
                 if (firstRowNode && !$(firstRowNode).hasClass('selected')) {
                     $(firstRowNode).trigger('click');
                 }
+                api.columns.adjust(); // 컬럼 너비 재조정
             }
         }
     });
